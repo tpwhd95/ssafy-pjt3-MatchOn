@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
+    user_id = models.CharField(max_length=64, primary_key=True)
     nickname = models.CharField(max_length=50)
     social_id = models.CharField(max_length=50)
     lat = models.FloatField()
