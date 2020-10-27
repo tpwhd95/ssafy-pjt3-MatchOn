@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+SITE_ID = 1
+
+REST_USE_JWT = True
 
 # Application definition
 
@@ -37,9 +40,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    
+    'corsheaders',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'rest_framework_mongoengine',
+    'rest_auth',
+    'rest_auth.registration',
 
     'users',
     'match',
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -102,6 +114,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL='users.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
