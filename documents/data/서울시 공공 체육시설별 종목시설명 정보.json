@@ -1,0 +1,4 @@
+{
+"DESCRIPTION" : {"TERM":"이용기간","RENT_LINK":"대관링크주소","UNIT":"이용단위","AREA":"면적(㎡)","IMG_FILE_1":"이미지파일","CAPACITY":"수용인원(정원)","OTHER_NAME":"비고","SEQ":"일련번호","GROUND_NAME":"종목시설명","USE_TIME":"이용시간","OTHER_USE":"용도","STATION":"위치","TARGET":"이용대상","CENTER_KEY":"시설키","TEL":"문의전화","GROSS_AREA":"연면적(㎡)","STANDARD":"규격","SELECT_WAY":"선별방법(선착순-1,추첨순-2)","CENTER_NAME":"시설명","GROUND_KEY":"종목시설키","SUBJECT_NAME":"종목명","SUBJECT_KEY":"종목키","RULES":"유의사항","FEE":"이용료(원)"}
+]
+}
