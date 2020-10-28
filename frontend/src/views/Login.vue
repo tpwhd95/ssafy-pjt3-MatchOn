@@ -1,82 +1,87 @@
 <template>
-  <v-container>
-    <v-btn
-      v-if="!this.isLoggedIn"
-      class="ml-2"
-      min-width="0"
-      text
-      @click="login"
-    >
-      login
-    </v-btn>
+  <v-row justify="center">
+    <v-dialog v-model="dialog" persistent max-width="290">
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn color="primary" dark v-bind="attrs" v-on="on"> Login </v-btn>
+      </template>
 
-    <!-- profile -->
-    <v-btn
-      v-if="this.isLoggedIn"
-      class="ml-2"
-      min-width="0"
-      text
-      @click="login"
-    >
-      profile
-    </v-btn>
-
-    <!-- logout -->
-    <v-btn
-      v-if="this.isLoggedIn"
-      class="ml-2"
-      min-width="0"
-      text
-      @click="logout2"
-    >
-      logout
-    </v-btn>
-  </v-container>
+      <v-card>
+        <v-card-title class="headline"> Login </v-card-title>
+        <v-card-actions>
+          <v-btn color="green darken-1" text @click="kakaologin">
+            카카오 로그인
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-row>
 </template>
 
 <script>
-import LoginForm from "@/views/LoginForm.vue";
-import { mapGetters, mapActions } from "vuex";
-
+import axios from "axios";
+import http from "@/util/http-common";
+import { mapState, mapActions } from "vuex";
 export default {
   name: "LoginForm",
-  components: {
-    LoginForm,
-  },
-  props: {
-    value: {
-      type: Boolean,
-      default: false,
-    },
-  },
   data() {
     return {
       dialog: false,
-      login_profile: "login",
     };
   },
-  created() {},
-  computed: {
-    ...mapGetters(["isLoggedIn"]),
-  },
-
   methods: {
+    kakaologin() {
+      const self = this;
+      Kakao.Auth.login({
+        success: function (res) {
+          const token = res.access_token;
+          http
+            .post("/auth/kakao", {
+              access_token: token,
+            })
+            .then((res) => {
+              Kakao.API.request({
+                url: "/v2/user/me",
+                success: function (res) {
+                  console.log(res);
+                  var username = res.properties.nickname;
+                  var password = res.id;
+                  http
+                    .post("/login/", {
+                      username: username,
+                      password: password,
+                    })
+                    .then((json) => {
+                      console.log(json);
+                      const data = json.data;
+                      self.setToken(data.token);
+                      self.setUserProfile(data.user);
+                      self.login();
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                      window.gapi &&
+                        window.gapi.auth2.getAuthInstance().signOut();
+                    });
+                },
+                fail: function (error) {},
+              });
+            })
+            .catch((err) => {
+              console.log(err.response);
+            });
+        },
+        fail: function (error) {
+          console.log(error);
+        },
+      });
+    },
     login() {
-      if (this.isLoggedIn) {
-        this.$router.push("/");
-        this.login_profile = "profile";
-      } else {
-        this.dialog = true;
-      }
+      this.dialog = false;
     },
-    ...mapActions(["logout"]),
-    logout2() {
-      if (this.isLoggedIn) {
-        this.logout();
-        this.login_profile = "login";
-        this.$router.push("/");
-      }
-    },
+    ...mapActions(["setToken", "setUserProfile"]),
+  },
+  computed: {
+    ...mapState(["authorization"]),
   },
 };
 </script>
