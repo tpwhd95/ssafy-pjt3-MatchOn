@@ -12,7 +12,7 @@ $ python -m venv venv
 # ven가 위치하는 폴더에서
 $ source venv/Scripts/activate
 ```
-#### 가상환경 그기
+#### 가상환경 끄기
 ```bash
 $ deactivate
 ```
