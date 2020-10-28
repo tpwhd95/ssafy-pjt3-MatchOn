@@ -1,9 +1,11 @@
 from django.shortcuts import render
 
 import requests
+import json
 from django.forms.models import model_to_dict
 from django.http import HttpResponse
 from .models import User
+from .serializers import UserSerializer,UserSerializerWithToken
 
 from rest_auth.registration.views import SocialLoginView
 from rest_framework.response import Response
