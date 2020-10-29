@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Map from '../views/Map.vue'
+import MapTest from '../views/Maptest.vue'
+import MapTest2 from '../views/Maptest2.vue'
 
 Vue.use(VueRouter)
 
@@ -27,6 +29,16 @@ const routes = [
     name: 'Map',
     component: Map
 
+  },
+  {
+    path: '/maptest',
+    name: 'MapTest',
+    component: MapTest
+  },
+  {
+    path: '/maptest2',
+    name: 'MapTest2',
+    component: MapTest2
   },
 ]
 
