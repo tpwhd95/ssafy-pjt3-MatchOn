@@ -1,7 +1,7 @@
 import json
 import os
 
-with open('/public.json', 'rt', encoding='UTF8') as f:
+with open('./public.json', 'rt', encoding='UTF8') as f:
     json_data_public = json.load(f)
 
 with open('./park.json', 'rt', encoding='UTF8') as f:
