@@ -34,8 +34,11 @@
     </v-app-bar>
 
     <v-main>
-      <router-view />
+      <router-view></router-view>
     </v-main>
+    <!-- <v-content>
+      <router-view></router-view>
+    </v-content> -->
   </v-app>
 </template>
 
