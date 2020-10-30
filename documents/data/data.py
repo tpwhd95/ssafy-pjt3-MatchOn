@@ -61,11 +61,11 @@ for i in bb:
     for z in k:
         for s in s_list:
             if s in z:
-                if z[-1]==',':
-                    pl.append(z[:-1])
-                else:
-                    pl.append(z)
-
+                # if z[-1]==',':
+                #     pl.append(z[:-2])
+                # else:
+                #     pl.append(z[:-1])
+                pl.append(s)
     if len(pl) != 0:
         tem = {
             "name" : i['p_park'],
@@ -88,11 +88,10 @@ for i in bb:
 # 운동시설
 for i in cc:
     if i['minclassnm'] in p_list:
-        print([i['minclassnm']])
         tem = {
             "name" : i['placenm'],
             "gu_name" : i['areanm'],
-            "spt_kind" : [i['minclassnm']],
+            "spt_kind" : [i['minclassnm'][:-1]],
             "lat" : i['y'],
             "lng" : i['x'],
             "address" : i['svcnm'],
@@ -109,6 +108,30 @@ for i in cc:
 
 
 print(place)
+print(type(place)) # 하나 둘 셋 이진석 화이팅!
+
+
+
+seen = list(set(place))
+print(seen)
+new_place = []
+for d in place:
+    t = tuple(d.items())
+    dt = dict(t)
+    seen.append(dt)
+# print(dt)
+    # if dt not in seen:
+        # print(seen)
+        # print(seen)
+        # seen.add(t)
+#         new_place.append(d)
+# print(new_place)
+
+
+
+with open(current + '\\documents\\data\\place.json', 'w', encoding='UTF-8' ) as place_file:
+    json.dump(place , place_file, ensure_ascii=False)
+
 cnt = 0
 for _  in place:
     cnt += 1
