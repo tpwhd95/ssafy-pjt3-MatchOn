@@ -24,7 +24,8 @@ class KakaoLogin(SocialLoginView):
             # enc.update(str(json_data['id']).encode('utf-8'))
             # encText = enc.hexdigest()
             # user = User(id = encText, username=json_data['properties']['nickname'], social_id=json_data['id'], password=json_data['id'])
-            user = User(username=json_data['properties']['nickname'], social_id=json_data['id'], password=json_data['id'])
+            username = ''.join(json_data['properties']['nickname'].split())
+            user = User(username=username, social_id=json_data['id'], password=json_data['id'])
             serializer = UserSerializerWithToken(data = model_to_dict(user))
             if serializer.is_valid():
                 serializer.save()
