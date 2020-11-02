@@ -3,7 +3,6 @@ from django.contrib.auth.models import AbstractUser
 # from djongo import models
 # from match.models import Team
 
-
 class User(AbstractUser):
     nickname = models.CharField(max_length=50)
     social_id = models.CharField(max_length=50)
