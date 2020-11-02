@@ -3,7 +3,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'matchon',
         'USER': 'root',
-        'PASSWORD': 'ssafy',
+        'PASSWORD': '1234',
         'HOST': 'localhost',
         'PORT': '3306',
     }
