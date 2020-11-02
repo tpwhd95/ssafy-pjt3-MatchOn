@@ -20,17 +20,12 @@ class KakaoLogin(SocialLoginView):
         print(json_data)
         u = User.objects.filter(social_id=json_data['id'])
         if not u:
-            # enc = hashlib.md5()
-            # enc.update(str(json_data['id']).encode('utf-8'))
-            # encText = enc.hexdigest()
-            # user = User(id = encText, username=json_data['properties']['nickname'], social_id=json_data['id'], password=json_data['id'])
-            username = ''.join(json_data['properties']['nickname'].split())
-            user = User(username=username, social_id=json_data['id'], password=json_data['id'])
+            username1 = ''.join(json_data['properties']['nickname'].split())
+            user = User(username=username1, social_id=json_data['id'], password=json_data['id'])
             serializer = UserSerializerWithToken(data = model_to_dict(user))
             if serializer.is_valid():
                 serializer.save()
             return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
         user = User.objects.get(id = u[0].id)
-        # user = u[0]
         user.social_id = 0
         return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
