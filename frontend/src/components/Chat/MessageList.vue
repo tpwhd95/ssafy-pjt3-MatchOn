@@ -4,7 +4,7 @@
       <div v-for="(msg, index) in msgs" v-bind:key="index">
         <v-list-tile>
           <v-list-tile-action>
-            <span>{{ msg.from.name }}</span>
+            <span style="font: bold">{{ msg.from.name }} </span>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>{{ msg.msg }}</v-list-tile-title>
