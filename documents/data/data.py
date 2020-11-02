@@ -1,21 +1,24 @@
 import json
 import os
 
-with open('./public.json', 'rt', encoding='UTF8') as f:
+
+current = os.getcwd()
+
+with open(current + '\\documents\\data\\public.json', 'rt', encoding='UTF8') as f:
     json_data_public = json.load(f)
 
-with open('./park.json', 'rt', encoding='UTF8') as f:
+with open(current + '\\documents\\data\\park.json', 'rt', encoding='UTF8') as f:
     json_data_park = json.load(f)
 
-with open('./sports.json', 'rt', encoding='UTF8') as f:
+with open(current + '\\documents\\data\\sports.json', 'rt', encoding='UTF8') as f:
     json_data_sports = json.load(f)
 
 # print(json.dumps(json_data_1, ensure_ascii=False, indent='\t'))
 # print(json.dumps(json_data_park, ensure_ascii=False, indent='\t'))
 # print(json.dumps(json_data_sports, ensure_ascii=False, indent='\t'))
 place = []
-p_list = ['축구장', '풋살장', '농구장', '테니스장']
-s_list = ['축구', '풋살', '농구', '테니스']
+p_list = ['풋살장', '농구장', '테니스장']
+s_list = ['풋살', '농구', '테니스']
 
 aa = json_data_public["DATA"]
 bb = json_data_park["DATA"]
@@ -27,9 +30,9 @@ for i in aa:
     pl = []
     for z in kk:
         if z in s_list:
-            pl.append(z + '장')
+            pl.append(z)
         if z[:-1] in s_list:
-            pl.append(z[:-1] + '장')
+            pl.append(z)
     for z in pl:
         if z in p_list:
             tem = {
@@ -58,11 +61,11 @@ for i in bb:
     for z in k:
         for s in s_list:
             if s in z:
-                if z[-1]==',':
-                    pl.append(z[:-1])
-                else:
-                    pl.append(z)
-
+                # if z[-1]==',':
+                #     pl.append(z[:-2])
+                # else:
+                #     pl.append(z[:-1])
+                pl.append(s)
     if len(pl) != 0:
         tem = {
             "name" : i['p_park'],
@@ -88,26 +91,47 @@ for i in cc:
         tem = {
             "name" : i['placenm'],
             "gu_name" : i['areanm'],
-            "spt_kind" : i['minclassnm'],
+            "spt_kind" : [i['minclassnm'][:-1]],
             "lat" : i['y'],
             "lng" : i['x'],
             "address" : i['svcnm'],
             "tel" : i['telno'],
+
+            # 공공시설에만 해당 함
             "url" : i['svcurl'],
             "img" : i['imgurl'],
             "str" : i['v_min'],
             "end" : i['v_max'],
 
         }
-
-        # # 1,3 번 겹치는 거 제거
-        # for z in place:
-        #     if tem['name'] != z['name']:
-        #         place.append(tem)
         place.append(tem)
 
 
 print(place)
+print(type(place)) # 하나 둘 셋 이진석 화이팅!
+
+
+
+seen = list(set(place))
+print(seen)
+new_place = []
+for d in place:
+    t = tuple(d.items())
+    dt = dict(t)
+    seen.append(dt)
+# print(dt)
+    # if dt not in seen:
+        # print(seen)
+        # print(seen)
+        # seen.add(t)
+#         new_place.append(d)
+# print(new_place)
+
+
+
+with open(current + '\\documents\\data\\place.json', 'w', encoding='UTF-8' ) as place_file:
+    json.dump(place , place_file, ensure_ascii=False)
+
 cnt = 0
 for _  in place:
     cnt += 1

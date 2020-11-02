@@ -14,13 +14,14 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-btn color="primary" dark @click="logout2"> Logout </v-btn>
   </v-row>
 </template>
 
 <script>
 import axios from "axios";
 import http from "@/util/http-common";
-import { mapState, mapActions } from "vuex";
+import { mapGetters, mapState, mapActions } from "vuex";
 export default {
   name: "LoginForm",
   data() {
@@ -39,6 +40,7 @@ export default {
               access_token: token,
             })
             .then((res) => {
+              console.log("asdf");
               Kakao.API.request({
                 url: "/v2/user/me",
                 success: function (res) {
@@ -78,10 +80,16 @@ export default {
     login() {
       this.dialog = false;
     },
-    ...mapActions(["setToken", "setUserProfile"]),
+    ...mapActions(["logout", "setToken", "setUserProfile"]),
+    logout2() {
+      if (this.isLoggedIn) {
+        this.logout();
+        this.$router.push("/");
+      }
+    },
   },
   computed: {
-    ...mapState(["authorization"]),
+    ...mapGetters(["isLoggedIn"]),
   },
 };
 </script>
