@@ -5,9 +5,12 @@ import './registerServiceWorker'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify';
+import socket from './plugins/socketPlugin';
+import Directives from './plugins/directives';
 
 Vue.config.productionTip = false
 Vue.use(Vuex)
+Vue.use(Directives);
 
 new Vue({
   created() {
@@ -16,5 +19,6 @@ new Vue({
   router,
   store,
   vuetify,
+  socket,
   render: h => h(App)
 }).$mount('#app')

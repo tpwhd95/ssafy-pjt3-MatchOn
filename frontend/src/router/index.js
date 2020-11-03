@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import Map from '../views/Map.vue'
 import MapTest from '../views/Maptest.vue'
 import MapTest2 from '../views/Maptest2.vue'
+import ChatRoom from '../views/ChatRoom.vue'
 
 Vue.use(VueRouter)
 
@@ -17,12 +18,6 @@ const routes = [
     path: '/about',
     name: 'About',
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  },
-  {
-
-    path: '/login',
-    name: 'Login',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Login.vue')
   },
   {
     path: '/map',
@@ -39,6 +34,11 @@ const routes = [
     path: '/maptest2',
     name: 'MapTest2',
     component: MapTest2
+  },
+  {
+    path: '/chatroom/:username',
+    name: 'ChatRoom',
+    component: ChatRoom
   },
 ]
 
