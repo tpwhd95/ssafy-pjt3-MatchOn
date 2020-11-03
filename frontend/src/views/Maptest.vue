@@ -1,12 +1,14 @@
 <template>
-  <div class="maptest2">
+  <div class="maptest">
     <div id="map" style="width: 100%; height: 600px"></div>
+    <div :class="selected">{{ selected }}</div>
   </div>
 </template>
 
 <script>
 export default {
   mounted() {
+    this.findcenter();
     window.kakao && window.kakao.maps ? this.initMap() : this.addScript();
   },
   data: () => {
@@ -16,7 +18,7 @@ export default {
       markers: [],
       ps: {},
       infowindow: {},
-      courses: [],
+      location: "답십리동",
       users: [
         { x: 127.048584257261, y: 37.5792782282719 },
         { x: 127.04955812811862, y: 37.5713551811832 },
@@ -25,6 +27,9 @@ export default {
         { x: 127.051346760004206, y: 37.57235740081413 },
         { x: 127.051346760005218, y: 37.57235740071429 },
       ],
+      selected: "",
+      cenx: 0,
+      ceny: 0,
       //   users: [
       //     { x: 126.57159381623066, y: 33.45133510810506 },
       //     { x: 126.5713551811832, y: 33.44955812811862 },
@@ -35,6 +40,18 @@ export default {
     };
   },
   methods: {
+    findcenter() {
+      var sumx = 0,
+        sumy = 0,
+        cenx = 0,
+        ceny = 0;
+      for (var i = 0; i < this.users.length; i++) {
+        sumx += this.users[i].x;
+        sumy += this.users[i].y;
+      }
+      this.cenx = sumx / this.users.length;
+      this.ceny = sumy / this.users.length;
+    },
     addScript() {
       const script = document.createElement("script");
       /* global kakao */
@@ -76,10 +93,134 @@ export default {
       // 지도에 다각형을 표시합니다
       polygon.setMap(map);
       map.setBounds(bounds);
+
+      var geocoder = new kakao.maps.services.Geocoder();
+      var center_loc = "12";
+      var callback = function (result, status) {
+        if (status === kakao.maps.services.Status.OK) {
+          console.log("지역 명칭 : " + result[0].address_name);
+          center_loc = result[0].address_name.split(" ")[2];
+          console.log(center_loc + " 당구장");
+        }
+        // 장소 검색 객체를 생성합니다
+        var ps = new kakao.maps.services.Places();
+
+        // 키워드로 장소를 검색합니다
+        ps.keywordSearch(center_loc + " 당구장", placesSearchCB);
+      };
+
+      geocoder.coord2RegionCode(this.cenx, this.ceny, callback);
+
+      var infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
+
+      function placesSearchCB(data, status, pagination) {
+        if (status === kakao.maps.services.Status.OK) {
+          // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
+          // LatLngBounds 객체에 좌표를 추가합니다
+          var bounds = new kakao.maps.LatLngBounds();
+
+          for (var i = 0; i < data.length; i++) {
+            displayMarker(data[i]);
+            bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
+          }
+
+          // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
+          map.setBounds(bounds);
+        }
+      }
+
+      // 지도에 마커를 표시하는 함수입니다
+      function displayMarker(place) {
+        // 마커를 생성하고 지도에 표시합니다
+        var marker = new kakao.maps.Marker({
+          map: map,
+          position: new kakao.maps.LatLng(place.y, place.x),
+        });
+        // kakao.maps.event.addListener(marker, "mouseover", function () {
+        //   // 마커를 클릭하면 장소명이 인포윈도우에 표출됩니다
+        //   var content =
+        //     '<div class="wrap" style="padding:5px;font-size:12px;background-color:white;width:200px;">' +
+        //     '    <div class="place" style="background-color:white;">' +
+        //     '        <div class="title">' +
+        //     place.place_name +
+        //     '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' +
+        //     "        </div>" +
+        //     '        <div class="body">' +
+        //     '            <div class="desc">' +
+        //     '                <div class="ellipsis">' +
+        //     place.road_address_name +
+        //     "</div>" +
+        //     '                <div class="jibun ellipsis">' +
+        //     place.phone +
+        //     "</div>" +
+        //     '                <div><a href="' +
+        //     place.place_url +
+        //     '" target="_blank" class="link">자세히보기</a></div>' +
+        //     "            </div>" +
+        //     "        </div>" +
+        //     "    </div>" +
+        //     "</div>";
+        //   infowindow.setContent(
+        //     content
+        //   );
+        //   infowindow.open(map, marker);
+        // });
+        // kakao.maps.event.addListener(
+        //   marker,
+        //   "mouseout",
+        //   makeOutListener(infowindow)
+        // );
+
+        // 마커에 클릭이벤트를 등록합니다
+        kakao.maps.event.addListener(marker, "click", function () {
+          // 마커를 클릭하면 장소명이 인포윈도우에 표출됩니다
+          var content =
+            '<div class="wrap" style="padding:5px;font-size:12px;background-color:white;width:200px;">' +
+            '    <div class="place" style="background-color:white;">' +
+            '        <div class="title">' +
+            place.place_name +
+            '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' +
+            "        </div>" +
+            '        <div class="body">' +
+            '            <div class="desc">' +
+            '                <div class="ellipsis">' +
+            place.road_address_name +
+            "</div>" +
+            '                <div class="jibun ellipsis">' +
+            place.phone +
+            "</div>" +
+            '                <div><a href="' +
+            place.place_url +
+            '" target="_blank" class="link">자세히보기</a></div>' +
+            "            </div>" +
+            "        </div>" +
+            "    </div>" +
+            "</div>";
+          infowindow.setContent(
+            // '<div style="padding:5px;font-size:12px;">' +
+            //   place.place_name +
+            //   "</div>"
+            content
+          );
+          infowindow.open(map, marker);
+          this.selected = place;
+          console.log(this.selected);
+        });
+      }
+
+      // 인포윈도우를 닫는 클로저를 만드는 함수입니다
+      function makeOutListener(infowindow) {
+        return function () {
+          infowindow.close();
+        };
+      }
+      function closeOverlay() {
+        infowindow.setMap(null);
+      }
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
 </style>

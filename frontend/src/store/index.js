@@ -1,8 +1,11 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import http from "@/util/http-common";
+import socket from './modules/socket';
 
 Vue.use(Vuex);
+
+const debug = process.env.NODE_ENV !== 'production';
 
 export default new Vuex.Store({
   state: {
@@ -43,5 +46,8 @@ export default new Vuex.Store({
       context.commit("setUserProfile", payload)
     },
   },
-  modules: {},
+  modules: {
+    socket,
+  },
+  strict: debug,
 });

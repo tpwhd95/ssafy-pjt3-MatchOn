@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-# from djongo import models
-# from match.models import Team
+from django.core import validators
 
 
 class User(AbstractUser):
