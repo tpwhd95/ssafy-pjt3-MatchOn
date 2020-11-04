@@ -91,7 +91,7 @@ CORS_ALLOW_HEADERS = (
 )
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:8080',
-    'http://k3a306.p.ssafy.io/'
+    # 'http://k3a306.p.ssafy.io/'
 ]
 
 ROOT_URLCONF = 'backend.urls'
