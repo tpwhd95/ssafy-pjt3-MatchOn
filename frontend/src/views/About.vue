@@ -57,6 +57,8 @@
           </v-btn>
         </v-col>
       </v-row>
+      <p>{{ sportsName }}</p>
+      <p>{{ date1 }}</p>
       <p>{{ time }}</p>
     </v-container>
   </v-form>
