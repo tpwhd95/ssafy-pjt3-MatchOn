@@ -15,8 +15,9 @@ class BeforeMatch(models.Model):
     # 스포츠PK
     sports_name = models.CharField(max_length=20)
     # 경기 하고 싶은 시간
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
+    date = models.DateField()
+    start_time = models.TimeField()
+    end_time = models.TimeField()
     # 위치
     lat = models.FloatField()
     lng = models.FloatField()

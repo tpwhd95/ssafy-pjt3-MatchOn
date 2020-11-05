@@ -13,3 +13,10 @@ def re_geocode(lat, lng):
 
     full_gu = si_name + '_' + gu_name
     return full_gu
+
+def test_func():
+    import time
+    print ("10초만 잘래요")
+    time.sleep(10)
+    print("일어났어요!")
+    return
