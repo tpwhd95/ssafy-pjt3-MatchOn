@@ -1,16 +1,22 @@
 <template>
   <div class="home">
-    <v-card class="mx-auto" max-width="1000">
+    <v-card class="mx-auto" max-width="720">
       <v-container fluid>
         <v-row>
-          <v-col v-for="card in cards" :key="card.title" :cols="card.flex">
+          <v-col
+            v-for="card in cards"
+            :key="card.title"
+            :cols="card.flex"
+            :sportsName="card.title"
+          >
             <v-card>
               <v-img
                 :src="card.src"
                 class="white--text align-end"
                 gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                 height="200px"
-                @click="matching"
+                @click="matching(card.title)"
+                style="cursor: pointer"
               >
                 <v-card-title v-text="card.title"></v-card-title>
               </v-img>
@@ -44,38 +50,39 @@ export default {
   components: {},
   data() {
     return {
+      sportsName: "",
       cards: [
         {
-          title: "Futsal",
+          title: "풋살",
           src: "https://cdn.vuetifyjs.com/images/cards/house.jpg",
-          flex: 6,
+          flex: 12,
         },
         {
-          title: "Favorite road trips",
+          title: "농구",
           src: "https://cdn.vuetifyjs.com/images/cards/road.jpg",
-          flex: 6,
+          flex: 12,
         },
         {
-          title: "Best airlines",
+          title: "테니스",
           src: "https://cdn.vuetifyjs.com/images/cards/plane.jpg",
-          flex: 6,
+          flex: 12,
         },
         {
-          title: "Best airlines",
+          title: "당구",
           src: "https://cdn.vuetifyjs.com/images/cards/plane.jpg",
-          flex: 6,
+          flex: 12,
         },
         {
-          title: "Best airlines",
+          title: "볼링",
           src: "https://cdn.vuetifyjs.com/images/cards/plane.jpg",
-          flex: 6,
+          flex: 12,
         },
       ],
     };
   },
   methods: {
-    matching() {
-      this.$router.push("/About");
+    matching(sportsName) {
+      this.$router.push({ name: "About", params: { sports: sportsName } });
     },
   },
 };
