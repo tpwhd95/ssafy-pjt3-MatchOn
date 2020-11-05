@@ -103,29 +103,35 @@ def before_match(request):
             etime_idx = int(user_bm.end_time.strftime("%H:%M")[:2])
             
             for i in range(stime_idx, etime_idx + 1):
+                # 해당 시간대;match_users[i]의 인원이 
                 if len(match_users[i]) >= sports_count[bm_match.sports_name] - 1:
-                    print(match_users[i])
+                    print('match_users[i]: ', match_users[i])
+                    import copy
+                    matched_users = copy.deepcopy(match_users[i])
+                    
+                    # 현재 유저까지 추가해서 매칭된 유저에 넣어서 매칭된 게임에 전달해준다.
+                    match_users[i].add(user_bm.pk)
+                    # 매칭된 게임 정보는 matched에 넣어준다.
                     matched.append(match_users[i])
+                    
+                    print('matched: ', matched)
                     # 매칭된 유저의 내용 빼기
-                    # for matched_users in match_users[i]:
-                    while match_users[i]:
-                        matched_users = match_users[i].pop()
-                        print(matched_users)
-                        matched_bm = get_object_or_404(BeforeMatch, pk=matched_users)
-                        print('here!', matched_bm)
+                    for user_pk in matched_users:
+                        matched_user_bm = BeforeMatch(pk=user_pk)
+                        print('matched_user_bm: ', matched_user_bm)
+                        print(matched_user_bm.start_time)
+                        # s_idx = int(matched_user_bm.start_time.strftime("%H:%M")[:2])
+                        # e_idx = int(matched_user_bm.end_time.strftime("%H:%M")[:2])
 
-                        s_idx = int(matched_bm.start_time.strftime("%H:%M")[:2])
-                        e_idx = int(matched_bm.end_time.strftime("%H:%M")[:2])
-                        print(s_idx, e_idx)
-                        for j in range(s_idx, e_idx + 1):
-                            print('wooow!', match_users[j], matched_users)
-                            # match_users[j].remove(matched_users)
+                        # print(s_idx, e_idx)
+                        # for j in range(s_idx, e_idx + 1):
+                        #     match_users[j].remove(user_pk)
                     # 현재 넣고 있는 유저의 넣었던 내용 빼기
 
                 else:
                     match_users[i].add(user_bm.pk)
-            print(match_users)
-            print(matched)
+            # print(match_users)
+            # print(matched)
     else:
         print('Naah')
 
