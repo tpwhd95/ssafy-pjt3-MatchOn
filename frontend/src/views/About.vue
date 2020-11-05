@@ -66,6 +66,7 @@
 
 <script>
 import http from "@/util/http-common";
+import { mapState } from "vuex";
 
 export default {
   name: "About",
@@ -100,19 +101,40 @@ export default {
       lng: "126.9779",
     };
   },
+  computed: {
+    ...mapState(["token"]),
+  },
   methods: {
     submit() {
+      const requestHeaders = {
+        headers: {
+          Authorization: "JWT " + this.token,
+        },
+      };
+      this.time[0] += 6;
+      this.time[1] += 6;
+      if (this.time[0] < 10) {
+        this.time[0] = "0" + this.time[0];
+      }
+      if (this.time[1] < 10) {
+        this.time[1] = "0" + this.time[1];
+      }
+      console.log(this.time);
       http
-        .post("/match/bm", {
-          sports: this.sportsName,
-          date: this.date1,
-          start_time: this.time[0] + 6,
-          end_time: this.time[1] + 6,
-          lat: this.lat,
-          lng: this.lng,
-        })
+        .post(
+          "/match/bm/",
+          {
+            sports_name: this.sportsName,
+            date: this.date1,
+            start_time: this.time[0] + ":00",
+            end_time: this.time[1] + ":00",
+            lat: this.lat,
+            lng: this.lng,
+          },
+          requestHeaders
+        )
         .then((res) => {
-          this.logs = res;
+          console.log(res);
         });
     },
     getToday() {

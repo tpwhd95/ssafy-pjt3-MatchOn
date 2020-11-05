@@ -18,7 +18,7 @@
                 @click="matching(card.title)"
                 style="cursor: pointer"
               >
-                <v-card-title v-text="card.title"></v-card-title>
+                <v-card-title v-text="card.title2"></v-card-title>
               </v-img>
 
               <v-card-actions>
@@ -53,27 +53,32 @@ export default {
       sportsName: "",
       cards: [
         {
-          title: "풋살",
+          title: "futsal",
+          title2: "풋살",
           src: "https://cdn.vuetifyjs.com/images/cards/house.jpg",
           flex: 12,
         },
         {
-          title: "농구",
+          title: "basket_ball",
+          title2: "농구",
           src: "https://cdn.vuetifyjs.com/images/cards/road.jpg",
           flex: 12,
         },
         {
-          title: "테니스",
+          title: "tennis",
+          title2: "테니스",
           src: "https://cdn.vuetifyjs.com/images/cards/plane.jpg",
           flex: 12,
         },
         {
-          title: "당구",
+          title: "pool",
+          title2: "당구",
           src: "https://cdn.vuetifyjs.com/images/cards/plane.jpg",
           flex: 12,
         },
         {
-          title: "볼링",
+          title: "bowl",
+          title2: "볼링",
           src: "https://cdn.vuetifyjs.com/images/cards/plane.jpg",
           flex: 12,
         },
