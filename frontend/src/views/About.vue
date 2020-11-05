@@ -136,6 +136,7 @@ export default {
         .then((res) => {
           console.log(res);
         });
+      this.$router.push("/matching");
     },
     getToday() {
       var today = new Date();
