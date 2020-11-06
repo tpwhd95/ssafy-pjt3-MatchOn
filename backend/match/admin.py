@@ -1,6 +1,9 @@
 from django.contrib import admin
 from .models import Sports, Match, MatchUser, Locations
 
+class MatchAdmin(admin.ModelAdmin):
+    list_display = ['sports', 'pk']
+
 # class UserAdmin(admin.ModelAdmin):
 #     list_display = ['nickname']
 # class BeforeMatchAdmin(admin.ModelAdmin):
@@ -15,6 +18,6 @@ from .models import Sports, Match, MatchUser, Locations
 
 # admin.site.register(Genre, GenreAdmin)
 admin.site.register(Sports)
-admin.site.register(Match)
+admin.site.register(Match, MatchAdmin)
 admin.site.register(MatchUser)
 admin.site.register(Locations)

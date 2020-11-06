@@ -2,16 +2,6 @@
   <v-app>
     <v-app-bar app color="primary" dark>
       <div class="d-flex align-center">
-        <!-- <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-          @click="$router.push('/')"
-          style="cursor: pointer"
-        /> -->
         <h1 @click="$router.push('/')" style="cursor: pointer">Match On</h1>
       </div>
 
@@ -44,7 +34,7 @@
         style="margin: 0px 16px 0px 0px; cursor: pointer"
         @click="profile"
       >
-        {{ userProfile.username }}님 환영합니다.
+        마이페이지
       </p>
       <v-btn v-if="this.isLoggedIn" color="primary" dark @click="logout2">
         Logout
@@ -52,6 +42,7 @@
     </v-app-bar>
 
     <v-main>
+      <br />
       <router-view></router-view>
     </v-main>
   </v-app>

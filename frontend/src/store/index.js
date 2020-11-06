@@ -47,7 +47,7 @@ export default new Vuex.Store({
     },
   },
   modules: {
-    socket,
+    // socket,
   },
   strict: debug,
 });
