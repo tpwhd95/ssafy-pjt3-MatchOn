@@ -20,7 +20,7 @@ export default {
       infowindow: {},
       location: "답십리동",
       myloc: "",
-      selected: "dsbjiaisd",
+      selected: "여기서 만나요!",
       users: [
         { x: 127.048584257261, y: 37.5792782282719 },
         { x: 127.04955812811862, y: 37.5713551811832 },
