@@ -49,23 +49,9 @@ def before_match(request):
             user = request.user, 
             status = 1, 
             sports_name = data['sports_name'],
-            # 날짜 표기 방식
-            # "date":"2020-11-04"
-            # "start_time":"14:57:18.091261"
-            # "end_time":"14:57:18.091261"
-
-            # 테스트용 데이트 자료
-            # date = '2020-11-04',
-            # start_time = '15:21:32',
-            # end_time = '15:21:32',
-            # date = datetime.date.today(),
-            # start_time = (datetime.datetime.now() - datetime.timedelta(hours= 3)).strftime("%H:%M"),
-            # end_time = datetime.datetime.now().time(),
-
             date = data['date'],
             start_time = data['start_time'],
             end_time = data['end_time'],
-
             lat = data['lat'],
             lng = data['lng'],
             gu = re_geocode(data['lat'], data['lng'])
@@ -109,15 +95,11 @@ def before_match(request):
                         break
                     else:
                         match_users[i].add(user_bm.pk)
-            print('match_users:', match_users)
-            print('matched: ', matched)
-
 
             # 잡혀진 매치가 있다면 해당 매치를 게임으로 바꿔줘야겠죠.
             while matched:
                 # BeforeMatch PK가 들어가 있는 리스트
                 bm_pks = matched.pop()
-                print('players: ', bm_pks)
                 
                 # 매치를 잡아줍니다.
                 sports_name = get_object_or_404(Sports, sports_name=bm_match.sports_name)
