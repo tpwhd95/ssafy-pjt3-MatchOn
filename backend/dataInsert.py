@@ -7,15 +7,13 @@ django.setup()
 from match.models import Locations
 
 
-current = os.getcwd()
-
-with open(current + '\\documents\\data\\public.json', 'rt', encoding='UTF8') as f:
+with open('public.json', 'rt', encoding='UTF8') as f:
     json_data_public = json.load(f)
 
-with open(current + '\\documents\\data\\park.json', 'rt', encoding='UTF8') as f:
+with open('park.json', 'rt', encoding='UTF8') as f:
     json_data_park = json.load(f)
 
-with open(current + '\\documents\\data\\reserve.json', 'rt', encoding='UTF8') as f:
+with open('reserve.json', 'rt', encoding='UTF8') as f:
     json_data_reserve = json.load(f)
 
 # print(json.dumps(json_data_1, ensure_ascii=False, indent='\t'))
@@ -128,7 +126,7 @@ for p in place:
 print(place_list)
 
 
-with open(current + '\\documents\\data\\place.json', 'w', encoding='UTF-8' ) as place_file:
+with open('place.json', 'w', encoding='UTF-8' ) as place_file:
     json.dump(place_list , place_file, ensure_ascii=False)
 
 cnt = 0
@@ -143,7 +141,8 @@ model_instances = [Locations(
     gu_name=record['gu_name'],
     address=record['address'],
     tel=record['tel'],
-    url=record['url']
+    url=record['url'],
+    sports_id=1
 ) for record in place_list]
 
 Locations.objects.all().delete()
