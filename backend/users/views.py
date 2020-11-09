@@ -38,25 +38,26 @@ def match_info(request):
     all_bms = BeforeMatch.objects.filter(user=request.user).order_by('-date', '-start_time')
     data = []
     for bm in all_bms:
-        am = get_object_or_404(AfterMatch, before_match=bm.pk)
         match_dict = {}
         match_dict['status'] = bm.status
-        match_dict['matching_pk'] = am.matching_pk
         match_dict['sports_name'] = bm.sports_name
         match_dict['date'] = bm.date
         match_dict['start_time'] = bm.start_time
         match_dict['end_time'] = bm.end_time
         match_dict['gu'] = bm.gu
-        match_dict['team_pk'] = am.team_pk
-        match_dict['fixed_time'] = am.fixed_time
-        match_dict['fixed_lat'] = am.fixed_lat
-        match_dict['fixed_lng'] = am.fixed_lng
-        match_dict['result'] = am.result
+        if int(bm.status) >= 2:
+            am = get_object_or_404(AfterMatch, before_match=bm.pk)
+            match_dict['matching_pk'] = am.matching_pk
+            match_dict['team_pk'] = am.team_pk
+            match_dict['fixed_time'] = am.fixed_time
+            match_dict['fixed_lat'] = am.fixed_lat
+            match_dict['fixed_lng'] = am.fixed_lng
+            match_dict['result'] = am.result
 
         data.append(match_dict)
-    # print(context)
     context = {
         'result' : 'true',
         'data' : data
     }
+    print(context)
     return Response(context, status=status.HTTP_200_OK)
