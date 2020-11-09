@@ -28,6 +28,9 @@
 </template>
 
 <script>
+import http from "@/util/http-common";
+import { mapState } from "vuex";
+
 export default {
   name: "Profile",
   components: {},
@@ -36,60 +39,96 @@ export default {
       userProfile: sessionStorage.getItem("userProfile")
         ? JSON.parse(sessionStorage.getItem("userProfile"))
         : [],
+      cards2_1: [],
+      cards2_2: [],
+      cards2_3: [],
+      cards2_4: [],
+
       cards1: [
         {
           title: "매칭중인 경기",
           flex: 12,
-          cards2: [
-            {
-              sports: "풋살",
-              date: "2020-11-18",
-              flex: 12,
-            },
-            {
-              sports: "풋살",
-              date: "2020-11-21",
-              flex: 12,
-            },
-          ],
+          cards2: this.cards2_1,
         },
         {
           title: "조율중인 경기",
           flex: 12,
-          cards2: [
-            {
-              sports: "풋살",
-              date: "2020-11-15",
-              flex: 12,
-              src: "",
-            },
-          ],
+          cards2: this.cards2_2,
         },
         {
           title: "대기중인 경기",
           flex: 12,
-          cards2: [
-            {
-              sports: "풋살",
-              date: "2020-11-11",
-              flex: 12,
-            },
-          ],
+          cards2: this.cards2_3,
         },
         {
           title: "완료된 경기",
           flex: 12,
-          cards2: [
-            {
-              sports: "풋살",
-              date: "2020-11-01",
-              flex: 12,
-              src: "",
-            },
-          ],
+          cards2: this.cards2_4,
         },
       ],
     };
+  },
+  created() {
+    this.getMatchInfo();
+  },
+  computed: {
+    ...mapState(["token"]),
+  },
+  methods: {
+    getMatchInfo() {
+      const self = this;
+      http
+        .get("/auth/match-info/", {
+          headers: {
+            Authorization: "JWT " + this.token,
+          },
+        })
+        .then(function (res) {
+          if (res.status == 1) {
+            self.cards2_1 = [];
+            for (let i of res.data) {
+              self.cards2_1.push({
+                sports: i.sports,
+                date: i.date,
+                flex: 12,
+              });
+            }
+          }
+          if (res.status == 2) {
+            self.cards2_2 = [];
+            for (let i of res.data) {
+              self.cards2_2.push({
+                sports: i.sports,
+                date: i.date,
+                flex: 12,
+              });
+            }
+          }
+          if (res.status == 3) {
+            self.cards2_3 = [];
+            for (let i of res.data) {
+              self.cards2_3.push({
+                sports: i.sports,
+                date: i.date,
+                flex: 12,
+              });
+            }
+          }
+          if (res.status == 4) {
+            self.cards2_4 = [];
+            for (let i of res.data) {
+              self.cards2_4.push({
+                sports: i.sports,
+                date: i.date,
+                flex: 12,
+              });
+            }
+          }
+        })
+        .catch(function (err) {
+          alert(err);
+        });
+    },
   },
 };
 </script>

@@ -2,7 +2,7 @@
   <v-form v-model="valid">
     <v-container>
       <v-row>
-        <v-col cols="1">
+        <v-col cols="12">
           <v-text-field
             v-model="sportsName"
             label="종목"
@@ -10,7 +10,7 @@
           ></v-text-field>
         </v-col>
 
-        <v-col cols="2">
+        <v-col cols="12">
           <v-menu
             v-model="menu1"
             :close-on-content-click="false"
@@ -36,7 +36,7 @@
           </v-menu>
         </v-col>
 
-        <v-col cols="8">
+        <v-col cols="12">
           <v-range-slider
             v-model="time"
             :tick-labels="ticksLabels"
@@ -46,7 +46,7 @@
             tick-size="5"
           ></v-range-slider>
         </v-col>
-        <v-col cols="1">
+        <v-col cols="12">
           <v-btn
             style="text-transform: none"
             color="primary"
