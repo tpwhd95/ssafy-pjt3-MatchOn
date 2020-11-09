@@ -91,7 +91,7 @@ CORS_ALLOW_HEADERS = (
 )
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:8080',
-    # 'https://matchon-1521d.web.app/',
+    'https://matchon-1521d.web.app/',
     # 'http://k3a306.p.ssafy.io/'
 ]
 
