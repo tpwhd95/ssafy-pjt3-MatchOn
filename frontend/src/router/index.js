@@ -1,10 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+
 import Home from '../views/Home.vue'
+import About from '../views/About.vue'
+import Profile from '../views/Profile.vue'
 import Map from '../views/Map.vue'
-import MapTest from '../views/Maptest.vue'
-import MapTest2 from '../views/Maptest2.vue'
 import ChatRoom from '../views/ChatRoom.vue'
+import Matching from '../views/Matching.vue'
 
 Vue.use(VueRouter)
 
@@ -15,30 +17,29 @@ const routes = [
     component: Home
   },
   {
-    path: '/about',
+    path: '/about/:sports',
     name: 'About',
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    component: About
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: Profile
   },
   {
     path: '/map',
     name: 'Map',
     component: Map
-
-  },
-  {
-    path: '/maptest',
-    name: 'MapTest',
-    component: MapTest
-  },
-  {
-    path: '/maptest2',
-    name: 'MapTest2',
-    component: MapTest2
   },
   {
     path: '/chatroom/:username',
     name: 'ChatRoom',
     component: ChatRoom
+  },
+  {
+    path: '/matching',
+    name: 'Matching',
+    component: Matching
   },
 ]
 

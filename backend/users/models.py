@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core import validators
 
-
 class User(AbstractUser):
     nickname = models.CharField(max_length=50)
     social_id = models.CharField(max_length=50)
@@ -13,13 +12,15 @@ class BeforeMatch(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.CharField(max_length=20)
     # 스포츠PK
-    sports_name = models.IntegerField()
+    sports_name = models.CharField(max_length=20)
     # 경기 하고 싶은 시간
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
+    date = models.DateField()
+    start_time = models.TimeField()
+    end_time = models.TimeField()
     # 위치
     lat = models.FloatField()
     lng = models.FloatField()
+    gu = models.CharField(max_length=50, null=True)
 
 
 class AfterMatch(models.Model):
