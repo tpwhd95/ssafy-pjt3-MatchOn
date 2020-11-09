@@ -1,6 +1,10 @@
 <template>
   <div class="home">
-    <v-card class="mx-auto" max-width="720">
+    <v-card v-if="!this.isLoggedIn" class="mx-auto" max-width="720">
+      로그인 하세요.
+    </v-card>
+
+    <v-card v-if="this.isLoggedIn" class="mx-auto" max-width="720">
       <v-container fluid>
         <v-row>
           <v-col
@@ -21,7 +25,7 @@
                 <v-card-title v-text="card.title2"></v-card-title>
               </v-img>
 
-              <v-card-actions>
+              <!-- <v-card-actions>
                 <v-spacer></v-spacer>
 
                 <v-btn icon>
@@ -35,7 +39,7 @@
                 <v-btn icon>
                   <v-icon>mdi-share-variant</v-icon>
                 </v-btn>
-              </v-card-actions>
+              </v-card-actions> -->
             </v-card>
           </v-col>
         </v-row>
@@ -45,6 +49,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "Home",
   components: {},
@@ -55,31 +61,31 @@ export default {
         {
           title: "futsal",
           title2: "풋살",
-          src: "https://cdn.vuetifyjs.com/images/cards/house.jpg",
+          src: "@/assets/futsal.jpg",
           flex: 12,
         },
         {
           title: "basket_ball",
           title2: "농구",
-          src: "https://cdn.vuetifyjs.com/images/cards/road.jpg",
+          src: "@/assets/basketball.jpg",
           flex: 12,
         },
         {
           title: "tennis",
           title2: "테니스",
-          src: "https://cdn.vuetifyjs.com/images/cards/plane.jpg",
+          src: "@/assets/tennis.jpg",
           flex: 12,
         },
         {
           title: "pool",
           title2: "당구",
-          src: "https://cdn.vuetifyjs.com/images/cards/plane.jpg",
+          src: "@/assets/pool.jpg",
           flex: 12,
         },
         {
           title: "bowl",
           title2: "볼링",
-          src: "https://cdn.vuetifyjs.com/images/cards/plane.jpg",
+          src: "@/assets/bowling.jpg",
           flex: 12,
         },
       ],
@@ -89,6 +95,9 @@ export default {
     matching(sportsName) {
       this.$router.push({ name: "About", params: { sports: sportsName } });
     },
+  },
+  computed: {
+    ...mapGetters(["isLoggedIn"]),
   },
 };
 </script>

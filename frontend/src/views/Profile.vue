@@ -28,6 +28,9 @@
 </template>
 
 <script>
+import http from "@/util/http-common";
+import { mapState } from "vuex";
+
 export default {
   name: "Profile",
   components: {},
@@ -40,56 +43,79 @@ export default {
         {
           title: "매칭중인 경기",
           flex: 12,
-          cards2: [
-            {
-              sports: "풋살",
-              date: "2020-11-18",
-              flex: 12,
-            },
-            {
-              sports: "풋살",
-              date: "2020-11-21",
-              flex: 12,
-            },
-          ],
+          cards2: [],
         },
         {
           title: "조율중인 경기",
           flex: 12,
-          cards2: [
-            {
-              sports: "풋살",
-              date: "2020-11-15",
-              flex: 12,
-              src: "",
-            },
-          ],
+          cards2: [],
         },
         {
           title: "대기중인 경기",
           flex: 12,
-          cards2: [
-            {
-              sports: "풋살",
-              date: "2020-11-11",
-              flex: 12,
-            },
-          ],
+          cards2: [],
         },
         {
           title: "완료된 경기",
           flex: 12,
-          cards2: [
-            {
-              sports: "풋살",
-              date: "2020-11-01",
-              flex: 12,
-              src: "",
-            },
-          ],
+          cards2: [],
         },
       ],
     };
+  },
+  created() {
+    this.getMatchInfo();
+  },
+  computed: {
+    ...mapState(["token"]),
+  },
+  methods: {
+    getMatchInfo() {
+      console.log(this.token);
+      const self = this;
+      http
+        .get("/auth/match-info/", {
+          headers: {
+            Authorization: "JWT " + this.token,
+          },
+        })
+        .then(function (res) {
+          console.log(res);
+          for (let i of res.data.data) {
+            if (i.status == 1) {
+              self.cards1[0].cards2.push({
+                sports: i.sports_name,
+                date: i.date,
+                flex: 12,
+              });
+            }
+            if (i.status == 2) {
+              self.cards1[1].cards2.push({
+                sports: i.sports_name,
+                date: i.date,
+                flex: 12,
+              });
+            }
+            if (i.status == 3) {
+              self.cards1[2].cards2.push({
+                sports: i.sports_name,
+                date: i.date,
+                flex: 12,
+              });
+            }
+            if (i.status == 4) {
+              self.cards1[3].cards2.push({
+                sports: i.sports_name,
+                date: i.date,
+                flex: 12,
+              });
+            }
+          }
+        })
+        .catch(function (err) {
+          alert(err);
+        });
+    },
   },
 };
 </script>
