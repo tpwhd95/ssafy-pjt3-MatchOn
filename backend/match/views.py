@@ -80,6 +80,9 @@ def before_match(request):
                         matched_users = copy.deepcopy(match_users[i])
                         # 매칭된 유저의 내용 빼기
                         for user_pk in matched_users:
+                            """
+                            공통된 시작시간과 끝시간을 넣어줄 것
+                            """
                             crnt_bm = get_object_or_404(BeforeMatch, pk=user_pk)
                             s_idx = int(crnt_bm.start_time.strftime("%H:%M")[:2])
                             e_idx = int(crnt_bm.end_time.strftime("%H:%M")[:2])
