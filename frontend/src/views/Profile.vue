@@ -39,31 +39,26 @@ export default {
       userProfile: sessionStorage.getItem("userProfile")
         ? JSON.parse(sessionStorage.getItem("userProfile"))
         : [],
-      cards2_1: [],
-      cards2_2: [],
-      cards2_3: [],
-      cards2_4: [],
-
       cards1: [
         {
           title: "매칭중인 경기",
           flex: 12,
-          cards2: this.cards2_1,
+          cards2: [],
         },
         {
           title: "조율중인 경기",
           flex: 12,
-          cards2: this.cards2_2,
+          cards2: [],
         },
         {
           title: "대기중인 경기",
           flex: 12,
-          cards2: this.cards2_3,
+          cards2: [],
         },
         {
           title: "완료된 경기",
           flex: 12,
-          cards2: this.cards2_4,
+          cards2: [],
         },
       ],
     };
@@ -76,6 +71,7 @@ export default {
   },
   methods: {
     getMatchInfo() {
+      console.log(this.token);
       const self = this;
       http
         .get("/auth/match-info/", {
@@ -84,41 +80,32 @@ export default {
           },
         })
         .then(function (res) {
-          if (res.status == 1) {
-            self.cards2_1 = [];
-            for (let i of res.data) {
-              self.cards2_1.push({
-                sports: i.sports,
+          console.log(res);
+          for (let i of res.data.data) {
+            if (i.status == 1) {
+              self.cards1[0].cards2.push({
+                sports: i.sports_name,
                 date: i.date,
                 flex: 12,
               });
             }
-          }
-          if (res.status == 2) {
-            self.cards2_2 = [];
-            for (let i of res.data) {
-              self.cards2_2.push({
-                sports: i.sports,
+            if (i.status == 2) {
+              self.cards1[1].cards2.push({
+                sports: i.sports_name,
                 date: i.date,
                 flex: 12,
               });
             }
-          }
-          if (res.status == 3) {
-            self.cards2_3 = [];
-            for (let i of res.data) {
-              self.cards2_3.push({
-                sports: i.sports,
+            if (i.status == 3) {
+              self.cards1[2].cards2.push({
+                sports: i.sports_name,
                 date: i.date,
                 flex: 12,
               });
             }
-          }
-          if (res.status == 4) {
-            self.cards2_4 = [];
-            for (let i of res.data) {
-              self.cards2_4.push({
-                sports: i.sports,
+            if (i.status == 4) {
+              self.cards1[3].cards2.push({
+                sports: i.sports_name,
                 date: i.date,
                 flex: 12,
               });
