@@ -100,7 +100,7 @@ def before_match(request):
                     else:
                         match_users[i].add(user_bm.pk)
 
-            print(match)
+            print(matched)
             # 잡혀진 매치가 있다면 해당 매치를 게임으로 바꿔줘야겠죠.
             while matched:
                 # BeforeMatch PK가 들어가 있는 리스트

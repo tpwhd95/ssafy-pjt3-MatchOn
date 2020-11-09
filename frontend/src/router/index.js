@@ -5,7 +5,6 @@ import Home from '../views/Home.vue'
 import About from '../views/About.vue'
 import Profile from '../views/Profile.vue'
 import Map from '../views/Map.vue'
-import ChatRoom from '../views/ChatRoom.vue'
 import Matching from '../views/Matching.vue'
 
 Vue.use(VueRouter)
@@ -30,11 +29,6 @@ const routes = [
     path: '/map',
     name: 'Map',
     component: Map
-  },
-  {
-    path: '/chatroom/:username',
-    name: 'ChatRoom',
-    component: ChatRoom
   },
   {
     path: '/matching',
