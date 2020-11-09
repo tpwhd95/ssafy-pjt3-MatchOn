@@ -3,20 +3,14 @@ from .models import User, BeforeMatch, AfterMatch
 
 
 class BeforeMatchAdmin(admin.ModelAdmin):
-    list_display = ['pk', 'sports_name', 'user']
-# class UserAdmin(admin.ModelAdmin):
-#     list_display = ['nickname']
-# class BeforeMatchAdmin(admin.ModelAdmin):
-#     search_fields = ['title']
-#     list_display = '__all__'
+    list_display = ['pk', 'sports_name', 'status', 'user']
+    list_filter = ('sports_name', 'status')
 
-# class WeatherLikeAdmin(admin.ModelAdmin):
-#     list_display = ['movie', 'weather', 'user', ]
 
-# class RankAdmin(admin.ModelAdmin):
-#     list_display = ['movie']
+class AfterMatchAdmin(admin.ModelAdmin):
+    list_display = ['pk', 'before_match', 'matching_pk']
+    list_filter = ['matching_pk']
 
-# admin.site.register(Genre, GenreAdmin)
 admin.site.register(User)
 admin.site.register(BeforeMatch, BeforeMatchAdmin)
-admin.site.register(AfterMatch)
+admin.site.register(AfterMatch, AfterMatchAdmin)
