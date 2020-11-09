@@ -1,7 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import http from "@/util/http-common";
-import socket from './modules/socket';
 
 Vue.use(Vuex);
 
@@ -45,9 +44,6 @@ export default new Vuex.Store({
     setUserProfile(context, payload) {
       context.commit("setUserProfile", payload)
     },
-  },
-  modules: {
-    // socket,
   },
   strict: debug,
 });
