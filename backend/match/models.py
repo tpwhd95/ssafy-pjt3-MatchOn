@@ -13,7 +13,10 @@ class Match(models.Model):
     sports = models.ForeignKey(Sports, on_delete=models.CASCADE)
     # 장소
     # 시간
-
+    # date = models.DateField()
+    # start_time = models.TimeField()
+    # end_time = models.TimeField()
+    
 
 class MatchUser(models.Model):
     match = models.ForeignKey(Match, on_delete=models.CASCADE)

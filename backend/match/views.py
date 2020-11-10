@@ -80,32 +80,40 @@ def before_match(request):
                         import copy
                         matched_users = copy.deepcopy(match_users[i])
                         # 매칭된 유저의 내용 빼기
+                        match_stime = datetime.time(hour=00, minute=00)
+                        match_etime = datetime.time(hour=23, minute=59)
                         for user_pk in matched_users:
-                            """
-                            공통된 시작시간과 끝시간을 넣어줄 것
-                            """
                             crnt_bm = get_object_or_404(BeforeMatch, pk=user_pk)
                             s_idx = int(crnt_bm.start_time.strftime("%H:%M")[:2])
                             e_idx = int(crnt_bm.end_time.strftime("%H:%M")[:2])
+
+                            if match_stime < crnt_bm.start_time:
+                                match_stime = crnt_bm.start_time
+                            if match_etime > crnt_bm.end_time:
+                                match_etime = crnt_bm.end_time
+
                             for j in range(s_idx, e_idx + 1):
                                 match_users[j].remove(user_pk)
                         # 현재 유저까지 추가해서 매칭된 유저에 넣어서 매칭된 게임에 전달해준다.
                         # 매칭된 게임 정보는 matched에 넣어준다.
                         matched_users.add(user_bm.pk)
+                        matched_users.add(match_stime)
+                        matched_users.add(match_etime)
                         matched.append(matched_users)
                         # 현재 넣고 있는 유저의 넣었던 내용 빼기
                         for k in range(stime_idx, i):
-                            match_users[j].remove(user_bm.pk)
+                            match_users[k].remove(user_bm.pk)
                         break
                     else:
                         match_users[i].add(user_bm.pk)
 
-            print(match)
             # 잡혀진 매치가 있다면 해당 매치를 게임으로 바꿔줘야겠죠.
             while matched:
                 # BeforeMatch PK가 들어가 있는 리스트
                 bm_pks = matched.pop()
-                
+                bm_etime = bm_pks.pop()
+                bm_stime = bm_pks.pop()
+                print(bm_stime, bm_etime)
                 # 매치를 잡아줍니다.
                 sports_name = get_object_or_404(Sports, sports_name=bm_match.sports_name)
                 match = Match(sports = sports_name)
@@ -134,3 +142,8 @@ def before_match(request):
     else:
         msg = {"status_code": 403, "detail": "이미 해당 시간에 매칭 중인 게임이 있습니다."}
         return Response(msg)
+
+
+@api_view(['POST'])
+def after_match(request):
+    pass
