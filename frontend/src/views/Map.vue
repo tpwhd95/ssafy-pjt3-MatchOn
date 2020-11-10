@@ -18,7 +18,6 @@ export default {
       markers: [],
       ps: {},
       infowindow: {},
-      location: "답십리동",
       myloc: "",
       selected: "여기서 만나요!",
       users: [
