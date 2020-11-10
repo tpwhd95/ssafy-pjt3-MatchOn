@@ -38,7 +38,36 @@
         navigator.serviceWorker.register("sw.js");
       });
     }
-
+  </script>
+  <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyDGdHvQgttXEKYkihDzYhpsKc6CPavUlD4",
+      authDomain: "matchon-1521d.firebaseapp.com",
+      databaseURL: "https://matchon-1521d.firebaseio.com",
+      projectId: "matchon-1521d",
+      storageBucket: "matchon-1521d.appspot.com",
+      messagingSenderId: "993144676136",
+    };
+    firebase.initializeApp(config);
+ 
+    const messaging = firebase.messaging();
+ 
+    //token값 알아내기
+    messaging.requestPermission()
+        .then(function(){
+            console.log("Have permission");
+            return messaging.getToken();
+        })
+        .then(function(token){
+            console.log(token);
+        })
+        .catch(function(arr){
+            console.log("Error Occured");
+        });
+ 
+ 
   </script>
 </body>
 

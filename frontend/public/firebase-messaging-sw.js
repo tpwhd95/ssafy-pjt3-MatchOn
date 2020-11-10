@@ -13,41 +13,39 @@ const config = {
 };
 
 firebase.initializeApp(config);
-const messaging = firebase.messaging();
 
 // 백그라운드 상태에서 받은 알림 처리
-messaging.setBackgroundMessageHandler((payload) => {
-    console.log('Message received. ', payload);
-    // Customize notification here
-    const title = 'Background Message Title'
+const messaging = firebase.messaging();
+messaging.setBackgroundMessageHandler(function(payload){
+ 
+    const title = "Hello World";
     const options = {
-        body: payload.data.message,
-        icon: '/firebase-logo.png'
-    }
-
-    return self.registration.showNotification(title, options);
+            body: payload.data.status
+    };
+ 
+    return self.registration.showNotification(title,options);
 });
 
-window.addEventListener('beforeinstallprompt', function (event) {
-    event.preventDefault();
-    //@ts-ignore
-    window.promptEvent = event;
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-        console.log('display-mode is standalone');
-    } else {
-        setVisible(true)
-    }
-});
+// window.addEventListener('beforeinstallprompt', function (event) {
+//     event.preventDefault();
+//     //@ts-ignore
+//     window.promptEvent = event;
+//     if (window.matchMedia('(display-mode: standalone)').matches) {
+//         console.log('display-mode is standalone');
+//     } else {
+//         setVisible(true)
+//     }
+// });
 
-function addToHomeScreen() {
-    //@ts-ignore
-    window.promptEvent.prompt();
-    //@ts-ignore
-    window.promptEvent.userChoice.then((choiceResult: any) => {
-        if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted the A2HS prompt')
-        } else {
-            console.log('User dismissed the A2HS prompt')
-        }
-    })
-}
+// function addToHomeScreen() {
+//     //@ts-ignore
+//     window.promptEvent.prompt();
+//     //@ts-ignore
+//     window.promptEvent.userChoice.then((choiceResult: any) => {
+//         if (choiceResult.outcome === 'accepted') {
+//             console.log('User accepted the A2HS prompt')
+//         } else {
+//             console.log('User dismissed the A2HS prompt')
+//         }
+//     })
+// }

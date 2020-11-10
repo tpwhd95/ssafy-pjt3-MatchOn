@@ -1,4 +1,5 @@
 <template>
+  
   <v-app>
     <v-app-bar app color="grey darken-3" dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
@@ -75,7 +76,7 @@
 import axios from "axios";
 import http from "@/util/http-common";
 import { mapGetters, mapState, mapActions } from "vuex";
-import { token } from "@/services/messaging";
+// import { token } from "@/services/messaging";
 
 export default {
   name: "app",
