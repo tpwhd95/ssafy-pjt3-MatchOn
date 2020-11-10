@@ -75,9 +75,15 @@
 import axios from "axios";
 import http from "@/util/http-common";
 import { mapGetters, mapState, mapActions } from "vuex";
+import { token } from "@/services/messaging";
 
 export default {
   name: "app",
+  setup() {
+    return {
+      token,
+    };
+  },
   data() {
     return {
       dialog: false,

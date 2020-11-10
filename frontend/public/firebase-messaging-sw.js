@@ -27,3 +27,27 @@ messaging.setBackgroundMessageHandler((payload) => {
 
     return self.registration.showNotification(title, options);
 });
+
+window.addEventListener('beforeinstallprompt', function (event) {
+    event.preventDefault();
+    //@ts-ignore
+    window.promptEvent = event;
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+        console.log('display-mode is standalone');
+    } else {
+        setVisible(true)
+    }
+});
+
+function addToHomeScreen() {
+    //@ts-ignore
+    window.promptEvent.prompt();
+    //@ts-ignore
+    window.promptEvent.userChoice.then((choiceResult: any) => {
+        if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the A2HS prompt')
+        } else {
+            console.log('User dismissed the A2HS prompt')
+        }
+    })
+}
