@@ -79,11 +79,11 @@ import { mapGetters, mapState, mapActions } from "vuex";
 
 export default {
   name: "app",
-  setup() {
-    return {
-      token,
-    };
-  },
+  // setup() {
+  //   return {
+  //     token,
+  //   };
+  // },
   data() {
     return {
       dialog: false,
@@ -145,12 +145,14 @@ export default {
     },
     login() {
       this.dialog = false;
+      const token2 = sessionStorage.getItem("token2");
+      console.log(token2);
       axios
         .post(
           "https://fcm.googleapis.com/fcm/send",
           {
             to:
-              "cdEFPugi0Hs:APA91bHdu1c8-GiKhS_D9c51ef4SJB-VgHnCrjGCojMDsM12fTy6hLA33D3PL7zg3qldoMm3955YECEA2pL4mZhiCwaZ1nyi0cpOV1nE4zn-BDtT6DYrWXarmDo1J3CzIa9CRkt_OJcH",
+              "d5W_AUhvD5Q:APA91bFECgK_e4AtZai3pUuesvvBDxadXFoEKF5ATEXxUmTh9NMIqwFIny8OY7Gw4i_rBQDS1nX0-0FSUPaMCeqTcG6D06WFOLrXn7C9AzF5D9alXgVK87k8eOg-slDbBzuFSUAVPEzy",
             data: { message: "조까 푸시 알림" },
           },
           {
@@ -163,7 +165,10 @@ export default {
           }
         )
         .then((data) => {
-          console.log(asdf);
+          console.log("asdf");
+        })
+        .catch((err) => {
+          console.log(err);
         });
     },
     ...mapActions(["logout", "setToken", "setUserProfile"]),
