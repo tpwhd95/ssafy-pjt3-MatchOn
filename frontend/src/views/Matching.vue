@@ -4,16 +4,19 @@
       <v-card width="400">
         <v-card-title class="black--text mt-8">
           <p class="ml-3">
-            팀원들을 찾고있습니다. <br /><br />매칭이 완료되면 <br />푸시알림이
-            발송됩니다.
+            팀원들을 찾고있습니다.
+            <br /><br />
+            매칭이 완료되면
+            <br />
+            푸시알림이발송됩니다.
           </p>
         </v-card-title>
 
         <v-card-text>
-          <div class="font-weight-bold ml-8 mb-2">종목: 풋살</div>
-          <div class="font-weight-bold ml-8 mb-2">날짜: 2020년 11월 5일</div>
+          <div class="font-weight-bold ml-8 mb-2">종목: {{ sportsNameKR }}</div>
+          <div class="font-weight-bold ml-8 mb-2">날짜: {{ date1 }}</div>
           <div class="font-weight-bold ml-8 mb-2">
-            시간: 오전 6시 ~ 오후 10시
+            시간: {{ time[0] }}시 ~ {{ time[1] }}시
           </div>
         </v-card-text>
       </v-card>
@@ -40,13 +43,17 @@
 
 <script>
 export default {
-  name: "matching",
+  name: "Matching",
   data() {
-    return {};
+    return {
+      sportsNameKR: this.$route.params.sportsNameKR,
+      date1: this.$route.params.date1,
+      time: this.$route.params.time,
+    };
   },
   methods: {
     main() {
-      this.$router.push("/");
+      this.$router.push("/map");
     },
   },
 };

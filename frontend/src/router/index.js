@@ -6,6 +6,7 @@ import About from '../views/About.vue'
 import Profile from '../views/Profile.vue'
 import Map from '../views/Map.vue'
 import Matching from '../views/Matching.vue'
+import HowToUse from '../views/HowToUse.vue'
 
 Vue.use(VueRouter)
 
@@ -34,6 +35,11 @@ const routes = [
     path: '/matching',
     name: 'Matching',
     component: Matching
+  },
+  {
+    path: '/howtouse',
+    name: 'HowToUse',
+    component: HowToUse
   },
 ]
 

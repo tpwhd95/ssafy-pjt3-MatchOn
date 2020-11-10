@@ -1,7 +1,8 @@
 <template>
   <v-app>
-    <v-app-bar app color="primary" dark>
-      <div class="d-flex align-center">
+    <v-app-bar app color="grey darken-3" dark>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <div>
         <h1 @click="$router.push('/')" style="cursor: pointer">Match On</h1>
       </div>
 
@@ -9,7 +10,7 @@
 
       <v-dialog v-if="!this.isLoggedIn" v-model="dialog" max-width="500">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn color="primary" dark v-bind="attrs" v-on="on"> Login </v-btn>
+          <v-btn color="teal" dark v-bind="attrs" v-on="on"> Login </v-btn>
         </template>
         <v-card style="padding: 20px">
           <v-card-title
@@ -29,20 +30,42 @@
         </v-card>
       </v-dialog>
 
-      <p
-        v-if="this.isLoggedIn"
-        style="margin: 0px 16px 0px 0px; cursor: pointer"
-        @click="profile"
-      >
-        마이페이지
-      </p>
-      <v-btn v-if="this.isLoggedIn" color="primary" dark @click="logout2">
+      <v-btn v-if="this.isLoggedIn" color="teal" dark @click="logout2">
         Logout
       </v-btn>
     </v-app-bar>
 
+    <v-navigation-drawer v-model="drawer" absolute left temporary dark>
+      <v-list nav dense>
+        <v-list-item-group v-model="group">
+          <v-list-item style="margin: 12px 3px">
+            <v-list-item-title @click="$router.push('/')">
+              <h1 class="display-1 font-weight-bold">
+                Match On
+              </h1></v-list-item-title
+            >
+          </v-list-item>
+
+          <v-list-item v-if="this.isLoggedIn" style="margin: 6px 3px">
+            <v-list-item-title @click="$router.push('/profile')">
+              <span class="text-h6 font-weight-bold">
+                마이페이지
+              </span></v-list-item-title
+            >
+          </v-list-item>
+
+          <v-list-item style="margin: 6px 3px">
+            <v-list-item-title @click="$router.push('/howtouse')">
+              <span class="text-h6 font-weight-bold">
+                이용방법
+              </span></v-list-item-title
+            >
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+    </v-navigation-drawer>
+
     <v-main>
-      <br />
       <router-view></router-view>
     </v-main>
   </v-app>
@@ -61,6 +84,8 @@ export default {
       userProfile: sessionStorage.getItem("userProfile")
         ? JSON.parse(sessionStorage.getItem("userProfile"))
         : [],
+      drawer: false,
+      group: null,
     };
   },
   methods: {
@@ -122,12 +147,14 @@ export default {
         this.$router.push("/");
       }
     },
-    profile() {
-      this.$router.push("/profile");
-    },
   },
   computed: {
     ...mapGetters(["isLoggedIn"]),
+  },
+  watch: {
+    group() {
+      this.drawer = false;
+    },
   },
 };
 </script>
