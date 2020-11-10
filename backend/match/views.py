@@ -101,34 +101,31 @@ def before_match(request):
                     # 현재 유저까지 추가해서 매칭된 유저에 넣어서 매칭된 게임에 전달해준다.
                     # 매칭된 게임 정보는 matched에 넣어준다.
                     matched_users.append(user_bm.pk)
-                    print('step1: ', matched_users)
                     matched_users.append(match_stime)
-                    print('step2: ', matched_users)
                     matched_users.append(match_etime)
-                    print('step3: ', matched_users)
                     matched.append(matched_users)
-                    print('step4: ', matched)
                     # 현재 넣고 있는 유저의 넣었던 내용 빼기
                     for k in range(stime_idx, i):
                         match_users[k].remove(user_bm.pk)                        
                     break
                 else:
                     match_users[i].append(user_bm.pk)
-        print(matched)
         # 잡혀진 매치가 있다면 해당 매치를 게임으로 바꿔줘야겠죠.
         while matched:
             # BeforeMatch PK가 들어가 있는 리스트
             bm_pks = matched.pop()
             bm_etime = bm_pks.pop()
             bm_stime = bm_pks.pop()
-            print('start_time: ', bm_stime, 'end_time: ', bm_etime)
             # 매치를 잡아줍니다.
             sports_name = get_object_or_404(Sports, sports_name=bm_match.sports_name)
             match = Match(sports = sports_name)
+            match.date = bm_match.date
+            match.start_time = bm_stime
+            match.end_time = bm_etime
             match.save()
 
             # 유저 정보를 꺼내서 AfterMatch와 MatchUser를 만들어 줍니다.
-            for bm_pk in bm_pks:
+            for idx, bm_pk in enumerate(bm_pks):
                 bm = get_object_or_404(BeforeMatch, pk=bm_pk)
                 bm.status = 2
                 bm.save()
@@ -138,6 +135,10 @@ def before_match(request):
                     match = match,
                     user_pk = bm.user.pk
                 )
+                if idx % 2:
+                    mmatch_user.team = 1
+                else:
+                    mmatch_user.team = 0
                 mmatch_user.save()
 
                 # AfterMatch를 만들어줍니다.
@@ -145,10 +146,35 @@ def before_match(request):
                     before_match = bm,
                     matching_pk = match.pk
                 )
-                am.save()
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def match_room(request):
+    data = request.data
+    match = get_object_or_404(Match, pk = data['match_pk'])
+    match_users = MatchUser.objects.filter(match = match.pk)    
+    res = [
+        {
+        'match_pk': match.pk,
+        'date': match.date, 
+        'start_time': match.start_time, 
+        'end_time': match.end_time
+        },
+        {
+            'users': [(user.user_pk, user.team) for user in match_users]
+            }
+    ]
+
+    context = {
+        'result' : 'true',
+        'data': res
+    }
+    return Response(context, status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
 def after_match(request):
+    data = request.data
+    match = get_object_or_404(Match, pk=data['match_pk'])
     pass
