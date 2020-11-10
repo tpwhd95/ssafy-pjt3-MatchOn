@@ -1,5 +1,4 @@
 <template>
-  
   <v-app>
     <v-app-bar app color="grey darken-3" dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
@@ -146,6 +145,26 @@ export default {
     },
     login() {
       this.dialog = false;
+      axios
+        .post(
+          "https://fcm.googleapis.com/fcm/send",
+          {
+            to:
+              "cdEFPugi0Hs:APA91bHdu1c8-GiKhS_D9c51ef4SJB-VgHnCrjGCojMDsM12fTy6hLA33D3PL7zg3qldoMm3955YECEA2pL4mZhiCwaZ1nyi0cpOV1nE4zn-BDtT6DYrWXarmDo1J3CzIa9CRkt_OJcH",
+            data: { message: "조까 푸시 알림" },
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization:
+                "key=AAAA5zwJHyg:APA91bGz18YD6un-vpBJDryN8g3PLx7NEbH7ChmnxU4l0TOOx1HKSpNZ7v3td8Fqb67tOHqmXvjnBRCpg_cUYzbGTQs0DZmophlF-gi4hCXMsUBkwQ1LYkE8aPB_eR-R2kQBjZvLmdKU",
+              Accept: "application/json",
+            },
+          }
+        )
+        .then((data) => {
+          console.log(asdf);
+        });
     },
     ...mapActions(["logout", "setToken", "setUserProfile"]),
     logout2() {
