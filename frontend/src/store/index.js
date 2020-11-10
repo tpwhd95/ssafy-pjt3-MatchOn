@@ -4,6 +4,8 @@ import http from "@/util/http-common";
 
 Vue.use(Vuex);
 
+const debug = process.env.NODE_ENV !== 'production';
+
 export default new Vuex.Store({
   state: {
     token: sessionStorage.getItem('token'),
@@ -43,5 +45,5 @@ export default new Vuex.Store({
       context.commit("setUserProfile", payload)
     },
   },
-  modules: {},
+  strict: debug,
 });
