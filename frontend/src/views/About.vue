@@ -4,7 +4,7 @@
       <v-row>
         <v-col cols="12">
           <v-text-field
-            v-model="sportsName"
+            v-model="sportsNameKR"
             label="종목"
             readonly
           ></v-text-field>
@@ -43,23 +43,23 @@
             :max="16"
             step="1"
             ticks="always"
-            tick-size="5"
+            tick-size="3"
           ></v-range-slider>
         </v-col>
-        <v-col cols="12">
+        <v-col cols="12" class="d-flex justify-center">
           <v-btn
             style="text-transform: none"
             color="primary"
             dark
-            @click="submit"
+            @click="submit(sportsNameKR, date1, time)"
           >
             MatchOn!
           </v-btn>
         </v-col>
       </v-row>
-      <p>{{ sportsName }}</p>
+      <!-- <p>{{ sportsName }}</p>
       <p>{{ date1 }}</p>
-      <p>{{ time }}</p>
+      <p>{{ time }}</p> -->
     </v-container>
   </v-form>
 </template>
@@ -74,6 +74,7 @@ export default {
   data() {
     return {
       sportsName: this.$route.params.sports,
+      sportsNameKR: this.$route.params.sportsKR,
       menu1: false,
       date1: "",
       time: [0, 1],
@@ -105,7 +106,7 @@ export default {
     ...mapState(["token"]),
   },
   methods: {
-    submit() {
+    submit(sportsNameKR, date1, time) {
       const requestHeaders = {
         headers: {
           Authorization: "JWT " + this.token,
@@ -139,7 +140,10 @@ export default {
         .catch((err) => {
           console.log(err);
         });
-      this.$router.push("/matching");
+      this.$router.push({
+        name: "Matching",
+        params: { sportsNameKR: sportsNameKR, date1: date1, time: time },
+      });
     },
     getToday() {
       var today = new Date();

@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <v-card v-if="!this.isLoggedIn" class="mx-auto" max-width="720">
-      로그인 하세요.
+      <v-container fluid> 로그인 하세요. </v-container>
     </v-card>
 
     <v-card v-if="this.isLoggedIn" class="mx-auto" max-width="720">
@@ -19,27 +19,11 @@
                 class="white--text align-end"
                 gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                 height="200px"
-                @click="matching(card.title)"
+                @click="matching(card.title, card.title2)"
                 style="cursor: pointer"
               >
                 <v-card-title v-text="card.title2"></v-card-title>
               </v-img>
-
-              <!-- <v-card-actions>
-                <v-spacer></v-spacer>
-
-                <v-btn icon>
-                  <v-icon>mdi-heart</v-icon>
-                </v-btn>
-
-                <v-btn icon>
-                  <v-icon>mdi-bookmark</v-icon>
-                </v-btn>
-
-                <v-btn icon>
-                  <v-icon>mdi-share-variant</v-icon>
-                </v-btn>
-              </v-card-actions> -->
             </v-card>
           </v-col>
         </v-row>
@@ -92,8 +76,11 @@ export default {
     };
   },
   methods: {
-    matching(sportsName) {
-      this.$router.push({ name: "About", params: { sports: sportsName } });
+    matching(sportsName, sportsNameKR) {
+      this.$router.push({
+        name: "About",
+        params: { sports: sportsName, sportsKR: sportsNameKR },
+      });
     },
   },
   computed: {
