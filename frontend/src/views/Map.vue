@@ -28,17 +28,10 @@ export default {
         { x: 127.051346760004206, y: 37.57235740081413 },
         { x: 127.051346760005218, y: 37.57235740071429 },
       ],
-
       cenx: 0,
       ceny: 0,
-      innerText: "",
-      //   users: [
-      //     { x: 126.57159381623066, y: 33.45133510810506 },
-      //     { x: 126.5713551811832, y: 33.44955812811862 },
-      //     { x: 126.57263296172184, y: 33.449986291544086 },
-      //     { x: 126.57321034054742, y: 33.450682513554554 },
-      //     { x: 126.57235740081413, y: 33.451346760004206 },
-      //   ],
+      selectlng: 0,
+      selectlat: 0,
     };
   },
   methods: {
@@ -213,6 +206,8 @@ export default {
           );
           infowindow.open(map, marker);
           self.selected = place.place_name;
+          self.selectlng = place.x;
+          self.selectlat = place.y;
         });
       }
 
