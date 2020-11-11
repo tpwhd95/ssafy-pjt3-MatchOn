@@ -67,6 +67,7 @@
 <script>
 import http from "@/util/http-common";
 import { mapState } from "vuex";
+import axios from "axios";
 
 export default {
   name: "About",
@@ -138,13 +139,20 @@ export default {
         )
         .then((res) => {
           console.log(res);
-          if (res.result == true) {
-            for (let i of res) {
+          console.log(res.data.result);
+          console.log(typeof res.data.result);
+          console.log(Object.keys(res.data).length);
+          if (res.data.result === "true") {
+            console.log("이프 됨");
+            console.log(res.data.device_tokens);
+            for (const i in res.data.device_tokens) {
+              console.log("for 됨");
+              console.log(res.data.device_tokens[i]);
               axios
                 .post(
                   "https://fcm.googleapis.com/fcm/send",
                   {
-                    to: i.device_tokens,
+                    to: res.data.device_tokens[i],
                     data: {
                       message:
                         "매칭이 완료되었습니다! 채팅방에서 경기 시간 및 장소를 조율해주세요.",
