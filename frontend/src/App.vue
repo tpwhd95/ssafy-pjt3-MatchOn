@@ -69,7 +69,7 @@
       <router-view></router-view>
     </v-main>
     <div>
-      <v-btn>push</v-btn>
+      <v-btn @click="push1">push</v-btn>
     </div>
   </v-app>
 </template>
@@ -154,8 +154,7 @@ export default {
         .post(
           "https://fcm.googleapis.com/fcm/send",
           {
-            to:
-              "d5W_AUhvD5Q:APA91bFECgK_e4AtZai3pUuesvvBDxadXFoEKF5ATEXxUmTh9NMIqwFIny8OY7Gw4i_rBQDS1nX0-0FSUPaMCeqTcG6D06WFOLrXn7C9AzF5D9alXgVK87k8eOg-slDbBzuFSUAVPEzy",
+            to: token2,
             data: { message: "푸시 알림" },
           },
           {
@@ -181,6 +180,33 @@ export default {
         this.logout();
         this.$router.push("/");
       }
+    },
+    push1() {
+      const token2 = sessionStorage.getItem("token2");
+      console.log(token2);
+      axios
+        .post(
+          "https://fcm.googleapis.com/fcm/send",
+          {
+            to: token2,
+            data: { message: "푸시 메시지는 여기에" },
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization:
+                "key=AAAA5zwJHyg:APA91bGz18YD6un-vpBJDryN8g3PLx7NEbH7ChmnxU4l0TOOx1HKSpNZ7v3td8Fqb67tOHqmXvjnBRCpg_cUYzbGTQs0DZmophlF-gi4hCXMsUBkwQ1LYkE8aPB_eR-R2kQBjZvLmdKU",
+              Accept: "application/json",
+            },
+          }
+        )
+        .then((data) => {
+          console.log("asdf");
+          console.log(data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
   computed: {
