@@ -68,9 +68,10 @@
     <v-main>
       <router-view></router-view>
     </v-main>
-    <div>
+    <v-card style="max-width: 720px">
       <v-btn @click="push1">push</v-btn>
-    </div>
+      <p>{{ token2 }}</p>
+    </v-card>
   </v-app>
 </template>
 
@@ -95,6 +96,7 @@ export default {
         : [],
       drawer: false,
       group: null,
+      token2: "",
     };
   },
   methods: {
@@ -149,6 +151,7 @@ export default {
     login() {
       this.dialog = false;
       const token2 = sessionStorage.getItem("token2");
+      this.token2 = token2;
       console.log(token2);
       axios
         .post(
@@ -183,6 +186,7 @@ export default {
     },
     push1() {
       const token2 = sessionStorage.getItem("token2");
+      this.token2 = token2;
       console.log(token2);
       axios
         .post(
