@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.db.models import Q
+from django.db.models import Q, Prefetch
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -61,7 +61,7 @@ def before_match(request):
 
     # 매칭 전 / 종목 이름 / 날짜 / 구 이름이 같은 조건 탐색
     crnt_bm_matches = BeforeMatch.objects.filter(status = 1, sports_name = bm_match.sports_name, date = bm_match.date, gu = bm_match.gu)
-    sports_count = {'tennis': 2, 'pool': 2, 'bowl': 2, 'basket_ball': 6, 'futsal': 12}
+    sports_count = {'tennis': 2, 'pool': 2, 'bowling': 2, 'basket_ball': 6, 'futsal': 12}
     
     # 해당 스포츠의 같은 동네에서 인원 수가 충족되고
     if crnt_bm_matches.count() >= sports_count[bm_match.sports_name]:
@@ -198,9 +198,24 @@ def after_match(request):
     data = request.data
     match = get_object_or_404(Match, pk=data['match_pk'])
 
-    match.fixed_time = data.fixed_time
+    match.fixed_time = data['fixed_time']
     match.save()
-    match_users = MatchUser.objects.filter(match=match.pk)
-    for match_user in match_users:
-        print(match_user)
+    for user in data['users']:
+        match_user = MatchUser.objects.filter(match=match, user_pk=user)[0]
+        match_user.team = data['users'][user]['team']
+        match_user.save()
+
+        am = AfterMatch.objects.filter(before_match__user=user, matching_pk=match.pk)[0]
+        bm = am.before_match
+        bm.status = '3'
+        bm.save()
+        
+        am.fixed_time = data['fixed_time']
+        am.team_pk = data['users'][user]['team']
+        """
+        공간정보는 업데이트 필요
+        """
+        # am.fixed_lat = data['fixed_lat']
+        # am.fixed_lng = data['fixed_lng']
+        am.save()
     return Response(status=status.HTTP_200_OK)
