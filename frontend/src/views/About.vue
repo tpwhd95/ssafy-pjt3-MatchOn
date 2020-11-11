@@ -121,6 +121,7 @@ export default {
         this.time[1] = "0" + this.time[1];
       }
       console.log(this.time);
+      console.log(sessionStorage.getItem("token2"));
       http
         .post(
           "/match/bm/",
@@ -131,11 +132,43 @@ export default {
             end_time: this.time[1] + ":00",
             lat: this.lat,
             lng: this.lng,
+            device_token: sessionStorage.getItem("token2"),
           },
           requestHeaders
         )
         .then((res) => {
           console.log(res);
+          if (res.result == true) {
+            for (let i of res) {
+              axios
+                .post(
+                  "https://fcm.googleapis.com/fcm/send",
+                  {
+                    to: i.device_tokens,
+                    data: {
+                      message:
+                        "매칭이 완료되었습니다! 채팅방에서 경기 시간 및 장소를 조율해주세요.",
+                    },
+                  },
+                  {
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization:
+                        "key=AAAA5zwJHyg:APA91bGz18YD6un-vpBJDryN8g3PLx7NEbH7ChmnxU4l0TOOx1HKSpNZ7v3td8Fqb67tOHqmXvjnBRCpg_cUYzbGTQs0DZmophlF-gi4hCXMsUBkwQ1LYkE8aPB_eR-R2kQBjZvLmdKU",
+                      Accept: "application/json",
+                    },
+                  }
+                )
+                .then((data) => {
+                  console.log("push notification success");
+                  console.log(data);
+                })
+                .catch((err) => {
+                  console.log("push notification fail");
+                  console.log(err);
+                });
+            }
+          }
         })
         .catch((err) => {
           console.log(err);

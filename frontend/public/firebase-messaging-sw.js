@@ -1,5 +1,5 @@
-importScripts('https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/7.15.0/firebase-messaging.js');
+importScripts('https://www.gstatic.com/firebasejs/5.5.9/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/5.5.9/firebase-messaging.js');
 
 const config = {
     apiKey: "AIzaSyDGdHvQgttXEKYkihDzYhpsKc6CPavUlD4",
@@ -13,17 +13,52 @@ const config = {
 };
 
 firebase.initializeApp(config);
-const messaging = firebase.messaging();
 
 // 백그라운드 상태에서 받은 알림 처리
-messaging.setBackgroundMessageHandler((payload) => {
-    console.log('Message received. ', payload);
-    // Customize notification here
-    const title = 'Background Message Title'
+const messaging = firebase.messaging();
+messaging.setBackgroundMessageHandler(function (payload) {
+    console.log(payload)
+    const title = "매치온!";
     const options = {
-        body: payload.data.message,
-        icon: '/firebase-logo.png'
-    }
+        // body: payload.data.message
+        body: "qwer"
+    };
 
     return self.registration.showNotification(title, options);
 });
+
+
+self.addEventListener('push', function (event) {
+    console.log('[Service Worker] Push Received.');
+    console.log(`[Service Worker] Push had this data: "${event.data.text()}"`);
+    console.log(event.data.json());
+    const title = '매치온!';
+    const options = {
+        body: `${event.data.json().data.message}`,
+    };
+    event.waitUntil(self.registration.showNotification(title, options));
+});
+
+// window.addEventListener('beforeinstallprompt', function (event) {
+//     event.preventDefault();
+//     //@ts-ignore
+//     window.promptEvent = event;
+//     if (window.matchMedia('(display-mode: standalone)').matches) {
+//         console.log('display-mode is standalone');
+//     } else {
+//         setVisible(true)
+//     }
+// });
+
+// function addToHomeScreen() {
+//     //@ts-ignore
+//     window.promptEvent.prompt();
+//     //@ts-ignore
+//     window.promptEvent.userChoice.then((choiceResult: any) => {
+//         if (choiceResult.outcome === 'accepted') {
+//             console.log('User accepted the A2HS prompt')
+//         } else {
+//             console.log('User dismissed the A2HS prompt')
+//         }
+//     })
+// }

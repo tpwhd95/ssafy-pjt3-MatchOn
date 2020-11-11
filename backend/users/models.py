@@ -21,6 +21,7 @@ class BeforeMatch(models.Model):
     lat = models.FloatField()
     lng = models.FloatField()
     gu = models.CharField(max_length=50, null=True)
+    device_token = models.CharField(max_length=255)
 
 
 class AfterMatch(models.Model):
