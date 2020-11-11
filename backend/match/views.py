@@ -126,12 +126,18 @@ def before_match(request):
             match.end_time = bm_etime
             match.save()
 
+            lat_sum = 0
+            lng_sum = 0
             # 유저 정보를 꺼내서 AfterMatch와 MatchUser를 만들어 줍니다.
             for idx, bm_pk in enumerate(bm_pks):
                 bm = get_object_or_404(BeforeMatch, pk=bm_pk)
                 bm.status = 2
                 bm.save()
                 
+                # 중간 위치를 위한 위도 경도 계산
+                lat_sum += bm.lat
+                lng_sum += bm.lng
+
                 tokens[bm.user.pk] = bm.device_token
 
                 # MatchUser를 저장해줍니다.
@@ -151,6 +157,9 @@ def before_match(request):
                     matching_pk = match.pk
                 )
                 am.save()
+            match.lat = lat_sum / len(bm_pks)
+            match.lng = lng_sum / len(bm_pks)
+            match.save()
         context = {
             'result': 'true',
             'device_tokens': tokens,
@@ -159,7 +168,7 @@ def before_match(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 def match_room(request):
     data = request.data
     match = get_object_or_404(Match, pk = data['match_pk'])
@@ -201,11 +210,11 @@ def after_match(request):
     match.fixed_time = data['fixed_time']
     match.save()
     for user in data['users']:
-        match_user = MatchUser.objects.filter(match=match, user_pk=user)[0]
+        match_user = get_object_or_404(MatchUser, match=match, user_pk=user)
         match_user.team = data['users'][user]['team']
         match_user.save()
 
-        am = AfterMatch.objects.filter(before_match__user=user, matching_pk=match.pk)[0]
+        am = get_object_or_404(AfterMatch, before_match__user=user, matching_pk=match.pk)
         bm = am.before_match
         bm.status = '3'
         bm.save()
@@ -215,7 +224,18 @@ def after_match(request):
         """
         공간정보는 업데이트 필요
         """
-        # am.fixed_lat = data['fixed_lat']
-        # am.fixed_lng = data['fixed_lng']
+        am.fixed_lat = data['fixed_lat']
+        am.fixed_lng = data['fixed_lng']
         am.save()
+    return Response(status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+def result(request):
+    data = request.data
+    match = get_object_or_404(Match, pk=data['match_pk'])
+    match_users = MatchUser.objects.filter(match=match)
+
+    print(match_users)
+
     return Response(status=status.HTTP_200_OK)
