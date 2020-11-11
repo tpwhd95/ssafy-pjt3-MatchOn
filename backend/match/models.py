@@ -12,6 +12,8 @@ class Sports(models.Model):
 class Match(models.Model):
     sports = models.ForeignKey(Sports, on_delete=models.CASCADE)
     # 장소
+    lat = models.FloatField(null=True)
+    lng = models.FloatField(null=True)
     # 시간
     date = models.DateField()
     start_time = models.TimeField()
