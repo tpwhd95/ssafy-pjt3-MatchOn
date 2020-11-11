@@ -1,5 +1,5 @@
-importScripts('https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/7.15.0/firebase-messaging.js');
+importScripts('https://www.gstatic.com/firebasejs/5.5.9/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/5.5.9/firebase-messaging.js');
 
 const config = {
     apiKey: "AIzaSyDGdHvQgttXEKYkihDzYhpsKc6CPavUlD4",
@@ -20,7 +20,8 @@ messaging.setBackgroundMessageHandler(function (payload) {
 
     const title = "매치온!";
     const options = {
-        body: payload.data.message
+        // body: payload.data.message
+        body: "qwer"
     };
 
     return self.registration.showNotification(title, options);

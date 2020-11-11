@@ -68,6 +68,9 @@
     <v-main>
       <router-view></router-view>
     </v-main>
+    <div>
+      <v-btn>push</v-btn>
+    </div>
   </v-app>
 </template>
 
@@ -153,7 +156,7 @@ export default {
           {
             to:
               "d5W_AUhvD5Q:APA91bFECgK_e4AtZai3pUuesvvBDxadXFoEKF5ATEXxUmTh9NMIqwFIny8OY7Gw4i_rBQDS1nX0-0FSUPaMCeqTcG6D06WFOLrXn7C9AzF5D9alXgVK87k8eOg-slDbBzuFSUAVPEzy",
-            data: { message: "조까 푸시 알림" },
+            data: { message: "푸시 알림" },
           },
           {
             headers: {
@@ -166,6 +169,7 @@ export default {
         )
         .then((data) => {
           console.log("asdf");
+          console.log(data);
         })
         .catch((err) => {
           console.log(err);
