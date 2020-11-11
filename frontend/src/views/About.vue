@@ -107,6 +107,61 @@ export default {
     ...mapState(["token"]),
   },
   methods: {
+    addScript() {
+      const script = document.createElement("script");
+      /* global kakao */
+      script.onload = () => kakao.maps.load(this.initMap);
+      script.src =
+        "//dapi.kakao.com/v2/maps/sdk.js?appkey=be80825bde1c9ecb6216babea86cf0ea&autoload=false&libraries=services,clusterer,drawing";
+      document.head.appendChild(script);
+    },
+    initMap() {
+      var self = this;
+      var mapContainer = document.getElementById("map"), // 지도를 표시할 div
+        mapOption = {
+          center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+          level: 3, // 지도의 확대 레벨
+        };
+      var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+    },
+    getLocation() {
+      var self = this;
+      if (navigator.geolocation) {
+        // GPS를 지원하면
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            var myx = position.coords.longitude;
+            var myy = position.coords.latitude;
+            self.lng = myx;
+            self.lat = myy;
+            console.log(self.lng, self.lat);
+            var my_loc = "";
+            // 내 위치 찾기
+            var geocoder1 = new kakao.maps.services.Geocoder();
+            var callback = (result, status) => {
+              if (status === kakao.maps.services.Status.OK) {
+                my_loc = result[0].address_name;
+                console.log(my_loc);
+                this.myloc = my_loc;
+                // this.my_loc = result[0].address_name.split(" ")[2];
+              }
+            };
+
+            geocoder1.coord2RegionCode(myx, myy, callback);
+          },
+          function (error) {
+            console.error(error);
+          },
+          {
+            enableHighAccuracy: false,
+            maximumAge: 0,
+            timeout: Infinity,
+          }
+        );
+      } else {
+        alert("GPS를 지원하지 않습니다");
+      }
+    },
     submit(sportsNameKR, date1, time) {
       const requestHeaders = {
         headers: {
@@ -207,6 +262,8 @@ export default {
   },
   mounted() {
     this.getToday();
+    window.kakao && window.kakao.maps ? this.initMap() : this.addScript();
+    this.getLocation();
   },
 };
 </script>
