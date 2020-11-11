@@ -28,7 +28,7 @@ class AfterMatch(models.Model):
     before_match = models.ForeignKey(BeforeMatch, on_delete=models.CASCADE)
     matching_pk = models.IntegerField()
     team_pk = models.IntegerField(null=True)
-    fixed_time = models.DateTimeField(null=True, blank=True)
+    fixed_time = models.TimeField(null=True, blank=True)
     fixed_lat = models.FloatField(null=True, blank=True)
     fixed_lng = models.FloatField(null=True, blank=True)
     result = models.BooleanField(null=True, blank=True)
