@@ -67,6 +67,7 @@
 <script>
 import http from "@/util/http-common";
 import { mapState } from "vuex";
+import axios from "axios";
 
 export default {
   name: "About",
@@ -121,6 +122,7 @@ export default {
         this.time[1] = "0" + this.time[1];
       }
       console.log(this.time);
+      console.log(sessionStorage.getItem("token2"));
       http
         .post(
           "/match/bm/",
@@ -131,11 +133,50 @@ export default {
             end_time: this.time[1] + ":00",
             lat: this.lat,
             lng: this.lng,
+            device_token: sessionStorage.getItem("token2"),
           },
           requestHeaders
         )
         .then((res) => {
           console.log(res);
+          console.log(res.data.result);
+          console.log(typeof res.data.result);
+          console.log(Object.keys(res.data).length);
+          if (res.data.result === "true") {
+            console.log("이프 됨");
+            console.log(res.data.device_tokens);
+            for (const i in res.data.device_tokens) {
+              console.log("for 됨");
+              console.log(res.data.device_tokens[i]);
+              axios
+                .post(
+                  "https://fcm.googleapis.com/fcm/send",
+                  {
+                    to: res.data.device_tokens[i],
+                    data: {
+                      message:
+                        "매칭이 완료되었습니다! 채팅방에서 경기 시간 및 장소를 조율해주세요.",
+                    },
+                  },
+                  {
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization:
+                        "key=AAAA5zwJHyg:APA91bGz18YD6un-vpBJDryN8g3PLx7NEbH7ChmnxU4l0TOOx1HKSpNZ7v3td8Fqb67tOHqmXvjnBRCpg_cUYzbGTQs0DZmophlF-gi4hCXMsUBkwQ1LYkE8aPB_eR-R2kQBjZvLmdKU",
+                      Accept: "application/json",
+                    },
+                  }
+                )
+                .then((data) => {
+                  console.log("push notification success");
+                  console.log(data);
+                })
+                .catch((err) => {
+                  console.log("push notification fail");
+                  console.log(err);
+                });
+            }
+          }
         })
         .catch((err) => {
           console.log(err);

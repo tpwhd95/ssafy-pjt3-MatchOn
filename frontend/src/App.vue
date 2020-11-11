@@ -68,6 +68,11 @@
     <v-main>
       <router-view></router-view>
     </v-main>
+    <v-card style="max-width: 720px">
+      <v-btn @click="push1">push</v-btn>
+      <p>{{ token2 }}</p>
+      <p>ver 11.11.7</p>
+    </v-card>
   </v-app>
 </template>
 
@@ -92,6 +97,7 @@ export default {
         : [],
       drawer: false,
       group: null,
+      token2: "",
     };
   },
   methods: {
@@ -146,14 +152,50 @@ export default {
     login() {
       this.dialog = false;
       const token2 = sessionStorage.getItem("token2");
+      this.token2 = token2;
       console.log(token2);
       axios
         .post(
           "https://fcm.googleapis.com/fcm/send",
           {
-            to:
-              "d5W_AUhvD5Q:APA91bFECgK_e4AtZai3pUuesvvBDxadXFoEKF5ATEXxUmTh9NMIqwFIny8OY7Gw4i_rBQDS1nX0-0FSUPaMCeqTcG6D06WFOLrXn7C9AzF5D9alXgVK87k8eOg-slDbBzuFSUAVPEzy",
-            data: { message: "조까 푸시 알림" },
+            to: token2,
+            data: { message: "로그인 푸시 알림" },
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization:
+                "key=AAAA5zwJHyg:APA91bGz18YD6un-vpBJDryN8g3PLx7NEbH7ChmnxU4l0TOOx1HKSpNZ7v3td8Fqb67tOHqmXvjnBRCpg_cUYzbGTQs0DZmophlF-gi4hCXMsUBkwQ1LYkE8aPB_eR-R2kQBjZvLmdKU",
+              Accept: "application/json",
+            },
+          }
+        )
+        .then((data) => {
+          console.log("push notification success");
+          console.log(data);
+        })
+        .catch((err) => {
+          console.log("push notification fail");
+          console.log(err);
+        });
+    },
+    ...mapActions(["logout", "setToken", "setUserProfile"]),
+    logout2() {
+      if (this.isLoggedIn) {
+        this.logout();
+        this.$router.push("/");
+      }
+    },
+    push1() {
+      const token2 = sessionStorage.getItem("token2");
+      this.token2 = token2;
+      console.log(token2);
+      axios
+        .post(
+          "https://fcm.googleapis.com/fcm/send",
+          {
+            to: token2,
+            data: { message: "푸시 버튼 알림" },
           },
           {
             headers: {
@@ -166,17 +208,11 @@ export default {
         )
         .then((data) => {
           console.log("asdf");
+          console.log(data);
         })
         .catch((err) => {
           console.log(err);
         });
-    },
-    ...mapActions(["logout", "setToken", "setUserProfile"]),
-    logout2() {
-      if (this.isLoggedIn) {
-        this.logout();
-        this.$router.push("/");
-      }
     },
   },
   computed: {
