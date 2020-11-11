@@ -158,7 +158,7 @@ export default {
           "https://fcm.googleapis.com/fcm/send",
           {
             to: token2,
-            data: { message: "푸시 알림" },
+            data: { message: "로그인 푸시 알림" },
           },
           {
             headers: {
@@ -170,10 +170,11 @@ export default {
           }
         )
         .then((data) => {
-          console.log("asdf");
+          console.log("push notification success");
           console.log(data);
         })
         .catch((err) => {
+          console.log("push notification fail");
           console.log(err);
         });
     },
@@ -193,7 +194,7 @@ export default {
           "https://fcm.googleapis.com/fcm/send",
           {
             to: token2,
-            data: { message: "푸시 메시지는 여기에" },
+            data: { message: "푸시 버튼 알림" },
           },
           {
             headers: {
