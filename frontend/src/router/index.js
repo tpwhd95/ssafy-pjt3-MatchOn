@@ -7,7 +7,9 @@ import Profile from '../views/Profile.vue'
 import Map from '../views/Map.vue'
 import Matching from '../views/Matching.vue'
 import HowToUse from '../views/HowToUse.vue'
+import MatchRoom from '../views/MatchRoom.vue'
 import Chat from '../views/Chat.vue'
+
 
 Vue.use(VueRouter)
 
@@ -41,6 +43,11 @@ const routes = [
     path: '/howtouse',
     name: 'HowToUse',
     component: HowToUse
+  },
+  {
+    path: '/matchroom/:match_id',
+    name: 'MatchRoom',
+    component: MatchRoom
   },
   {
     path: '/chat',

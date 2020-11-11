@@ -13,7 +13,19 @@
                   :key="card2.sports"
                   :cols="card2.flex"
                 >
-                  <v-card style="padding: 8px">
+                  <v-card
+                    v-if="card1.title == '조율중인 경기'"
+                    style="padding: 8px"
+                    @click="getMatchRoom(card2.match_pk)"
+                  >
+                    <p style="margin: 12px 0px">종목: {{ card2.sports }}</p>
+                    <p style="margin: 12px 0px">날짜: {{ card2.date }}</p>
+                    <p style="margin: 12px 0px">
+                      시간: {{ card2.start_time }} ~ {{ card2.end_time }}
+                    </p>
+                  </v-card>
+
+                  <v-card v-else style="padding: 8px">
                     <p style="margin: 12px 0px">종목: {{ card2.sports }}</p>
                     <p style="margin: 12px 0px">날짜: {{ card2.date }}</p>
                     <p style="margin: 12px 0px">
@@ -131,6 +143,7 @@ export default {
                 sports: temp_sports,
                 date: i.date,
                 flex: 12,
+                match_pk: i.matching_pk,
               });
             }
             if (i.status == 3) {
@@ -184,6 +197,30 @@ export default {
         .catch(function (err) {
           alert(err);
         });
+    },
+    getMatchRoom(match_id) {
+      console.log(match_id);
+      console.log(this.token);
+      http
+        .post(
+          "/match/match-room/",
+          { match_pk: match_id },
+          {
+            headers: {
+              Authorization: "JWT " + this.token,
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      this.$router.push({
+        name: "MatchRoom",
+        params: { match_id: match_id },
+      });
     },
   },
 };
