@@ -8,8 +8,8 @@ from rest_framework.decorators import api_view
 from .match_funcs import re_geocode
 
 # 모델
-from users.models import BeforeMatch, AfterMatch
-from match.models import Sports, Match, MatchUser
+from users.models import User, BeforeMatch, AfterMatch
+from match.models import Sports, Match, MatchUser, Locations
 
 # 시리얼라이저
 from .serializers import BMSerializer
@@ -52,7 +52,8 @@ def before_match(request):
         end_time = data['end_time'],
         lat = data['lat'],
         lng = data['lng'],
-        gu = re_geocode(data['lat'], data['lng'])
+        gu = re_geocode(data['lat'], data['lng']),
+        device_token = data['device_token']
         )
     bm_match.save()
     serializer = BMSerializer(bm_match)
@@ -111,6 +112,7 @@ def before_match(request):
                 else:
                     match_users[i].append(user_bm.pk)
         # 잡혀진 매치가 있다면 해당 매치를 게임으로 바꿔줘야겠죠.
+        tokens = {}
         while matched:
             # BeforeMatch PK가 들어가 있는 리스트
             bm_pks = matched.pop()
@@ -130,6 +132,8 @@ def before_match(request):
                 bm.status = 2
                 bm.save()
                 
+                tokens[bm.user.pk] = bm.device_token
+
                 # MatchUser를 저장해줍니다.
                 mmatch_user = MatchUser(
                     match = match,
@@ -146,6 +150,12 @@ def before_match(request):
                     before_match = bm,
                     matching_pk = match.pk
                 )
+                am.save()
+        context = {
+            'result': 'true',
+            'device_tokens': tokens,
+        }
+        return Response(context, status=status.HTTP_200_OK)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -153,17 +163,26 @@ def before_match(request):
 def match_room(request):
     data = request.data
     match = get_object_or_404(Match, pk = data['match_pk'])
-    match_users = MatchUser.objects.filter(match = match.pk)    
+    match_users = MatchUser.objects.filter(match = match.pk)
+    # 장소 정보 넣어서 보내기
+    locations = Locations.objects.filter(sports = match.sports)
+
+    users = {}
+    for user in match_users:
+        users[user.user_pk] = {
+            'nickname': get_object_or_404(User, pk=user.user_pk).nickname, 
+            'team': user.team
+            }
+
     res = [
         {
         'match_pk': match.pk,
         'date': match.date, 
         'start_time': match.start_time, 
-        'end_time': match.end_time
-        },
-        {
-            'users': [(user.user_pk, user.team) for user in match_users]
-            }
+        'end_time': match.end_time,
+        'users': users,
+        'locations': {}
+        }
     ]
 
     context = {
@@ -175,6 +194,13 @@ def match_room(request):
 
 @api_view(['POST'])
 def after_match(request):
+    # 팀 / 시간 / 장소를 확정하고 각 플레이어들의 데이터를 저장해준다.
     data = request.data
     match = get_object_or_404(Match, pk=data['match_pk'])
-    pass
+
+    match.fixed_time = data.fixed_time
+    match.save()
+    match_users = MatchUser.objects.filter(match=match.pk)
+    for match_user in match_users:
+        print(match_user)
+    return Response(status=status.HTTP_200_OK)

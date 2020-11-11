@@ -16,6 +16,7 @@ class Match(models.Model):
     date = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
+    fixed_time = models.TimeField(null=True, blank=True)
     
     
 class MatchUser(models.Model):
