@@ -111,6 +111,8 @@ def before_match(request):
                     break
                 else:
                     match_users[i].append(user_bm.pk)
+        if not matched:
+            return Response(serializer.data, status=status.HTTP_200_OK)
         # 잡혀진 매치가 있다면 해당 매치를 게임으로 바꿔줘야겠죠.
         tokens = {}
         while matched:
@@ -179,7 +181,7 @@ def match_room(request):
     users = {}
     for user in match_users:
         users[user.user_pk] = {
-            'nickname': get_object_or_404(User, pk=user.user_pk).nickname, 
+            'username': get_object_or_404(User, pk=user.user_pk).username, 
             'team': user.team
             }
 
