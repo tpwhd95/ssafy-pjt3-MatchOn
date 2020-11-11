@@ -67,7 +67,7 @@ export default {
           flex: 12,
         },
         {
-          title: "bowl",
+          title: "bowling",
           title2: "볼링",
           src: require("@/assets/bowling.jpg"),
           flex: 12,
