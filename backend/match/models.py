@@ -19,6 +19,7 @@ class Match(models.Model):
     start_time = models.TimeField()
     end_time = models.TimeField()
     fixed_time = models.TimeField(null=True, blank=True)
+    won_team = models.BooleanField(null=True, blank=True)
     
     
 class MatchUser(models.Model):
