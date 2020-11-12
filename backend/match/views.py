@@ -182,7 +182,8 @@ def match_room(request):
 
     users = {}
     for user in match_users:
-        bm = get_object_or_404(AfterMatch, match=match, before_match__user=user.user_pk).before_match
+        am = get_object_or_404(AfterMatch, matching_pk=match.pk, before_match__user=user.user_pk)
+        bm = am.before_match
         users[user.user_pk] = {
             'username': get_object_or_404(User, pk=user.user_pk).username, 
             'team': user.team,
@@ -192,7 +193,7 @@ def match_room(request):
 
     res = [
         {
-        'sports': match.sports,
+        'sports': match.sports.sports_name,
         'match_pk': match.pk,
         'date': match.date, 
         'start_time': match.start_time, 
