@@ -243,38 +243,62 @@ def after_match(request):
 def result(request):
     user = request.user
     data = request.data
-    result = data['result']
+    if data['result'] == 'true':
+        result = True
+    elif data['result'] == 'false':
+        result = False
+    
     match = get_object_or_404(Match, pk=data['match_pk'])
     result_writer = get_object_or_404(MatchUser, match=match.pk, user_pk=user.pk)
     team = result_writer.team
-
     flag = 0
     if match.won_team == None:
-        if team:
+        if team == True:
             match.won_team = result
+            match.true_result = True
             match.save()
-        else:
-            if result:
+        elif team == False:
+            if result == True:
                 match.won_team = False
                 match.save()
-            else:
+            elif result == False:
                 match.won_team = True
                 match.save()
+            match.false_result = True
+            match.save()
         context = {
             'result': 'ready',
             'detail': '다른 팀의 결과 입력을 기다리고 있습니다.'
         }
         return Response(context, status=status.HTTP_200_OK)
-    else:
-        if team: # True 팀일 때
-            if result != match.won_team:
-                flag = 1
-        else: # False 팀일 때
-            if result == match.won_team:
-                flag = 1
+    
+    if team == True: # True 팀일 때
+        if match.true_result == True:
+            context = {
+                'result': 'error',
+                'detail': '이미 결과를 투표하셨습니다.'
+            }
+            return Response(context, status=status.HTTP_200_OK)
+        if result != match.won_team:
+            flag = 1
+        match.true_result = True
+        match.save()
+    elif team == False: # False 팀일 때
+        if match.false_result == True:
+            context = {
+                'result': 'error',
+                'detail': '이미 결과를 투표하셨습니다.'
+            }
+            return Response(context, status=status.HTTP_200_OK)
+        if result == match.won_team:
+            flag = 1
+        match.false_result = True
+        match.save()
     
     if flag:
         match.won_team = None
+        match.false_result = False
+        match.true_result = False
         match.save()
         context = {
             'result': 'false',

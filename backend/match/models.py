@@ -20,6 +20,8 @@ class Match(models.Model):
     end_time = models.TimeField()
     fixed_time = models.TimeField(null=True, blank=True)
     won_team = models.BooleanField(null=True, blank=True)
+    false_result = models.BooleanField(default=False)
+    true_result = models.BooleanField(default=False)
     
     
 class MatchUser(models.Model):
