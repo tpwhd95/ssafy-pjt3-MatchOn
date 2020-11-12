@@ -46,9 +46,9 @@ export default {
   name: "Matching",
   data() {
     return {
-      sportsNameKR: this.$route.params.sportsNameKR,
-      date1: this.$route.params.date1,
-      time: this.$route.params.time,
+      sportsNameKR: this.$route.query.sportsNameKR,
+      date1: this.$route.query.date1,
+      time: this.$route.query.time,
     };
   },
   methods: {

@@ -79,8 +79,8 @@ export default {
   components: {},
   data() {
     return {
-      sportsName: this.$route.params.sports,
-      sportsNameKR: this.$route.params.sportsKR,
+      sportsName: this.$route.query.sports,
+      sportsNameKR: this.$route.query.sportsKR,
       menu1: false,
       date1: "",
       time: [0, 1],
@@ -260,7 +260,7 @@ export default {
         });
       this.$router.push({
         name: "Matching",
-        params: { sportsNameKR: sportsNameKR, date1: date1, time: time },
+        query: { sportsNameKR: sportsNameKR, date1: date1, time: time },
       });
     },
     getToday() {

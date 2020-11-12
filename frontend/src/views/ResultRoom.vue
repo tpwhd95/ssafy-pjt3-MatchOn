@@ -19,10 +19,10 @@ export default {
   components: {},
   data() {
     return {
-      match_id: this.$route.params.match_id,
-      sports: this.$route.params.sports,
-      date: this.$route.params.date,
-      time: this.$route.params.time,
+      match_id: this.$route.query.match_id,
+      sports: this.$route.query.sports,
+      date: this.$route.query.date,
+      time: this.$route.query.time,
     };
   },
   computed: {
