@@ -22,6 +22,7 @@
                   :cols="card2.flex"
                 >
                   <v-card
+                    v-if="card1.title == '조율중인 경기'"
                     style="padding: 8px"
                     @click="getMatchRoom(card2.match_pk)"
                   >
@@ -32,13 +33,23 @@
                     </p>
                   </v-card>
 
-                  <!-- <v-card v-else style="padding: 8px">
+                  <v-card
+                    v-if="card1.title == '대기중인 경기'"
+                    style="padding: 8px"
+                  >
                     <p style="margin: 12px 0px">종목: {{ card2.sports }}</p>
                     <p style="margin: 12px 0px">날짜: {{ card2.date }}</p>
-                    <p style="margin: 12px 0px">
-                      시간: {{ card2.start_time }} ~ {{ card2.end_time }}
-                    </p>
-                  </v-card> -->
+                    <p style="margin: 12px 0px">시간: {{ card2.fixed_time }}</p>
+                  </v-card>
+
+                  <v-card
+                    v-if="card1.title == '완료된 경기'"
+                    style="padding: 8px"
+                  >
+                    <p style="margin: 12px 0px">종목: {{ card2.sports }}</p>
+                    <p style="margin: 12px 0px">날짜: {{ card2.date }}</p>
+                    <p style="margin: 12px 0px">시간: {{ card2.fixed_time }}</p>
+                  </v-card>
                 </v-col>
               </v-row>
             </v-card>
@@ -133,16 +144,16 @@ export default {
           flex: 12,
           cards2: [],
         },
-        // {
-        //   title: "대기중인 경기",
-        //   flex: 12,
-        //   cards2: [],
-        // },
-        // {
-        //   title: "완료된 경기",
-        //   flex: 12,
-        //   cards2: [],
-        // },
+        {
+          title: "대기중인 경기",
+          flex: 12,
+          cards2: [],
+        },
+        {
+          title: "완료된 경기",
+          flex: 12,
+          cards2: [],
+        },
       ],
     };
   },
@@ -214,54 +225,60 @@ export default {
                 date: i.date,
                 flex: 12,
                 match_pk: i.matching_pk,
+                start_time: i.start_time,
+                end_time: i.end_time,
               });
             }
-            // if (i.status == 3) {
-            //   var temp_sports = "";
-            //   if (i.sports_name == "futsal") {
-            //     temp_sports = "풋살";
-            //   }
-            //   if (i.sports_name == "basket_ball") {
-            //     temp_sports = "농구";
-            //   }
-            //   if (i.sports_name == "pool") {
-            //     temp_sports = "당구";
-            //   }
-            //   if (i.sports_name == "tennis") {
-            //     temp_sports = "테니스";
-            //   }
-            //   if (i.sports_name == "bowl") {
-            //     temp_sports = "볼링";
-            //   }
-            //   self.cards1[2].cards2.push({
-            //     sports: temp_sports,
-            //     date: i.date,
-            //     flex: 12,
-            //   });
-            // }
-            // if (i.status == 4) {
-            //   var temp_sports = "";
-            //   if (i.sports_name == "futsal") {
-            //     temp_sports = "풋살";
-            //   }
-            //   if (i.sports_name == "basket_ball") {
-            //     temp_sports = "농구";
-            //   }
-            //   if (i.sports_name == "pool") {
-            //     temp_sports = "당구";
-            //   }
-            //   if (i.sports_name == "tennis") {
-            //     temp_sports = "테니스";
-            //   }
-            //   if (i.sports_name == "bowl") {
-            //     temp_sports = "볼링";
-            //   }
-            //   self.cards1[3].cards2.push({
-            //     sports: temp_sports,
-            //     date: i.date,
-            //     flex: 12,
-            //   });
-            // }
+            if (i.status == 3) {
+              self.flag = false;
+              var temp_sports = "";
+              if (i.sports_name == "futsal") {
+                temp_sports = "풋살";
+              }
+              if (i.sports_name == "basket_ball") {
+                temp_sports = "농구";
+              }
+              if (i.sports_name == "pool") {
+                temp_sports = "당구";
+              }
+              if (i.sports_name == "tennis") {
+                temp_sports = "테니스";
+              }
+              if (i.sports_name == "bowl") {
+                temp_sports = "볼링";
+              }
+              self.cards1[1].cards2.push({
+                sports: temp_sports,
+                date: i.date,
+                flex: 12,
+                fixed_time: i.fixed_time,
+              });
+            }
+            if (i.status == 4) {
+              self.flag = false;
+              var temp_sports = "";
+              if (i.sports_name == "futsal") {
+                temp_sports = "풋살";
+              }
+              if (i.sports_name == "basket_ball") {
+                temp_sports = "농구";
+              }
+              if (i.sports_name == "pool") {
+                temp_sports = "당구";
+              }
+              if (i.sports_name == "tennis") {
+                temp_sports = "테니스";
+              }
+              if (i.sports_name == "bowl") {
+                temp_sports = "볼링";
+              }
+              self.cards1[2].cards2.push({
+                sports: temp_sports,
+                date: i.date,
+                flex: 12,
+                fixed_time: i.fixed_time,
+              });
+            }
           }
         })
         .catch(function (err) {

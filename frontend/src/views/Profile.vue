@@ -14,6 +14,17 @@
                   :cols="card2.flex"
                 >
                   <v-card
+                    v-if="card1.title == '매칭중인 경기'"
+                    style="padding: 8px"
+                  >
+                    <p style="margin: 12px 0px">종목: {{ card2.sports }}</p>
+                    <p style="margin: 12px 0px">날짜: {{ card2.date }}</p>
+                    <p style="margin: 12px 0px">
+                      시간: {{ card2.start_time }} ~ {{ card2.end_time }}
+                    </p>
+                  </v-card>
+
+                  <v-card
                     v-if="card1.title == '조율중인 경기'"
                     style="padding: 8px"
                     @click="getMatchRoom(card2.match_pk)"
@@ -28,9 +39,7 @@
                   <v-card v-else style="padding: 8px">
                     <p style="margin: 12px 0px">종목: {{ card2.sports }}</p>
                     <p style="margin: 12px 0px">날짜: {{ card2.date }}</p>
-                    <p style="margin: 12px 0px">
-                      시간: {{ card2.start_time }} ~ {{ card2.end_time }}
-                    </p>
+                    <p style="margin: 12px 0px">시간: {{ card2.fixed_time }}</p>
                   </v-card>
                 </v-col>
               </v-row>
@@ -144,6 +153,8 @@ export default {
                 date: i.date,
                 flex: 12,
                 match_pk: i.matching_pk,
+                start_time: i.start_time,
+                end_time: i.end_time,
               });
             }
             if (i.status == 3) {
@@ -167,6 +178,7 @@ export default {
                 sports: temp_sports,
                 date: i.date,
                 flex: 12,
+                fixed_time: i.fixed_time,
               });
             }
             if (i.status == 4) {
@@ -190,6 +202,7 @@ export default {
                 sports: temp_sports,
                 date: i.date,
                 flex: 12,
+                fixed_time: i.fixed_time,
               });
             }
           }
