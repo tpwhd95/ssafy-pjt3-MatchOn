@@ -20,7 +20,8 @@
                     <p style="margin: 12px 0px">종목: {{ card2.sports }}</p>
                     <p style="margin: 12px 0px">날짜: {{ card2.date }}</p>
                     <p style="margin: 12px 0px">
-                      시간: {{ card2.start_time }} ~ {{ card2.end_time }}
+                      시간: {{ card2.start_time | ChangeTime }}시 ~
+                      {{ card2.end_time | ChangeTime }}시
                     </p>
                   </v-card>
 
@@ -32,14 +33,46 @@
                     <p style="margin: 12px 0px">종목: {{ card2.sports }}</p>
                     <p style="margin: 12px 0px">날짜: {{ card2.date }}</p>
                     <p style="margin: 12px 0px">
-                      시간: {{ card2.start_time }} ~ {{ card2.end_time }}
+                      시간: {{ card2.match_start | ChangeTime }}시 ~
+                      {{ card2.match_end | ChangeTime }}시
                     </p>
                   </v-card>
 
-                  <v-card v-else style="padding: 8px">
+                  <v-card
+                    v-if="card1.title == '대기중인 경기'"
+                    style="padding: 8px"
+                  >
                     <p style="margin: 12px 0px">종목: {{ card2.sports }}</p>
                     <p style="margin: 12px 0px">날짜: {{ card2.date }}</p>
-                    <p style="margin: 12px 0px">시간: {{ card2.fixed_time }}</p>
+                    <p style="margin: 12px 0px">
+                      시간: {{ card2.fixed_time | ChangeTime }}시
+                    </p>
+                  </v-card>
+
+                  <v-card
+                    v-if="card1.title == '진행중인 경기'"
+                    style="padding: 8px"
+                  >
+                    <p style="margin: 12px 0px">종목: {{ card2.sports }}</p>
+                    <p style="margin: 12px 0px">날짜: {{ card2.date }}</p>
+                    <p style="margin: 12px 0px">
+                      시간: {{ card2.fixed_time | ChangeTime }}시
+                    </p>
+                  </v-card>
+
+                  <v-card
+                    v-if="card1.title == '완료된 경기'"
+                    style="padding: 8px"
+                  >
+                    <p style="margin: 12px 0px">종목: {{ card2.sports }}</p>
+                    <p style="margin: 12px 0px">날짜: {{ card2.date }}</p>
+                    <p style="margin: 12px 0px">
+                      시간: {{ card2.fixed_time | ChangeTime }}시
+                    </p>
+                    <p v-if="card2.result == 1" style="margin: 12px 0px">
+                      결과: 승리
+                    </p>
+                    <p v-else style="margin: 12px 0px">결과: 패배</p>
                   </v-card>
                 </v-col>
               </v-row>
@@ -76,6 +109,11 @@ export default {
         },
         {
           title: "대기중인 경기",
+          flex: 12,
+          cards2: [],
+        },
+        {
+          title: "진행중인 경기",
           flex: 12,
           cards2: [],
         },
@@ -153,8 +191,8 @@ export default {
                 date: i.date,
                 flex: 12,
                 match_pk: i.matching_pk,
-                start_time: i.start_time,
-                end_time: i.end_time,
+                match_start: i.match_start,
+                match_end: i.match_end,
               });
             }
             if (i.status == 3) {
@@ -205,6 +243,31 @@ export default {
                 fixed_time: i.fixed_time,
               });
             }
+            if (i.status == 5) {
+              var temp_sports = "";
+              if (i.sports_name == "futsal") {
+                temp_sports = "풋살";
+              }
+              if (i.sports_name == "basket_ball") {
+                temp_sports = "농구";
+              }
+              if (i.sports_name == "pool") {
+                temp_sports = "당구";
+              }
+              if (i.sports_name == "tennis") {
+                temp_sports = "테니스";
+              }
+              if (i.sports_name == "bowl") {
+                temp_sports = "볼링";
+              }
+              self.cards1[4].cards2.push({
+                sports: temp_sports,
+                date: i.date,
+                flex: 12,
+                fixed_time: i.fixed_time,
+                result: i.result,
+              });
+            }
           }
         })
         .catch(function (err) {
@@ -234,6 +297,11 @@ export default {
         name: "MatchRoom",
         params: { match_id: match_id },
       });
+    },
+  },
+  filters: {
+    ChangeTime(value) {
+      return value.split(":")[0];
     },
   },
 };
