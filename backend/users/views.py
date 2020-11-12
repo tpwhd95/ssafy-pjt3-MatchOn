@@ -12,6 +12,7 @@ from rest_auth.registration.views import SocialLoginView
 import hashlib
 
 from .models import User, BeforeMatch, AfterMatch
+from match.models import Match, MatchUser
 from .serializers import UserSerializer,UserSerializerWithToken
 
 class KakaoLogin(SocialLoginView):
@@ -48,6 +49,8 @@ def match_info(request):
         if int(bm.status) >= 2:
             am = get_object_or_404(AfterMatch, before_match=bm.pk)
             match_dict['matching_pk'] = am.matching_pk
+            match_dict['match_start'] = get_object_or_404(Match, pk=am.matching_pk).start_time
+            match_dict['match_end'] = get_object_or_404(Match, pk=am.matching_pk).end_time
             match_dict['team_pk'] = am.team_pk
             match_dict['fixed_time'] = am.fixed_time
             match_dict['fixed_lat'] = am.fixed_lat
@@ -59,5 +62,4 @@ def match_info(request):
         'result' : 'true',
         'data' : data
     }
-    print(context)
     return Response(context, status=status.HTTP_200_OK)

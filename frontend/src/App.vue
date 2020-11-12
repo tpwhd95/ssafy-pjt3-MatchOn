@@ -71,6 +71,7 @@
     <v-card style="max-width: 720px">
       <v-btn @click="push1">push</v-btn>
       <p>{{ token2 }}</p>
+      <p>ver 11.11.7</p>
     </v-card>
   </v-app>
 </template>
@@ -177,6 +178,7 @@ export default {
           console.log("push notification fail");
           console.log(err);
         });
+      this.$router.go();
     },
     ...mapActions(["logout", "setToken", "setUserProfile"]),
     logout2() {

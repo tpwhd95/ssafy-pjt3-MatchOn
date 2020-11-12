@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.db.models import Q
+from django.db.models import Q, Prefetch
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -61,7 +61,7 @@ def before_match(request):
 
     # 매칭 전 / 종목 이름 / 날짜 / 구 이름이 같은 조건 탐색
     crnt_bm_matches = BeforeMatch.objects.filter(status = 1, sports_name = bm_match.sports_name, date = bm_match.date, gu = bm_match.gu)
-    sports_count = {'tennis': 2, 'pool': 2, 'bowl': 2, 'basket_ball': 6, 'futsal': 12}
+    sports_count = {'tennis': 2, 'pool': 2, 'bowling': 2, 'basket_ball': 6, 'futsal': 12}
     
     # 해당 스포츠의 같은 동네에서 인원 수가 충족되고
     if crnt_bm_matches.count() >= sports_count[bm_match.sports_name]:
@@ -111,6 +111,10 @@ def before_match(request):
                     break
                 else:
                     match_users[i].append(user_bm.pk)
+        
+        if not matched:
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
         # 잡혀진 매치가 있다면 해당 매치를 게임으로 바꿔줘야겠죠.
         tokens = {}
         while matched:
@@ -126,12 +130,18 @@ def before_match(request):
             match.end_time = bm_etime
             match.save()
 
+            lat_sum = 0
+            lng_sum = 0
             # 유저 정보를 꺼내서 AfterMatch와 MatchUser를 만들어 줍니다.
             for idx, bm_pk in enumerate(bm_pks):
                 bm = get_object_or_404(BeforeMatch, pk=bm_pk)
                 bm.status = 2
                 bm.save()
                 
+                # 중간 위치를 위한 위도 경도 계산
+                lat_sum += bm.lat
+                lng_sum += bm.lng
+
                 tokens[bm.user.pk] = bm.device_token
 
                 # MatchUser를 저장해줍니다.
@@ -151,6 +161,9 @@ def before_match(request):
                     matching_pk = match.pk
                 )
                 am.save()
+            match.lat = lat_sum / len(bm_pks)
+            match.lng = lng_sum / len(bm_pks)
+            match.save()
         context = {
             'result': 'true',
             'device_tokens': tokens,
@@ -159,7 +172,7 @@ def before_match(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 def match_room(request):
     data = request.data
     match = get_object_or_404(Match, pk = data['match_pk'])
@@ -169,13 +182,18 @@ def match_room(request):
 
     users = {}
     for user in match_users:
+        am = get_object_or_404(AfterMatch, matching_pk=match.pk, before_match__user=user.user_pk)
+        bm = am.before_match
         users[user.user_pk] = {
-            'nickname': get_object_or_404(User, pk=user.user_pk).nickname, 
-            'team': user.team
+            'username': get_object_or_404(User, pk=user.user_pk).username, 
+            'team': user.team,
+            'lat': bm.lat,
+            'lng': bm.lng
             }
 
     res = [
         {
+        'sports': match.sports.sports_name,
         'match_pk': match.pk,
         'date': match.date, 
         'start_time': match.start_time, 
@@ -198,9 +216,111 @@ def after_match(request):
     data = request.data
     match = get_object_or_404(Match, pk=data['match_pk'])
 
-    match.fixed_time = data.fixed_time
+    match.fixed_time = data['fixed_time']
     match.save()
-    match_users = MatchUser.objects.filter(match=match.pk)
-    for match_user in match_users:
-        print(match_user)
+    for user in data['users']:
+        match_user = get_object_or_404(MatchUser, match=match, user_pk=user)
+        match_user.team = data['users'][user]['team']
+        match_user.save()
+
+        am = get_object_or_404(AfterMatch, before_match__user=user, matching_pk=match.pk)
+        bm = am.before_match
+        bm.status = '3'
+        bm.save()
+        
+        am.fixed_time = data['fixed_time']
+        am.team_pk = data['users'][user]['team']
+        """
+        공간정보는 업데이트 필요
+        """
+        am.fixed_lat = data['fixed_lat']
+        am.fixed_lng = data['fixed_lng']
+        am.save()
     return Response(status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+def result(request):
+    user = request.user
+    data = request.data
+    if data['result'] == 'true':
+        result = True
+    elif data['result'] == 'false':
+        result = False
+    
+    match = get_object_or_404(Match, pk=data['match_pk'])
+    result_writer = get_object_or_404(MatchUser, match=match.pk, user_pk=user.pk)
+    team = result_writer.team
+    flag = 0
+    if match.won_team == None:
+        if team == True:
+            match.won_team = result
+            match.true_result = True
+            match.save()
+        elif team == False:
+            if result == True:
+                match.won_team = False
+                match.save()
+            elif result == False:
+                match.won_team = True
+                match.save()
+            match.false_result = True
+            match.save()
+        context = {
+            'result': 'ready',
+            'detail': '다른 팀의 결과 입력을 기다리고 있습니다.'
+        }
+        return Response(context, status=status.HTTP_200_OK)
+    
+    if team == True: # True 팀일 때
+        if match.true_result == True:
+            context = {
+                'result': 'error',
+                'detail': '이미 결과를 투표하셨습니다.'
+            }
+            return Response(context, status=status.HTTP_200_OK)
+        if result != match.won_team:
+            flag = 1
+        match.true_result = True
+        match.save()
+    elif team == False: # False 팀일 때
+        if match.false_result == True:
+            context = {
+                'result': 'error',
+                'detail': '이미 결과를 투표하셨습니다.'
+            }
+            return Response(context, status=status.HTTP_200_OK)
+        if result == match.won_team:
+            flag = 1
+        match.false_result = True
+        match.save()
+    
+    if flag:
+        match.won_team = None
+        match.false_result = False
+        match.true_result = False
+        match.save()
+        context = {
+            'result': 'false',
+            'detail': '양팀의 게임 결과가 일치하지 않습니다. 결과를 다시 입력해주세요.'
+        }
+        return Response(context, status=status.HTTP_200_OK)
+
+    match_users = MatchUser.objects.filter(match=match)
+    for match_user in match_users:
+        am = get_object_or_404(AfterMatch, before_match__user=match_user.user_pk, matching_pk=match.pk)
+        bm = am.before_match
+        bm.status = '5'
+        bm.save()
+
+        if match.won_team == match_user.team:
+            am.result = True
+            am.save()
+        else:
+            am.result = False
+            am.save()
+    context = {
+        'result': 'true',
+        'datail': f'팀 번호 {int(match.won_team)}의 승리결과에 대한 처리가 완료되었습니다.'
+    }
+    return Response(context, status=status.HTTP_200_OK)

@@ -12,11 +12,16 @@ class Sports(models.Model):
 class Match(models.Model):
     sports = models.ForeignKey(Sports, on_delete=models.CASCADE)
     # 장소
+    lat = models.FloatField(null=True)
+    lng = models.FloatField(null=True)
     # 시간
     date = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
     fixed_time = models.TimeField(null=True, blank=True)
+    won_team = models.BooleanField(null=True, blank=True)
+    false_result = models.BooleanField(default=False)
+    true_result = models.BooleanField(default=False)
     
     
 class MatchUser(models.Model):

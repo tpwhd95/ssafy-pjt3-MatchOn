@@ -7,6 +7,14 @@ import Profile from '../views/Profile.vue'
 import Map from '../views/Map.vue'
 import Matching from '../views/Matching.vue'
 import HowToUse from '../views/HowToUse.vue'
+import MatchRoom from '../views/MatchRoom.vue'
+import ResultRoom from '../views/ResultRoom.vue'
+import Chat from '../views/Chat.vue'
+import ResultReady from '../components/Result/ResultReady.vue'
+import ResultError from '../components/Result/ResultError.vue'
+import ResultFalse from '../components/Result/ResultFalse.vue'
+import ResultTrue from '../components/Result/ResultTrue.vue'
+
 
 Vue.use(VueRouter)
 
@@ -40,6 +48,41 @@ const routes = [
     path: '/howtouse',
     name: 'HowToUse',
     component: HowToUse
+  },
+  {
+    path: '/matchroom/:match_id',
+    name: 'MatchRoom',
+    component: MatchRoom
+  },
+  {
+    path: '/resultroom/:match_id',
+    name: 'ResultRoom',
+    component: ResultRoom
+  },
+  {
+    path: '/chat',
+    name: 'Chat',
+    component: Chat
+  },
+  {
+    path: '/resultready',
+    name: 'ResultReady',
+    component: ResultReady
+  },
+  {
+    path: '/resulterror',
+    name: 'ResultError',
+    component: ResultError
+  },
+  {
+    path: '/resultfalse',
+    name: 'ResultFalse',
+    component: ResultFalse
+  },
+  {
+    path: '/resulttrue',
+    name: 'ResultTrue',
+    component: ResultTrue
   },
 ]
 

@@ -2,7 +2,7 @@
   <v-form v-model="valid">
     <v-container>
       <v-row>
-        <v-col cols="12">
+        <v-col cols="12" class="py-0">
           <v-text-field
             v-model="sportsNameKR"
             label="종목"
@@ -10,7 +10,7 @@
           ></v-text-field>
         </v-col>
 
-        <v-col cols="12">
+        <v-col cols="12" class="py-0">
           <v-menu
             v-model="menu1"
             :close-on-content-click="false"
@@ -36,7 +36,8 @@
           </v-menu>
         </v-col>
 
-        <v-col cols="12">
+        <v-col cols="12" class="py-0">
+          <div>가능한 시간을 선택하세요.</div>
           <v-range-slider
             v-model="time"
             :tick-labels="ticksLabels"
@@ -46,6 +47,10 @@
             tick-size="3"
           ></v-range-slider>
         </v-col>
+
+        <div class="mx-3">당신의 위치에 마커를 설정해주세요.</div>
+        <div id="map" style="margin: auto; width: 95%; height: 270px"></div>
+
         <v-col cols="12" class="d-flex justify-center">
           <v-btn
             style="text-transform: none"
@@ -67,6 +72,7 @@
 <script>
 import http from "@/util/http-common";
 import { mapState } from "vuex";
+import axios from "axios";
 
 export default {
   name: "About",
@@ -100,12 +106,84 @@ export default {
       today: "",
       lat: "37.5663",
       lng: "126.9779",
+      marker1: "",
     };
   },
   computed: {
     ...mapState(["token"]),
   },
   methods: {
+    addScript() {
+      const script = document.createElement("script");
+      /* global kakao */
+      script.onload = () => kakao.maps.load(this.initMap);
+      script.src =
+        "//dapi.kakao.com/v2/maps/sdk.js?appkey=be80825bde1c9ecb6216babea86cf0ea&autoload=false&libraries=services,clusterer,drawing";
+      document.head.appendChild(script);
+    },
+    initMap() {
+      var self = this;
+      var mapContainer = document.getElementById("map"), // 지도를 표시할 div
+        mapOption = {
+          center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+          level: 3, // 지도의 확대 레벨
+        };
+      var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+      var self = this;
+      var myx;
+      var myy;
+      if (navigator.geolocation) {
+        // GeoLocation을 이용해서 접속 위치를 얻어옵니다
+        navigator.geolocation.getCurrentPosition((position) => {
+          var lat1 = position.coords.latitude, // 위도
+            lon1 = position.coords.longitude; // 경도
+          self.lng = lon1;
+          self.lat = lat1;
+
+          var locPosition = new kakao.maps.LatLng(lat1, lon1); // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
+
+          // 마커와 인포윈도우를 표시합니다
+          displayMarker(locPosition);
+        });
+      } else {
+        // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
+
+        var locPosition = new kakao.maps.LatLng(33.450701, 126.570667),
+          message = "geolocation을 사용할수 없어요..";
+
+        displayMarker(locPosition);
+      }
+
+      // 지도에 마커와 인포윈도우를 표시하는 함수입니다
+      function displayMarker(locPosition) {
+        // 마커를 생성합니다
+        var marker = new kakao.maps.Marker({
+          map: map,
+          position: locPosition,
+        });
+
+        // 지도 중심좌표를 접속위치로 변경합니다
+        map.setCenter(locPosition);
+
+        // 마커가 드래그 가능하도록 설정합니다
+        marker.setDraggable(false);
+
+        kakao.maps.event.addListener(map, "click", function (mouseEvent) {
+          // 클릭한 위도, 경도 정보를 가져옵니다
+          var latlng = mouseEvent.latLng;
+
+          // 마커 위치를 클릭한 위치로 옮깁니다
+          marker.setPosition(latlng);
+
+          console.log(latlng.getLat(), latlng.getLng());
+          self.lng = latlng.getLng();
+          self.lat = latlng.getLat();
+
+          var resultDiv = document.getElementById("clickLatlng");
+        });
+      }
+    },
     submit(sportsNameKR, date1, time) {
       const requestHeaders = {
         headers: {
@@ -138,13 +216,20 @@ export default {
         )
         .then((res) => {
           console.log(res);
-          if (res.result == true) {
-            for (let i of res) {
+          console.log(res.data.result);
+          console.log(typeof res.data.result);
+          console.log(Object.keys(res.data).length);
+          if (res.data.result === "true") {
+            console.log("이프 됨");
+            console.log(res.data.device_tokens);
+            for (const i in res.data.device_tokens) {
+              console.log("for 됨");
+              console.log(res.data.device_tokens[i]);
               axios
                 .post(
                   "https://fcm.googleapis.com/fcm/send",
                   {
-                    to: i.device_tokens,
+                    to: res.data.device_tokens[i],
                     data: {
                       message:
                         "매칭이 완료되었습니다! 채팅방에서 경기 시간 및 장소를 조율해주세요.",
@@ -199,6 +284,7 @@ export default {
   },
   mounted() {
     this.getToday();
+    window.kakao && window.kakao.maps ? this.initMap() : this.addScript();
   },
 };
 </script>
