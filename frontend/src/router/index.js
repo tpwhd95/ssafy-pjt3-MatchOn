@@ -8,6 +8,7 @@ import Map from '../views/Map.vue'
 import Matching from '../views/Matching.vue'
 import HowToUse from '../views/HowToUse.vue'
 import MatchRoom from '../views/MatchRoom.vue'
+import ResultRoom from '../views/ResultRoom.vue'
 import Chat from '../views/Chat.vue'
 
 
@@ -48,6 +49,11 @@ const routes = [
     path: '/matchroom/:match_id',
     name: 'MatchRoom',
     component: MatchRoom
+  },
+  {
+    path: '/resultroom/:match_id',
+    name: 'ResultRoom',
+    component: ResultRoom
   },
   {
     path: '/chat',
