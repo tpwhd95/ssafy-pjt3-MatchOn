@@ -48,6 +48,14 @@
                   <v-card
                     v-if="card1.title == '진행중인 경기'"
                     style="padding: 8px"
+                    @click="
+                      getResultRoom(
+                        card2.match_pk,
+                        card2.sports,
+                        card2.date,
+                        card2.fixed_time
+                      )
+                    "
                   >
                     <p style="margin: 12px 0px">종목: {{ card2.sports }}</p>
                     <p style="margin: 12px 0px">날짜: {{ card2.date }}</p>
@@ -287,6 +295,7 @@ export default {
                 date: i.date,
                 flex: 12,
                 fixed_time: i.fixed_time,
+                match_pk: i.matching_pk,
               });
             }
             // if (i.status == 5) {
@@ -342,6 +351,14 @@ export default {
       this.$router.push({
         name: "MatchRoom",
         params: { match_id: match_id },
+      });
+    },
+    getResultRoom(match_id, sports, date, time) {
+      console.log(match_id);
+      console.log(this.token);
+      this.$router.push({
+        name: "ResultRoom",
+        params: { match_id: match_id, sports: sports, date: date, time: time },
       });
     },
   },

@@ -241,7 +241,7 @@ export default {
               if (i.sports_name == "tennis") {
                 temp_sports = "테니스";
               }
-              if (i.sports_name == "bowl") {
+              if (i.sports_name == "bowling") {
                 temp_sports = "볼링";
               }
               self.cards1[3].cards2.push({
