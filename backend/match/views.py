@@ -111,8 +111,10 @@ def before_match(request):
                     break
                 else:
                     match_users[i].append(user_bm.pk)
+        
         if not matched:
             return Response(serializer.data, status=status.HTTP_200_OK)
+
         # 잡혀진 매치가 있다면 해당 매치를 게임으로 바꿔줘야겠죠.
         tokens = {}
         while matched:
@@ -180,13 +182,17 @@ def match_room(request):
 
     users = {}
     for user in match_users:
+        bm = get_object_or_404(AfterMatch, match=match, before_match__user=user.user_pk).before_match
         users[user.user_pk] = {
             'username': get_object_or_404(User, pk=user.user_pk).username, 
-            'team': user.team
+            'team': user.team,
+            'lat': bm.lat,
+            'lng': bm.lng
             }
 
     res = [
         {
+        'sports': match.sports,
         'match_pk': match.pk,
         'date': match.date, 
         'start_time': match.start_time, 
@@ -234,10 +240,62 @@ def after_match(request):
 
 @api_view(['POST'])
 def result(request):
+    user = request.user
     data = request.data
+    result = data['result']
     match = get_object_or_404(Match, pk=data['match_pk'])
+    result_writer = get_object_or_404(MatchUser, match=match.pk, user_pk=user.pk)
+    team = result_writer.team
+
+    flag = 0
+    if match.won_team == None:
+        if team:
+            match.won_team = result
+            match.save()
+        else:
+            if result:
+                match.won_team = False
+                match.save()
+            else:
+                match.won_team = True
+                match.save()
+        context = {
+            'result': 'ready',
+            'detail': '다른 팀의 결과 입력을 기다리고 있습니다.'
+        }
+        return Response(context, status=status.HTTP_200_OK)
+    else:
+        if team: # True 팀일 때
+            if result != match.won_team:
+                flag = 1
+        else: # False 팀일 때
+            if result == match.won_team:
+                flag = 1
+    
+    if flag:
+        match.won_team = None
+        match.save()
+        context = {
+            'result': 'false',
+            'detail': '양팀의 게임 결과가 일치하지 않습니다. 결과를 다시 입력해주세요.'
+        }
+        return Response(context, status=status.HTTP_200_OK)
+
     match_users = MatchUser.objects.filter(match=match)
+    for match_user in match_users:
+        am = get_object_or_404(AfterMatch, before_match__user=match_user.user_pk, matching_pk=match.pk)
+        bm = am.before_match
+        bm.status = '5'
+        bm.save()
 
-    print(match_users)
-
-    return Response(status=status.HTTP_200_OK)
+        if match.won_team == match_user.team:
+            am.result = True
+            am.save()
+        else:
+            am.result = False
+            am.save()
+    context = {
+        'result': 'true',
+        'datail': f'팀 번호 {int(match.won_team)}의 승리결과에 대한 처리가 완료되었습니다.'
+    }
+    return Response(context, status=status.HTTP_200_OK)
