@@ -179,7 +179,7 @@ export default {
     matching(sportsName, sportsNameKR) {
       this.$router.push({
         name: "About",
-        params: { sports: sportsName, sportsKR: sportsNameKR },
+        query: { sports: sportsName, sportsKR: sportsNameKR },
       });
     },
 
@@ -350,7 +350,7 @@ export default {
         });
       this.$router.push({
         name: "MatchRoom",
-        params: { match_id: match_id },
+        query: { match_id: match_id },
       });
     },
     getResultRoom(match_id, sports, date, time) {
@@ -358,7 +358,7 @@ export default {
       console.log(this.token);
       this.$router.push({
         name: "ResultRoom",
-        params: { match_id: match_id, sports: sports, date: date, time: time },
+        query: { match_id: match_id, sports: sports, date: date, time: time },
       });
     },
   },

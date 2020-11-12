@@ -131,6 +131,7 @@ export default {
           cards2: [],
         },
       ],
+      room_master: null,
     };
   },
   created() {
@@ -304,7 +305,7 @@ export default {
         });
       this.$router.push({
         name: "MatchRoom",
-        params: { match_id: match_id },
+        query: { match_id: match_id },
       });
     },
     getResultRoom(match_id, sports, date, time) {
@@ -312,7 +313,7 @@ export default {
       console.log(this.token);
       this.$router.push({
         name: "ResultRoom",
-        params: { match_id: match_id, sports: sports, date: date, time: time },
+        query: { match_id: match_id, sports: sports, date: date, time: time },
       });
     },
   },
