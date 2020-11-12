@@ -178,6 +178,7 @@ export default {
           console.log("push notification fail");
           console.log(err);
         });
+      this.$router.go();
     },
     ...mapActions(["logout", "setToken", "setUserProfile"]),
     logout2() {
