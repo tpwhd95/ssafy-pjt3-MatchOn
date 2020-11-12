@@ -2,7 +2,7 @@
   <v-form v-model="valid">
     <v-container>
       <v-row>
-        <v-col cols="12">
+        <v-col cols="12" class="py-0">
           <v-text-field
             v-model="sportsNameKR"
             label="종목"
@@ -10,7 +10,7 @@
           ></v-text-field>
         </v-col>
 
-        <v-col cols="12">
+        <v-col cols="12" class="py-0">
           <v-menu
             v-model="menu1"
             :close-on-content-click="false"
@@ -36,7 +36,8 @@
           </v-menu>
         </v-col>
 
-        <v-col cols="12">
+        <v-col cols="12" class="py-0">
+          <div>가능한 시간을 선택하세요.</div>
           <v-range-slider
             v-model="time"
             :tick-labels="ticksLabels"
@@ -46,6 +47,10 @@
             tick-size="3"
           ></v-range-slider>
         </v-col>
+
+        <div class="mx-3">당신의 위치에 마커를 설정해주세요.</div>
+        <div id="map" style="margin: auto; width: 95%; height: 270px"></div>
+
         <v-col cols="12" class="d-flex justify-center">
           <v-btn
             style="text-transform: none"
@@ -101,6 +106,7 @@ export default {
       today: "",
       lat: "37.5663",
       lng: "126.9779",
+      marker1: "",
     };
   },
   computed: {
@@ -123,43 +129,59 @@ export default {
           level: 3, // 지도의 확대 레벨
         };
       var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
-    },
-    getLocation() {
-      var self = this;
-      if (navigator.geolocation) {
-        // GPS를 지원하면
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            var myx = position.coords.longitude;
-            var myy = position.coords.latitude;
-            self.lng = myx;
-            self.lat = myy;
-            console.log(self.lng, self.lat);
-            var my_loc = "";
-            // 내 위치 찾기
-            var geocoder1 = new kakao.maps.services.Geocoder();
-            var callback = (result, status) => {
-              if (status === kakao.maps.services.Status.OK) {
-                my_loc = result[0].address_name;
-                console.log(my_loc);
-                this.myloc = my_loc;
-                // this.my_loc = result[0].address_name.split(" ")[2];
-              }
-            };
 
-            geocoder1.coord2RegionCode(myx, myy, callback);
-          },
-          function (error) {
-            console.error(error);
-          },
-          {
-            enableHighAccuracy: false,
-            maximumAge: 0,
-            timeout: Infinity,
-          }
-        );
+      var self = this;
+      var myx;
+      var myy;
+      if (navigator.geolocation) {
+        // GeoLocation을 이용해서 접속 위치를 얻어옵니다
+        navigator.geolocation.getCurrentPosition((position) => {
+          var lat1 = position.coords.latitude, // 위도
+            lon1 = position.coords.longitude; // 경도
+          self.lng = lon1;
+          self.lat = lat1;
+
+          var locPosition = new kakao.maps.LatLng(lat1, lon1); // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
+
+          // 마커와 인포윈도우를 표시합니다
+          displayMarker(locPosition);
+        });
       } else {
-        alert("GPS를 지원하지 않습니다");
+        // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
+
+        var locPosition = new kakao.maps.LatLng(33.450701, 126.570667),
+          message = "geolocation을 사용할수 없어요..";
+
+        displayMarker(locPosition);
+      }
+
+      // 지도에 마커와 인포윈도우를 표시하는 함수입니다
+      function displayMarker(locPosition) {
+        // 마커를 생성합니다
+        var marker = new kakao.maps.Marker({
+          map: map,
+          position: locPosition,
+        });
+
+        // 지도 중심좌표를 접속위치로 변경합니다
+        map.setCenter(locPosition);
+
+        // 마커가 드래그 가능하도록 설정합니다
+        marker.setDraggable(false);
+
+        kakao.maps.event.addListener(map, "click", function (mouseEvent) {
+          // 클릭한 위도, 경도 정보를 가져옵니다
+          var latlng = mouseEvent.latLng;
+
+          // 마커 위치를 클릭한 위치로 옮깁니다
+          marker.setPosition(latlng);
+
+          console.log(latlng.getLat(), latlng.getLng());
+          self.lng = latlng.getLng();
+          self.lat = latlng.getLat();
+
+          var resultDiv = document.getElementById("clickLatlng");
+        });
       }
     },
     submit(sportsNameKR, date1, time) {
@@ -263,7 +285,6 @@ export default {
   mounted() {
     this.getToday();
     window.kakao && window.kakao.maps ? this.initMap() : this.addScript();
-    this.getLocation();
   },
 };
 </script>

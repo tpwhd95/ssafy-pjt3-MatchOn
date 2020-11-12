@@ -1,6 +1,6 @@
 <template>
   <div class="chat">
-    <form onsubmit="return sendMessage();">
+    <form onsubmit="sendMessage()">
       <input id="message" placeholder="Enter message" autocomplete="off" />
       <input type="submit" />
     </form>
