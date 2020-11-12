@@ -196,6 +196,8 @@ def match_room(request):
         'sports': match.sports.sports_name,
         'match_pk': match.pk,
         'date': match.date, 
+        'match_lat': match.lat,
+        'match_lng': match.lng,
         'start_time': match.start_time, 
         'end_time': match.end_time,
         'users': users,
