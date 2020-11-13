@@ -167,7 +167,7 @@ export default {
               if (i.sports_name == "tennis") {
                 temp_sports = "테니스";
               }
-              if (i.sports_name == "bowl") {
+              if (i.sports_name == "bowling") {
                 temp_sports = "볼링";
               }
               self.cards1[0].cards2.push({
@@ -192,7 +192,7 @@ export default {
               if (i.sports_name == "tennis") {
                 temp_sports = "테니스";
               }
-              if (i.sports_name == "bowl") {
+              if (i.sports_name == "bowling") {
                 temp_sports = "볼링";
               }
               self.cards1[1].cards2.push({
@@ -218,7 +218,7 @@ export default {
               if (i.sports_name == "tennis") {
                 temp_sports = "테니스";
               }
-              if (i.sports_name == "bowl") {
+              if (i.sports_name == "bowling") {
                 temp_sports = "볼링";
               }
               self.cards1[2].cards2.push({
@@ -267,7 +267,7 @@ export default {
               if (i.sports_name == "tennis") {
                 temp_sports = "테니스";
               }
-              if (i.sports_name == "bowl") {
+              if (i.sports_name == "bowling") {
                 temp_sports = "볼링";
               }
               self.cards1[4].cards2.push({
