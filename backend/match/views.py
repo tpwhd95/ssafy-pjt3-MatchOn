@@ -326,3 +326,8 @@ def result(request):
         'datail': f'팀 번호 {int(match.won_team)}의 승리결과에 대한 처리가 완료되었습니다.'
     }
     return Response(context, status=status.HTTP_200_OK)
+
+
+def SayHello():
+    print('Hello!')
+    return
