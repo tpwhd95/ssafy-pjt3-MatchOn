@@ -50,10 +50,12 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'django_crontab',
 
     'users',
     'match',
     'api',
+    
 ]
 
 MIDDLEWARE = [
@@ -213,3 +215,7 @@ REST_AUTH_SERIALIZERS = {
 }
 
 # FORCE_SCRIPT_NAME = '/api'
+
+CRONJOBS = [
+   ('*/1 * * * *', 'match.views.say_hello')
+]
