@@ -8,56 +8,82 @@
     <p>{{ users }}</p>
     <p>유저들: {{ users_pk }}</p>
 
-    <v-row style="margin: 10px">
-      <v-checkbox
-        v-for="(user, key) in users"
-        :key="user.username"
-        v-model="teamA"
-        :label="user.username"
-        :value="key"
-      ></v-checkbox>
-    </v-row>
-    <p>{{ teamA }}</p>
-    <p>{{ teamB }}</p>
-    <p>{{ fixed_users }}</p>
+    <div class="card">
+      <div class="card-body">
+        <p class="text-secondary nomessages" v-if="messages.length == 0">
+          [No messages yet!]
+        </p>
+        <div class="messages" v-chat-scroll="{ always: false, smooth: true }">
+          <div v-for="message in messages" :key="message.id">
+            <span class="text-info">[{{ message.name }}]: </span>
+            <span>{{ message.message }}</span>
+            <br />
+            <span class="text-secondary time">{{ message.timestamp }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-action">
+        <CreateMessage :name="userProfile.username" :match_id="match_id" />
+      </div>
 
-    <v-row class="mx-1">
-      <v-col cols="12" class="py-0">
-        <v-slider
-          v-model="ex3.val"
-          :label="ex3.label"
-          :thumb-color="ex3.color"
-          :min="6"
-          :max="22"
-          step="1"
-          thumb-label="always"
-        ></v-slider>
-      </v-col>
-    </v-row>
-    <p>{{ this.ex3.val }}</p>
+      <v-row style="margin: 10px">
+        <v-checkbox
+          v-for="(user, key) in users"
+          :key="user.username"
+          v-model="teamA"
+          :label="user.username"
+          :value="key"
+        ></v-checkbox>
+      </v-row>
+      <p>{{ teamA }}</p>
+      <p>{{ teamB }}</p>
+      <p>{{ fixed_users }}</p>
 
-    <v-btn v-if="userProfile.id == room_master" @click="inputAfterMatch">
-      확정
-    </v-btn>
+      <v-row class="mx-1">
+        <v-col cols="12" class="py-0">
+          <v-slider
+            v-model="ex3.val"
+            :label="ex3.label"
+            :thumb-color="ex3.color"
+            :min="6"
+            :max="22"
+            step="1"
+            thumb-label="always"
+          ></v-slider>
+        </v-col>
+      </v-row>
+      <p>{{ this.ex3.val }}</p>
+
+      <v-btn v-if="userProfile.id == room_master" @click="inputAfterMatch">
+        확정
+      </v-btn>
+    </div>
   </v-card>
 </template>
 
 <script>
 import http from "@/util/http-common";
 import { mapState } from "vuex";
+import CreateMessage from "@/components/CreateMessage";
+import fb from "@/firebase/init";
+import moment from "moment";
 
 export default {
   name: "MatchRoom",
-  components: {},
+  components: {
+    CreateMessage,
+  },
   data() {
     return {
-      userProfile: sessionStorage.getItem("userProfile")
-        ? JSON.parse(sessionStorage.getItem("userProfile"))
-        : [],
       match_id: this.$route.query.match_id,
       room_master: null,
       center_lat: "",
       center_lng: "",
+      messages: [],
+      userProfile: sessionStorage.getItem("userProfile")
+        ? JSON.parse(sessionStorage.getItem("userProfile"))
+        : [],
+
       users_pk: [],
 
       fixed_lat: "37.477107637586194",
@@ -73,6 +99,24 @@ export default {
   },
   created() {
     this.getRoomData(this.match_id);
+
+    let ref = fb
+      .collection("messages" + String(this.match_id))
+      .orderBy("timestamp");
+
+    ref.onSnapshot((snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        if ((change.type = "added")) {
+          let doc = change.doc;
+          this.messages.push({
+            id: doc.id,
+            name: doc.data().name,
+            message: doc.data().message,
+            timestamp: moment(doc.data().timestamp).format("LTS"),
+          });
+        }
+      });
+    });
   },
   methods: {
     getRoomData(match_id) {
@@ -152,5 +196,28 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.chat h2 {
+  font-size: 2.6em;
+  margin-bottom: 0px;
+}
+
+.chat h5 {
+  margin-top: 0px;
+  margin-bottom: 40px;
+}
+
+.chat span {
+  font-size: 1.2em;
+}
+
+.chat .time {
+  display: block;
+  font-size: 0.7em;
+}
+
+.messages {
+  max-height: 300px;
+  overflow: auto;
+}
 </style>

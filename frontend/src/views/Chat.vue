@@ -5,7 +5,7 @@
     <div class="card">
       <div class="card-body">
         <p class="text-secondary nomessages" v-if="messages.length == 0">
-          [No messages yet!]
+          [메세지를 입력하세요!]
         </p>
         <div class="messages" v-chat-scroll="{ always: false, smooth: true }">
           <div v-for="message in messages" :key="message.id">
@@ -39,7 +39,7 @@ export default {
     };
   },
   created() {
-    let ref = fb.collection("messages").orderBy("timestamp");
+    let ref = fb.collection("messages2").orderBy("timestamp");
 
     ref.onSnapshot((snapshot) => {
       snapshot.docChanges().forEach((change) => {

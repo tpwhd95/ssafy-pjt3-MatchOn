@@ -42,5 +42,8 @@
     "> 1%",
     "last 2 versions",
     "not dead"
+  ],
+  "predeploy": [
+    "npm --prefix \"%RESOURCE_DIR%\" run lint"
   ]
 }
