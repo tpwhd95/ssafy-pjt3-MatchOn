@@ -179,7 +179,7 @@ export default {
     matching(sportsName, sportsNameKR) {
       this.$router.push({
         name: "About",
-        params: { sports: sportsName, sportsKR: sportsNameKR },
+        query: { sports: sportsName, sportsKR: sportsNameKR },
       });
     },
 
@@ -209,7 +209,7 @@ export default {
             //   if (i.sports_name == "tennis") {
             //     temp_sports = "테니스";
             //   }
-            //   if (i.sports_name == "bowl") {
+            //   if (i.sports_name == "bowling") {
             //     temp_sports = "볼링";
             //   }
             //   self.cards1[0].cards2.push({
@@ -235,7 +235,7 @@ export default {
               if (i.sports_name == "tennis") {
                 temp_sports = "테니스";
               }
-              if (i.sports_name == "bowl") {
+              if (i.sports_name == "bowling") {
                 temp_sports = "볼링";
               }
               self.cards1[0].cards2.push({
@@ -262,7 +262,7 @@ export default {
               if (i.sports_name == "tennis") {
                 temp_sports = "테니스";
               }
-              if (i.sports_name == "bowl") {
+              if (i.sports_name == "bowling") {
                 temp_sports = "볼링";
               }
               self.cards1[1].cards2.push({
@@ -287,7 +287,7 @@ export default {
               if (i.sports_name == "tennis") {
                 temp_sports = "테니스";
               }
-              if (i.sports_name == "bowl") {
+              if (i.sports_name == "bowling") {
                 temp_sports = "볼링";
               }
               self.cards1[2].cards2.push({
@@ -313,7 +313,7 @@ export default {
             //   if (i.sports_name == "tennis") {
             //     temp_sports = "테니스";
             //   }
-            //   if (i.sports_name == "bowl") {
+            //   if (i.sports_name == "bowling") {
             //     temp_sports = "볼링";
             //   }
             //   self.cards1[3].cards2.push({
@@ -350,7 +350,7 @@ export default {
         });
       this.$router.push({
         name: "MatchRoom",
-        params: { match_id: match_id },
+        query: { match_id: match_id },
       });
     },
     getResultRoom(match_id, sports, date, time) {
@@ -358,7 +358,7 @@ export default {
       console.log(this.token);
       this.$router.push({
         name: "ResultRoom",
-        params: { match_id: match_id, sports: sports, date: date, time: time },
+        query: { match_id: match_id, sports: sports, date: date, time: time },
       });
     },
   },

@@ -9,12 +9,12 @@ import Matching from '../views/Matching.vue'
 import HowToUse from '../views/HowToUse.vue'
 import MatchRoom from '../views/MatchRoom.vue'
 import ResultRoom from '../views/ResultRoom.vue'
-import Chat from '../views/Chat.vue'
 import ResultReady from '../components/Result/ResultReady.vue'
 import ResultError from '../components/Result/ResultError.vue'
 import ResultFalse from '../components/Result/ResultFalse.vue'
 import ResultTrue from '../components/Result/ResultTrue.vue'
-
+import Login from "../views/Login.vue";
+import Chat from "../views/Chat.vue";
 
 Vue.use(VueRouter)
 
@@ -60,11 +60,6 @@ const routes = [
     component: ResultRoom
   },
   {
-    path: '/chat',
-    name: 'Chat',
-    component: Chat
-  },
-  {
     path: '/resultready',
     name: 'ResultReady',
     component: ResultReady
@@ -84,6 +79,24 @@ const routes = [
     name: 'ResultTrue',
     component: ResultTrue
   },
+  {
+    path: "/login",
+    name: "Login",
+    component: Login
+  },
+  {
+    path: '/chat',
+    name: 'Chat',
+    component: Chat,
+    props: true,
+    beforeEnter: (to, from, next) => {
+      if (to.params.name) {
+        next();
+      } else {
+        next({ name: 'Login' })
+      }
+    }
+  }
 ]
 
 const router = new VueRouter({
