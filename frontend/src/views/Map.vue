@@ -224,7 +224,6 @@ export default {
   },
   mounted() {
     window.kakao && window.kakao.maps ? this.initMap() : this.addScript();
-    this.findcenter();
   },
 };
 </script>
