@@ -13,6 +13,7 @@ import ResultReady from '../components/Result/ResultReady.vue'
 import ResultError from '../components/Result/ResultError.vue'
 import ResultFalse from '../components/Result/ResultFalse.vue'
 import ResultTrue from '../components/Result/ResultTrue.vue'
+import MatchTrue from '../components/Result/MatchTrue.vue'
 import Login from "../views/Login.vue";
 import Chat from "../views/Chat.vue";
 
@@ -78,6 +79,11 @@ const routes = [
     path: '/resulttrue',
     name: 'ResultTrue',
     component: ResultTrue
+  },
+  {
+    path: '/matchtrue',
+    name: 'MatchTrue',
+    component: MatchTrue
   },
   {
     path: "/login",
