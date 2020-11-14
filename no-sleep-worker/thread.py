@@ -1,5 +1,5 @@
 import threading
-import ./check_play_time
+import check_play_time
 import datetime
 import sys
 
@@ -8,12 +8,23 @@ print()
 
 
 def execute_per_minute(second, num):
-    print(f'시간: {datetime.datetime.now()} {num} 번째')
+    print(f'시간: {datetime.datetime.now()} {num} 번째 실행')
     num += 1
-    check_play_time.time_check()
-    print('루프 종료')
-    print('잠깐 쉬기 10초')
+    now_date = datetime.datetime.today().strftime("%Y-%m-%d")
+    now_time = str(datetime.datetime.today().hour)+":10:00.000000"
+    print(now_time)
+    check_play_time.time_check(now_date, now_time)
+    
+    print()
     threading.Timer(second, execute_per_minute, [second, num]).start()
 
-
-execute_per_minute(10, 1)
+def on_time(sec, num):
+    second = datetime.datetime.now().strftime("%S")
+    minute = datetime.datetime.now().strftime("%M")
+    print(f'시간: {datetime.datetime.now()} {num} 번째 정각맞추기')
+    num += 1
+    if int(second) == 0 and int(minute) == 0:
+        execute_per_minute(3600, 1)
+        return
+    threading.Timer(sec, on_time, [sec, num]).start()
+on_time(1, 1)
