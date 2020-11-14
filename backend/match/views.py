@@ -257,7 +257,7 @@ def result(request):
     if match.won_team == None:
         if team == True:
             match.won_team = result
-            match.true_result = True
+            match.zero_resulted = True
             match.save()
         elif team == False:
             if result == True:
@@ -266,7 +266,7 @@ def result(request):
             elif result == False:
                 match.won_team = True
                 match.save()
-            match.false_result = True
+            match.one_resulted = True
             match.save()
         context = {
             'result': 'ready',
@@ -275,7 +275,7 @@ def result(request):
         return Response(context, status=status.HTTP_200_OK)
     
     if team == True: # True 팀일 때
-        if match.true_result == True:
+        if match.zero_resulted == True:
             context = {
                 'result': 'error',
                 'detail': '이미 결과를 투표하셨습니다.'
@@ -283,10 +283,10 @@ def result(request):
             return Response(context, status=status.HTTP_200_OK)
         if result != match.won_team:
             flag = 1
-        match.true_result = True
+        match.zero_resulted = True
         match.save()
     elif team == False: # False 팀일 때
-        if match.false_result == True:
+        if match.one_resulted == True:
             context = {
                 'result': 'error',
                 'detail': '이미 결과를 투표하셨습니다.'
@@ -294,13 +294,13 @@ def result(request):
             return Response(context, status=status.HTTP_200_OK)
         if result == match.won_team:
             flag = 1
-        match.false_result = True
+        match.one_resulted = True
         match.save()
     
     if flag:
         match.won_team = None
-        match.false_result = False
-        match.true_result = False
+        match.one_resulted = False
+        match.zero_resulted = False
         match.save()
         context = {
             'result': 'false',
@@ -326,8 +326,3 @@ def result(request):
         'datail': f'팀 번호 {int(match.won_team)}의 승리결과에 대한 처리가 완료되었습니다.'
     }
     return Response(context, status=status.HTTP_200_OK)
-
-
-def SayHello():
-    print('Hello!')
-    return
