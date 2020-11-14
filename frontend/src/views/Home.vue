@@ -1,9 +1,16 @@
 <template>
   <div class="home">
-    <v-card v-if="!this.isLoggedIn" class="mx-auto" max-width="720">
-      <v-container fluid> 로그인 하세요. </v-container>
-    </v-card>
+    <!-- 비로그인 디비전 -->
+    <v-main v-if="!this.isLoggedIn" class="mx-auto" max-width="720">
+      <v-container fluid>
+        <div class="text-center d-flex align-center">
+          <img src="@/assets/images/logos/logo.png" style="width: 100%" />
+        </div>
+      </v-container>
+    </v-main>
 
+    <!-- 로그인 디비전 -->
+    <!-- 현재 매칭 정보 -->
     <v-card
       v-if="this.isLoggedIn && this.flag == false"
       class="mx-auto"
@@ -71,6 +78,7 @@
       </v-container>
     </v-card>
 
+    <!-- 매칭 신청 -->
     <v-card v-if="this.isLoggedIn" class="mx-auto" max-width="720">
       <v-container fluid>
         <v-row>
