@@ -73,6 +73,9 @@ export default {
             console.log(" 상대편이 입력을 마친 상태");
             // 내 값과 상대방의 값이 같으면 충돌
             if (my_status == opposit_status) {
+              this.room_results_ref.doc(this.my_team).set({
+                match_result: my_status,
+              });
               console.log("충돌 남");
 
               this.$router.push("/resultfalse");
@@ -86,78 +89,10 @@ export default {
               return;
             }
           }
-
           console.log("경기 결과  입력");
           this.room_results_ref.doc(this.my_team).set({
             match_result: my_status,
           });
-        });
-    },
-    inputResultWin() {
-      http
-        .post(
-          "/match/result/",
-          {
-            match_pk: this.match_id,
-            result: "true",
-          },
-          {
-            headers: {
-              Authorization: "JWT " + this.token,
-            },
-          }
-        )
-        .then((res) => {
-          console.log(res);
-          if (res.data.result == "ready") {
-            console.log("ready");
-          } else if (res.data.result == "error") {
-            console.log("error");
-            this.$router.push("/resulterror");
-          } else if (res.data.result == "false") {
-            console.log("false");
-            this.$router.push("/resultfalse");
-          } else if (res.data.result == "true") {
-            console.log("true");
-            this.$router.push("/resulttrue");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    inputResultLose() {
-      http
-        .post(
-          "/match/result/",
-          {
-            match_pk: this.match_id,
-            result: "false",
-          },
-          {
-            headers: {
-              Authorization: "JWT " + this.token,
-            },
-          }
-        )
-        .then((res) => {
-          console.log(res);
-          if (res.data.result == "ready") {
-            console.log("ready");
-            this.$router.push("/resultready");
-          } else if (res.data.result == "error") {
-            console.log("error");
-            this.$router.push("/resulterror");
-          } else if (res.data.result == "false") {
-            console.log("false");
-            this.$router.push("/resultfalse");
-          } else if (res.data.result == "true") {
-            console.log("true");
-            this.$router.push("/resulttrue");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
         });
     },
   },
@@ -191,7 +126,7 @@ export default {
             // 내 상태가 0
             if (my_status == 0) {
               // 모달 클로즈
-              console.log("모달 클로즈");
+              console.log("다시 입력하세요");
             }
             // 내 상태가 0이 아닌데 상대가 0이면
             else if (my_status != 0 && opposit_status == 0) {
@@ -199,11 +134,44 @@ export default {
               console.log("대기 중");
               this.$router.push("/resultready");
             }
-            // 내 상태가 0이 아니고 상대도 0이 아니면
-            else if (my_status != 0 && opposit_status != 0) {
+            // 내 상태가 0이 아니고 상대도 0이 아니고 결과값이 같으면
+            else if (
+              my_status != 0 &&
+              opposit_status != 0 &&
+              my_status == opposit_status
+            ) {
+              // 충돌 로직
+              console.log("충돌");
+              this.$router.push("/resultfalse");
+            }
+            // 내 상태가 0이 아니고 상대도 0이 아니고 결과값이 다르면
+            else if (
+              my_status != 0 &&
+              opposit_status != 0 &&
+              my_status != opposit_status
+            ) {
               // 경기 종료 로직
               console.log("경기 종료");
               this.$router.push("/resulttrue");
+              http
+                .post(
+                  "/match/result/",
+                  {
+                    match_pk: this.match_id,
+                    result: my_status,
+                  },
+                  {
+                    headers: {
+                      Authorization: "JWT " + this.token,
+                    },
+                  }
+                )
+                .then((res) => {
+                  console.log("경기 결과 입력 완료");
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
             }
           });
         }

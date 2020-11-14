@@ -2,18 +2,13 @@
   <v-card class="mx-auto" max-width="720">
     <h1>조율하는 방</h1>
     <p>{{ match_id }}번 경기</p>
-    <p>방장: {{ room_master }}</p>
-    <p>중앙위치: {{ center_lat }}, {{ center_lng }}</p>
-    <p>내 번호: {{ userProfile.id }}</p>
-    <p>{{ users }}</p>
-    <p>유저들: {{ users_pk }}</p>
 
     <div id="map" style="margin: auto; width: 95%; height: 270px"></div>
 
     <div class="card">
       <div class="card-body">
         <p class="text-secondary nomessages" v-if="messages.length == 0">
-          [No messages yet!]
+          [팀원들과 자유롭게 대화하고 방장님은 장소와 시간을 정해주세요!]
         </p>
         <div class="messages" v-chat-scroll="{ always: false, smooth: true }">
           <div v-for="message in messages" :key="message.id">
@@ -28,7 +23,7 @@
         <CreateMessage :name="userProfile.username" :match_id="match_id" />
       </div>
 
-      <v-row style="margin: 10px">
+      <!-- <v-row style="margin: 10px">
         <v-checkbox
           v-for="(user, key) in users"
           :key="user.username"
@@ -39,9 +34,9 @@
       </v-row>
       <p>{{ teamA }}</p>
       <p>{{ teamB }}</p>
-      <p>{{ fixed_users }}</p>
+      <p>{{ fixed_users }}</p> -->
 
-      <v-row class="mx-1">
+      <v-row v-if="userProfile.id == room_master" class="mx-1">
         <v-col cols="12" class="py-0">
           <v-slider
             v-model="ex3.val"
@@ -54,7 +49,6 @@
           ></v-slider>
         </v-col>
       </v-row>
-      <p>{{ this.ex3.val }}</p>
 
       <v-btn v-if="userProfile.id == room_master" @click="inputAfterMatch">
         확정
@@ -87,14 +81,18 @@ export default {
         ? JSON.parse(sessionStorage.getItem("userProfile"))
         : [],
 
-      users: {},
       users_pk: [],
       selected: "",
       fixed_lat: "37.477107637586194",
       fixed_lng: "126.96346058714246",
       ex3: { label: "확정시간", val: 50, color: "red" },
-      teamA: [],
-      teamB: [],
+
+      match_results_ref: null,
+      match_users_ref: null,
+
+      // users: {},
+      // teamA: [],
+      // teamB: [],
       fixed_users: {},
     };
   },
@@ -118,6 +116,14 @@ export default {
             message: doc.data().message,
             timestamp: moment(doc.data().timestamp).format("LTS"),
           });
+        }
+      });
+    });
+
+    this.room_results_ref.onSnapshot((snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        if (change.type === "added") {
+          console.log("확정!!!!!!!");
         }
       });
     });
@@ -174,56 +180,96 @@ export default {
           room_results_ref
             .doc(users[this.userProfile.id].team ? "1" : "0")
             .set({
-              match_result: 0,
+              match_result: -1,
+            })
+            .then(() => {
+              room_results_ref.onSnapshot((snapshot) => {
+                snapshot.docChanges().forEach((change) => {
+                  if (change.type === "modified") {
+                    console.log("변경 발생");
+                    this.$router.push("/matchtrue");
+                  }
+                });
+              });
+              console.log(res.data.data[0].users);
+              const users_pk = Object.keys(res.data.data[0].users);
+              console.log(users_pk);
+              for (const user_pk of users_pk) {
+                if (this.users[user_pk].team == true) {
+                  this.fixed_users[user_pk] = { team: 1 };
+                } else {
+                  this.fixed_users[user_pk] = { team: 0 };
+                }
+              }
+              console.log(this.fixed_users);
+              if (res.data.data[0].sports === "tennis") {
+                this.sport = "테니스장";
+              } else if (res.data.data[0].sports === "bowling") {
+                this.sport = "볼링장";
+              } else if (res.data.data[0].sports === "pool") {
+                this.sport = "당구장";
+              } else if (res.data.data[0].sports === "futsal") {
+                this.sport = "풋살장";
+              } else if (res.data.data[0].sports === "basket_ball") {
+                this.sport = "농구장";
+              }
+            })
+            .then(() => {
+              window.kakao && window.kakao.maps
+                ? this.initMap()
+                : this.addScript();
             });
-          this.users_pk = Object.keys(res.data.data[0].users);
-          if (res.data.data[0].sports === "tennis") {
-            this.sport = "테니스장";
-          } else if (res.data.data[0].sports === "bowling") {
-            this.sport = "볼링장";
-          } else if (res.data.data[0].sports === "pool") {
-            this.sport = "당구장";
-          } else if (res.data.data[0].sports === "futsal") {
-            this.sport = "풋살장";
-          } else if (res.data.data[0].sports === "basket_ball") {
-            this.sport = "농구장";
-          }
-        })
-        .then(() => {
-          window.kakao && window.kakao.maps ? this.initMap() : this.addScript();
         })
         .catch((err) => {
           console.log(err);
         });
     },
     inputAfterMatch() {
-      if (this.teamA.length == this.users_pk.length / 2) {
-        http
-          .post(
-            "/match/am/",
-            {
-              match_pk: this.match_id,
-              // fixed_time: this.ex3.val,
-              fixed_time: "09:00:00",
-              users: this.fixed_users,
-              fixed_lat: this.fixed_lat,
-              fixed_lng: this.fixed_lng,
-            },
-            {
-              headers: {
-                Authorization: "JWT " + this.token,
-              },
-            }
-          )
-          .then((res) => {
-            console.log(res);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+      // if (this.teamA.length == this.users_pk.length / 2) {
+      console.log("입력 실행!");
+      if (this.ex3.val < 10) {
+        this.ex3.val = "0" + String(this.ex3.val) + ":00:00";
       } else {
-        alert("각 팀의 인원 수가 같아야 합니다.");
+        this.ex3.val = String(this.ex3.val) + ":00:00";
       }
+      console.log(this.fixed_users);
+      http
+        .post(
+          "/match/am/",
+          {
+            match_pk: this.match_id,
+            fixed_time: this.ex3.val,
+            // fixed_time: "09:00:00",
+            users: this.fixed_users,
+            fixed_lat: this.fixed_lat,
+            fixed_lng: this.fixed_lng,
+          },
+          {
+            headers: {
+              Authorization: "JWT " + this.token,
+            },
+          }
+        )
+        .then((res) => {
+          console.log("전송 완료!");
+
+          const room_results_ref = fb.collection(
+            "room_results" + String(this.match_id)
+          );
+          room_results_ref.get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              doc.ref.set({
+                match_result: 0,
+              });
+            });
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      // } else {
+      //   alert("각 팀의 인원 수가 같아야 합니다.");
+      // }
     },
     addScript() {
       const script = document.createElement("script");
@@ -354,6 +400,7 @@ export default {
           self.selected = place.place_name;
           self.fixed_lng = place.x;
           self.fixed_lat = place.y;
+          console.log(self.fixed_lng, self.fixed_lat);
         });
       }
 
@@ -368,25 +415,25 @@ export default {
       }
     },
   },
-  watch: {
-    teamA(values) {
-      if (values.length == this.users_pk.length / 2) {
-        this.teamB = this.users_pk.filter((item) => !values.includes(item));
-      } else {
-        this.teamB = [];
-      }
-      console.log(this.users_pk);
-      for (const user_pk of this.users_pk) {
-        console.log(user_pk);
-        console.log(values);
-        if (values.includes(user_pk)) {
-          this.fixed_users[user_pk] = { team: 0 };
-        } else {
-          this.fixed_users[user_pk] = { team: 1 };
-        }
-      }
-    },
-  },
+  // watch: {
+  //   teamA(values) {
+  //     if (values.length == this.users_pk.length / 2) {
+  //       this.teamB = this.users_pk.filter((item) => !values.includes(item));
+  //     } else {
+  //       this.teamB = [];
+  //     }
+  //     console.log(this.users_pk);
+  //     for (const user_pk of this.users_pk) {
+  //       console.log(user_pk);
+  //       console.log(values);
+  //       if (values.includes(user_pk)) {
+  //         this.fixed_users[user_pk] = { team: 0 };
+  //       } else {
+  //         this.fixed_users[user_pk] = { team: 1 };
+  //       }
+  //     }
+  //   },
+  // },
 };
 </script>
 

@@ -71,7 +71,7 @@
     <v-card style="max-width: 720px">
       <v-btn @click="push1">push</v-btn>
       <p>{{ token2 }}</p>
-      <p>ver 11.14.2</p>
+      <p>ver 11.14.9</p>
     </v-card>
   </v-app>
 </template>
