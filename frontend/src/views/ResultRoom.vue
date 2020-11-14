@@ -7,6 +7,15 @@
     <p>시간: {{ time | ChangeTime }}시</p>
     <v-btn @click="inputResult(true)">승리</v-btn>
     <v-btn @click="inputResult(false)">패배</v-btn>
+
+    <v-snackbar v-model="alert_collide">
+      이미 결과를 입력하셨습니다. 상대방이 결과를 입력할 때까지 기다려주세요.
+      <template v-slot:action="{ attrs }">
+        <v-btn color="pink" text v-bind="attrs" @click="alert_collide = false">
+          닫기
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-card>
 </template>
 
@@ -28,6 +37,7 @@ export default {
       room_results_ref: null,
       room_users_ref: null,
       my_team: "0",
+      alert_collide: false,
     };
   },
   computed: {
@@ -50,6 +60,7 @@ export default {
               opposit_status = doc.data().match_result;
             else if (doc.data().match_result != 0) {
               console.log("이미 입력 마침");
+              this.alert_collide = true;
               isAlready = true;
             }
           });
@@ -63,6 +74,8 @@ export default {
             // 내 값과 상대방의 값이 같으면 충돌
             if (my_status == opposit_status) {
               console.log("충돌 남");
+
+              this.$router.push("/resultfalse");
               this.room_results_ref.get().then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
                   doc.ref.set({
@@ -98,7 +111,6 @@ export default {
           console.log(res);
           if (res.data.result == "ready") {
             console.log("ready");
-            this.$router.push("/resultready");
           } else if (res.data.result == "error") {
             console.log("error");
             this.$router.push("/resulterror");
@@ -185,11 +197,13 @@ export default {
             else if (my_status != 0 && opposit_status == 0) {
               // 대기 중 모달 출력
               console.log("대기 중");
+              this.$router.push("/resultready");
             }
             // 내 상태가 0이 아니고 상대도 0이 아니면
             else if (my_status != 0 && opposit_status != 0) {
               // 경기 종료 로직
               console.log("경기 종료");
+              this.$router.push("/resulttrue");
             }
           });
         }
