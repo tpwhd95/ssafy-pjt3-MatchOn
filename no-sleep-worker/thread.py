@@ -24,7 +24,6 @@ def on_time(sec, num):
     print(f'시간: {datetime.datetime.now()} {num} 번째 정각맞추기')
     num += 1
     if int(second) == 0 and int(minute) == 0:
-        execute_per_minute(3600, 1)
         return
     threading.Timer(sec, on_time, [sec, num]).start()
 on_time(1, 1)
