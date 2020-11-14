@@ -101,7 +101,7 @@ export default {
   computed: {
     ...mapState(["token"]),
   },
-  created() {
+  mounted() {
     this.getRoomData(this.match_id);
 
     let ref = fb
@@ -137,11 +137,45 @@ export default {
           }
         )
         .then((res) => {
-          console.log(res);
+          console.log(res.data);
           this.room_master = Object.keys(res.data.data[0].users)[0];
           this.center_lat = res.data.data[0].match_lat;
           this.center_lng = res.data.data[0].match_lng;
           this.users = res.data.data[0].users;
+          let users = JSON.parse(JSON.stringify(res.data.data[0].users));
+          let user_keys = Object.keys(users);
+          const room_users_ref = fb.collection(
+            "room_users" + String(this.match_id)
+          );
+          const room_results_ref = fb.collection(
+            "room_results" + String(this.match_id)
+          );
+          room_users_ref
+            .doc(user_keys[0])
+            .get()
+            .then((doc) => {
+              if (this.userProfile.id == user_keys[0] && !doc.exists) {
+                console.log("ddd");
+                // 파이어베이스에 roomid로 룸을 생성하고 하위에 users를 입력
+                for (let i = 0; i < user_keys.length; i += 1) {
+                  console.log("for");
+                  room_users_ref
+                    .doc(user_keys[i])
+                    .set({
+                      user: users[user_keys[i]],
+                      user_id: user_keys[i],
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                    });
+                }
+              }
+            });
+          room_results_ref
+            .doc(users[this.userProfile.id].team ? "1" : "0")
+            .set({
+              match_result: 0,
+            });
           this.users_pk = Object.keys(res.data.data[0].users);
           if (res.data.data[0].sports === "tennis") {
             this.sport = "테니스장";
@@ -154,6 +188,9 @@ export default {
           } else if (res.data.data[0].sports === "basket_ball") {
             this.sport = "농구장";
           }
+        })
+        .then(() => {
+          window.kakao && window.kakao.maps ? this.initMap() : this.addScript();
         })
         .catch((err) => {
           console.log(err);
@@ -241,6 +278,8 @@ export default {
       var center_loc = "12";
       var callback = (result, status) => {
         if (status === kakao.maps.services.Status.OK) {
+          console.log("콜백함수!!!!!!");
+          console.log(self.center_lng, self.center_lat);
           console.log("지역 명칭 : " + result[0].address_name);
           center_loc = result[0].address_name.split(" ")[2];
           console.log(center_loc + " " + self.sport);
@@ -251,7 +290,7 @@ export default {
         // 키워드로 장소를 검색합니다
         ps.keywordSearch(center_loc + " " + self.sport, placesSearchCB);
       };
-
+      console.log(self.center_lng, self.center_lat);
       geocoder.coord2RegionCode(self.center_lng, self.center_lat, callback);
 
       var infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
@@ -328,9 +367,6 @@ export default {
         infowindow.setMap(null);
       }
     },
-  },
-  mounted() {
-    window.kakao && window.kakao.maps ? this.initMap() : this.addScript();
   },
   watch: {
     teamA(values) {

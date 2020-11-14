@@ -169,19 +169,37 @@ export default {
         // 마커가 드래그 가능하도록 설정합니다
         marker.setDraggable(false);
 
-        kakao.maps.event.addListener(map, "click", function (mouseEvent) {
-          // 클릭한 위도, 경도 정보를 가져옵니다
-          var latlng = mouseEvent.latLng;
+        kakao.maps.event.addListener(map, "dragend", function () {
+          // 지도 중심좌표를 얻어옵니다
 
-          // 마커 위치를 클릭한 위치로 옮깁니다
-          marker.setPosition(latlng);
-
-          console.log(latlng.getLat(), latlng.getLng());
-          self.lng = latlng.getLng();
-          self.lat = latlng.getLat();
-
-          var resultDiv = document.getElementById("clickLatlng");
+          var position = map.getCenter();
+          marker.setPosition(position);
+          self.lng = position.getLng();
+          self.lat = position.getLat();
         });
+
+        kakao.maps.event.addListener(map, "zoom_changed", function () {
+          // 지도 중심좌표를 얻어옵니다
+
+          var position = map.getCenter();
+          marker.setPosition(position);
+          self.lng = position.getLng();
+          self.lat = position.getLat();
+        });
+
+        // kakao.maps.event.addListener(map, "click", function (mouseEvent) {
+        //   // 클릭한 위도, 경도 정보를 가져옵니다
+        //   var latlng = mouseEvent.latLng;
+
+        //   // 마커 위치를 클릭한 위치로 옮깁니다
+        //   marker.setPosition(latlng);
+
+        //   console.log(latlng.getLat(), latlng.getLng());
+        //   self.lng = latlng.getLng();
+        //   self.lat = latlng.getLat();
+
+        //   var resultDiv = document.getElementById("clickLatlng");
+        // });
       }
     },
     submit(sportsNameKR, date1, time) {

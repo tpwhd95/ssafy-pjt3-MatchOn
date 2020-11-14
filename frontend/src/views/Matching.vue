@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     main() {
-      this.$router.push("/map");
+      this.$router.push("/");
     },
   },
 };

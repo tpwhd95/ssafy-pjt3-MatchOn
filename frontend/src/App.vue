@@ -35,7 +35,7 @@
       </v-btn>
     </v-app-bar>
 
-    <v-navigation-drawer v-model="drawer" absolute left temporary dark>
+    <v-navigation-drawer v-model="drawer" fixed left temporary dark>
       <v-list nav dense>
         <v-list-item-group v-model="group">
           <v-list-item style="margin: 12px 3px">
@@ -71,7 +71,7 @@
     <v-card style="max-width: 720px">
       <v-btn @click="push1">push</v-btn>
       <p>{{ token2 }}</p>
-      <p>ver 11.13.1</p>
+      <p>ver 11.14.1</p>
     </v-card>
   </v-app>
 </template>
