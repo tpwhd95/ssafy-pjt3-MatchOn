@@ -330,8 +330,6 @@ def result(request):
 @api_view(['GET'])
 def report(request):
     user = get_object_or_404(User, username=request.user)
-    
-    
     context = {}
     sports = ['pae_ssaum', 'futsal', 'basket_ball', 'bowling', 'tennis', 'pool']
     for i in range(1, 6):
