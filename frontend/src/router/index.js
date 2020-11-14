@@ -96,7 +96,17 @@ const routes = [
         next({ name: 'Login' })
       }
     }
-  }
+  },
+  {
+    path: "/report",
+    name: "Report",
+    component: Report
+  },
+  {
+    path: "/reportdetail",
+    name: "ReportDetail",
+    component: ReportDetail
+  },
 ]
 
 const router = new VueRouter({
