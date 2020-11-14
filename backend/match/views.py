@@ -329,12 +329,14 @@ def result(request):
 
 @api_view(['GET'])
 def report(request):
-    user = request.user
+    user = get_object_or_404(User, username=request.user)
+    
+    
     context = {}
     sports = ['pae_ssaum', 'futsal', 'basket_ball', 'bowling', 'tennis', 'pool']
     for i in range(1, 6):
-        match_count = AfterMatch.objects.select_related('before_match').filter(user=user).filter(sports_name=sports[i]).count()
-        win_match_count = AfterMatch.objects.select_related('before_match').filter(user=user).filter(sports_name=sports[i]).filter(result=True).count()
+        match_count = AfterMatch.objects.filter(before_match__user=user, before_match__status='5', before_match__sports_name=sports[i]).count()
+        win_match_count = AfterMatch.objects.filter(before_match__user=user, before_match__status='5', before_match__sports_name=sports[i], result=True).count()
         lose_match_count = match_count - win_match_count
         temp = {}
         temp['win'] = win_match_count

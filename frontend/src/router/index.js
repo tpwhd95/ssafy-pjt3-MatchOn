@@ -16,6 +16,8 @@ import ResultTrue from '../components/Result/ResultTrue.vue'
 import MatchTrue from '../components/Result/MatchTrue.vue'
 import Login from "../views/Login.vue";
 import Chat from "../views/Chat.vue";
+import Report from "../views/Report.vue";
+import ReportDetail from "../views/ReportDetail.vue";
 
 Vue.use(VueRouter)
 
