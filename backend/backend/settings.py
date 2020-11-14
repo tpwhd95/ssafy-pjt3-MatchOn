@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '^rhw6g936_hiyk_&n+v8(hb^%md8dw2ekid!_fbhnj##3h!hsb'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -92,7 +92,7 @@ CORS_ALLOW_HEADERS = (
 )
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:8080',
-    # 'https://matchon-1521d.web.app/',
+    'https://matchon-1521d.web.app/',
     # 'http://k3a306.p.ssafy.io/'
 ]
 
