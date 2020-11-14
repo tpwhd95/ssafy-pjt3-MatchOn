@@ -40,6 +40,16 @@ self.addEventListener('push', function (event) {
     event.waitUntil(self.registration.showNotification(title, options));
 });
 
+
+self.addEventListener('notificationClick', function(event) {
+    console.log('푸쉬 알림 클릭')
+
+    event.showNotification.close();
+
+    event.waitUntil(
+        clients.openWindow('http://localhost:8080/')
+    );
+});
 // window.addEventListener('beforeinstallprompt', function (event) {
 //     event.preventDefault();
 //     //@ts-ignore
