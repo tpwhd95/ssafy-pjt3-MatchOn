@@ -229,3 +229,7 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,python,vuejs,visualstudiocode,venv
+
+**/migrations/**
+!**/migrations
+!**/migrations/__init__.py

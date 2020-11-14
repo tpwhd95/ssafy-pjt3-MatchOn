@@ -80,19 +80,13 @@ export default {
       userProfile: sessionStorage.getItem("userProfile")
         ? JSON.parse(sessionStorage.getItem("userProfile"))
         : [],
-
       users_pk: [],
       selected: "",
       fixed_lat: "37.477107637586194",
       fixed_lng: "126.96346058714246",
       ex3: { label: "확정시간", val: 50, color: "red" },
-
       match_results_ref: null,
       match_users_ref: null,
-
-      // users: {},
-      // teamA: [],
-      // teamB: [],
       fixed_users: {},
     };
   },
