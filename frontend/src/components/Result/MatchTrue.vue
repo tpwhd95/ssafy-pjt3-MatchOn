@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto" max-width="720">
+  <div class="mx-auto" max-width="720">
     <v-img height="250" src="@/assets/images/results/slamdunk.png"></v-img>
 
     <v-card-title>매치 장소와 시간이 확정되었습니다!</v-card-title>
@@ -16,7 +16,7 @@
         >마이페이지로</v-btn
       >
     </div>
-  </v-card>
+  </div>
 </template>
 
 <script>

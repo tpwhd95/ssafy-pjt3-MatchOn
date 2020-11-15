@@ -10,7 +10,6 @@ import HowToUse from '../views/HowToUse.vue'
 import MatchRoom from '../views/MatchRoom.vue'
 import ResultRoom from '../views/ResultRoom.vue'
 import ResultReady from '../components/Result/ResultReady.vue'
-import ResultError from '../components/Result/ResultError.vue'
 import ResultFalse from '../components/Result/ResultFalse.vue'
 import ResultTrue from '../components/Result/ResultTrue.vue'
 import MatchTrue from '../components/Result/MatchTrue.vue'
@@ -66,11 +65,6 @@ const routes = [
     path: '/resultready',
     name: 'ResultReady',
     component: ResultReady
-  },
-  {
-    path: '/resulterror',
-    name: 'ResultError',
-    component: ResultError
   },
   {
     path: '/resultfalse',

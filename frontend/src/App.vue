@@ -84,11 +84,12 @@
         </v-list>
       </v-navigation-drawer>
 
-      <v-main>
+      <v-main class="h-100 mb-7">
         <router-view
           @report-detail="getReportDetail"
           :report_detail_datas="report_detail_datas"
           :sports_name="sports_name"
+          class="h-100"
         ></router-view>
       </v-main>
 
