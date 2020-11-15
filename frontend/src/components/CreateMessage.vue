@@ -1,14 +1,14 @@
 <template>
-  <div class="container" style="margin-bottom: 30px">
+  <div class="container mt-0 pt-0" style="margin-bottom: 30px">
     <form @submit.prevent="createMessage">
       <div class="form-group">
-        <input
+        <v-text-field
           type="text"
           name="message"
           class="form-control"
-          placeholder="Enter message ..."
+          placeholder="메시지를 입력해주세요"
           v-model="newMessage"
-        />
+        ></v-text-field>
         <p class="text-danger" v-if="errorText">{{ errorText }}</p>
       </div>
       <v-btn class="btn btn-primary" type="submit" name="action"

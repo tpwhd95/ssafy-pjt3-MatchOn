@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '^rhw6g936_hiyk_&n+v8(hb^%md8dw2ekid!_fbhnj##3h!hsb'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -214,4 +214,4 @@ REST_AUTH_SERIALIZERS = {
 }
 
 
-# FORCE_SCRIPT_NAME = '/api'
+FORCE_SCRIPT_NAME = '/api'

@@ -1,49 +1,70 @@
 <template>
-  <v-card class="mx-auto mb-15" max-width="720">
+  <v-card class="mx-auto mb-14 mt-3" max-width="720">
     <h1 class="ft-dh text-center">
       <span class="ft-dh onred">매치</span><span class="ft-dh">룸</span>
     </h1>
+    <!-- 팀원분기 -->
+    <div class="mx-2 mt-2">
+      <div v-if="userProfile.id == room_master">
+        <h3>{{ users[room_master]["username"] }}님이 매치 마스터입니다.</h3>
+        <p style="font-size: 12px">
+          팀원들과 자유롭게 대화하고 장소와 시간을 정해주세요!
+        </p>
+      </div>
+      <div v-else>
+        <h3>매치 마스터는 {{ users[room_master]["username"] }}님입니다.</h3>
+        <p style="font-size: 12px">
+          팀원들과 자유롭게 대화하고 장소와 시간을 정해주세요!
+        </p>
+      </div>
+    </div>
+
+    <!-- 채팅방 -->
+    <v-card
+      outlined
+      class="messages mx-2 mt-2"
+      v-chat-scroll="{ always: false, smooth: true }"
+      style="background-color: rgba(0, 0, 0, 0.2)"
+    >
+      <div v-for="message in messages" :key="message.id">
+        <div v-if="message.name == userProfile.username">
+          <div class="d-flex justify-end">
+            <span class="mx-3" style="color: rgba(0, 0, 0, 0.8)">{{
+              message.message
+            }}</span>
+            <!-- <span class="text-info">:[나] </span> -->
+          </div>
+          <p
+            class="d-flex justify-end text-secondary time mx-3 mb-1 0.5rem"
+            style="color: rgba(0, 0, 0, 0.5)"
+          >
+            {{ message.timestamp }}
+          </p>
+        </div>
+        <div v-else>
+          <span class="text-info">[{{ message.name }}]: </span>
+          <span>{{ message.message }}</span>
+          <br />
+          <span class="text-secondary time">{{ message.timestamp }}</span>
+        </div>
+      </div>
+    </v-card>
+
+    <div class="card-action">
+      <CreateMessage :name="userProfile.username" :match_id="match_id" />
+    </div>
+
     <p class="ml-2 mb-0" style="font-size: 14px">매치 위치를 선택해주세요.</p>
-    <div id="map" style="margin: auto; width: 95%; height: 270px"></div>
+    <div
+      id="map"
+      class="mb-10"
+      style="margin: auto; width: 95%; height: 270px"
+    ></div>
     <div class="card">
       <div class="card-body">
         <p class="text-secondary nomessages" v-if="messages.length == 0">
           [팀원들과 자유롭게 대화하고 방장님은 장소와 시간을 정해주세요!]
         </p>
-
-        <!-- 채팅방 -->
-        <v-card
-          outlined
-          class="messages mx-2 mt-2"
-          v-chat-scroll="{ always: false, smooth: true }"
-          style="background-color: rgba(0, 0, 0, 0.2)"
-        >
-          <div v-for="message in messages" :key="message.id">
-            <div v-if="message.name == userProfile.username">
-              <div class="d-flex justify-end">
-                <span class="mx-3" style="color: rgba(0, 0, 0, 0.8)">{{
-                  message.message
-                }}</span>
-                <!-- <span class="text-info">:[나] </span> -->
-              </div>
-              <p
-                class="d-flex justify-end text-secondary time mx-3 mb-1 0.5rem"
-                style="color: rgba(0, 0, 0, 0.5)"
-              >
-                {{ message.timestamp }}
-              </p>
-            </div>
-            <div v-else>
-              <span class="text-info">[{{ message.name }}]: </span>
-              <span>{{ message.message }}</span>
-              <br />
-              <span class="text-secondary time">{{ message.timestamp }}</span>
-            </div>
-          </div>
-        </v-card>
-      </div>
-      <div class="card-action">
-        <CreateMessage :name="userProfile.username" :match_id="match_id" />
       </div>
 
       <!-- <v-row style="margin: 10px">
@@ -58,30 +79,36 @@
       <p>{{ teamA }}</p>
       <p>{{ teamB }}</p>
       <p>{{ fixed_users }}</p> -->
+      <p class="ml-4 my-0" v-if="stime != etime">
+        매치 가능시간은 {{ stime | ChangeTime }}시부터
+        {{ etime | ChangeTime }}시입니다.
+      </p>
+      <p class="ml-4 my-0" v-if="stime == etime">
+        매치 가능시간은 {{ stime | ChangeTime }}시입니다.
+      </p>
 
       <v-row v-if="userProfile.id == room_master" class="mx-1">
         <v-col cols="12" class="py-0">
+          <p style="font-size: 12px">매치 시간을 지정해주세요.</p>
           <v-slider
             v-model="ex3.val"
-            :default="stime"
             :label="ex3.label"
             :thumb-color="ex3.color"
             :min="stime"
             :max="etime"
             step="1"
-            thumb-label="always"
+            thumb-label="true"
           ></v-slider>
         </v-col>
       </v-row>
       <div class="text-center">
         <v-btn
-          style="font-color: rgb(0, 0, 0)"
           class="mb-2"
           color="rgb(189, 22, 44)"
           v-if="userProfile.id == room_master"
           @click="inputAfterMatch"
         >
-          확정
+          <span style="color: white"> 매치온! </span>
         </v-btn>
       </div>
     </div>
@@ -120,7 +147,7 @@ export default {
       selected: "",
       fixed_lat: "37.477107637586194",
       fixed_lng: "126.96346058714246",
-      ex3: { label: "확정시간", val: 50, color: "red" },
+      ex3: { label: "매치시간", val: 0, color: "red" },
       match_results_ref: null,
       match_users_ref: null,
       fixed_users: {},
@@ -456,6 +483,20 @@ export default {
       }
       function closeOverlay() {
         infowindow.setMap(null);
+      }
+    },
+  },
+  filters: {
+    ChangeTime(time) {
+      if (time < 12) {
+        var changedTime = "오전" + time;
+        return changedTime;
+      } else if (time == 12) {
+        var changedTime = "오후" + time;
+        return changedTime;
+      } else {
+        var changedTime = "오후" + (time - 12);
+        return changedTime;
       }
     },
   },
