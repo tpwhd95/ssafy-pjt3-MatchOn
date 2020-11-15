@@ -43,6 +43,7 @@ def before_match(request):
                 msg = {"status_code": 403, "detail": "이미 해당 시간에 매칭 중인 게임이 있습니다."}
                 return Response(msg)
 
+    
     bm_match = BeforeMatch(
         user = request.user, 
         status = 1, 
