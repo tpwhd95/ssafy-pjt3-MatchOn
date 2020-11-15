@@ -3,7 +3,7 @@
     <div class="d-md-none h-100">
       <!-- 내브바 -->
       <v-app-bar app class="align-center" color="black darken-3" dark>
-        <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+        <!-- <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon> -->
         <div style="height: 40px">
           <!-- <h1 @click="$router.push('/')" class="ft-dh" style="cursor: pointer">
           매치<span class="ft-dh onred">온</span>
@@ -17,7 +17,11 @@
           />
         </div>
 
+        <p>ver 11.16.1</p>
+
         <v-spacer></v-spacer>
+
+        <v-btn @click="push1">push</v-btn>
 
         <!-- 비로그인 디비전 -->
         <v-dialog v-if="!this.isLoggedIn" v-model="dialog" max-width="500">
