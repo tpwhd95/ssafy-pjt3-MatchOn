@@ -19,7 +19,6 @@
 
         <p>ver 11.16.7</p>
 
-
         <!-- <v-btn @click="push1">push</v-btn> -->
 
         <!-- 비로그인 디비전 -->
@@ -100,6 +99,14 @@
           <!-- <span style="color: white">전적</span> -->
           <i class="far fa-clipboard fa-2x" style="color: white"></i>
         </v-btn>
+      </v-bottom-navigation>
+      <v-bottom-navigation
+        v-model="value"
+        background-color="black"
+        fixed="true"
+        class="d-flex justify-space-around align-center"
+        v-else
+      >
       </v-bottom-navigation>
     </div>
     <MainSignoutPC class="d-none d-md-block" />
