@@ -327,3 +327,29 @@ def result(request):
         'datail': f'팀 번호 {int(match.won_team)}의 승리결과에 대한 처리가 완료되었습니다.'
     }
     return Response(context, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def report(request):
+    user = get_object_or_404(User, username=request.user)
+    
+    
+    context = {}
+    sports = ['pae_ssaum', 'futsal', 'basket_ball', 'bowling', 'tennis', 'pool']
+    for i in range(1, 6):
+        match_count = AfterMatch.objects.filter(before_match__user=user, before_match__status='5', before_match__sports_name=sports[i]).count()
+        win_match_count = AfterMatch.objects.filter(before_match__user=user, before_match__status='5', before_match__sports_name=sports[i], result=True).count()
+        lose_match_count = match_count - win_match_count
+        temp = {}
+        temp['win'] = win_match_count
+        temp['lose'] = lose_match_count
+        temp['total'] = match_count
+        if match_count != 0:
+            temp['rate'] = round((win_match_count / match_count) * 100, 2)
+        else:
+            temp['rate'] = round(0, 2)
+        temp['sports_id'] = i
+        temp['sports_name'] = sports[i]
+        context[sports[i]] = temp
+    return Response(context, status=status.HTTP_200_OK)
+    
+
