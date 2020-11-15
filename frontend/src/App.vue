@@ -66,7 +66,11 @@
     </v-navigation-drawer>
 
     <v-main>
-      <router-view></router-view>
+      <router-view
+        @report-detail="getReportDetail"
+        :report_detail_datas="report_detail_datas"
+        :sports_name="sports_name"
+      ></router-view>
     </v-main>
     <v-card style="max-width: 720px">
       <v-btn @click="push1">push</v-btn>
@@ -98,6 +102,8 @@ export default {
       drawer: false,
       group: null,
       token2: "",
+      report_detail_datas: [],
+      sports_name: "",
     };
   },
   methods: {
@@ -215,9 +221,28 @@ export default {
           console.log(err);
         });
     },
+    getReportDetail(sports_pk) {
+      http
+        .get(`/match/report/${sports_pk}`, {
+          headers: {
+            Authorization: "JWT " + this.token,
+          },
+        })
+        .then((res) => {
+          this.report_detail_datas = res.data;
+          this.sports_name = res.data[0].sports_name;
+          console.log(this.report_detail_datas);
+          console.log(this.sports_name);
+          this.$router.push(`report/${sports_pk}`);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
   computed: {
     ...mapGetters(["isLoggedIn"]),
+    ...mapState(["token"]),
   },
   watch: {
     group() {
