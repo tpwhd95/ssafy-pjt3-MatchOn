@@ -83,8 +83,12 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-main class="content">
-      <router-view></router-view>
+    <v-main>
+      <router-view
+        @report-detail="getReportDetail"
+        :report_detail_datas="report_detail_datas"
+        :sports_name="sports_name"
+      ></router-view>
     </v-main>
 
     <!-- 바텀 내비게이터 -->
@@ -140,6 +144,8 @@ export default {
       drawer: false,
       group: null,
       token2: "",
+      report_detail_datas: [],
+      sports_name: "",
     };
   },
   methods: {
@@ -257,9 +263,28 @@ export default {
           console.log(err);
         });
     },
+    getReportDetail(sports_pk) {
+      http
+        .get(`/match/report/${sports_pk}`, {
+          headers: {
+            Authorization: "JWT " + this.token,
+          },
+        })
+        .then((res) => {
+          this.report_detail_datas = res.data;
+          this.sports_name = res.data[0].sports_name;
+          console.log(this.report_detail_datas);
+          console.log(this.sports_name);
+          this.$router.push(`report/${sports_pk}`);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
   computed: {
     ...mapGetters(["isLoggedIn"]),
+    ...mapState(["token"]),
   },
   watch: {
     group() {

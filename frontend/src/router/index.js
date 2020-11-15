@@ -111,7 +111,7 @@ const routes = [
     component: Report
   },
   {
-    path: "/reportdetail",
+    path: "/report/:sports_pk",
     name: "ReportDetail",
     component: ReportDetail
   },
