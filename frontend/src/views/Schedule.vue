@@ -137,7 +137,6 @@
                                 {{ card2.match_start | ChangeTime }}시 ~
                                 {{ card2.match_end | ChangeTime }}시
                               </v-list-item-subtitle>
-                              버튼!!
                             </v-list-item-content>
                           </v-list-item>
                         </v-img>
@@ -170,39 +169,10 @@
                                 매치 경기 시간:
                                 {{ card2.fixed_time | ChangeTime }}시
                               </v-list-item-subtitle>
-                              버튼!!
                             </v-list-item-content>
                           </v-list-item>
                         </v-img>
                       </v-card>
-
-                      <!-- <v-card
-                    v-else-if="card2.status == 5"
-                    class="ml-1 mr-1"
-                >
-                  <v-img
-                    class="white--text semi_card_image"
-                    :src="card2.matchSrc"     
-                  >
-                    <v-card-title>{{ card2.sports }}</v-card-title>
-                    <v-card-subtitle >{{ card2.gu }}</v-card-subtitle>
-                    <v-list-item>
-                      <v-list-item-content class="pt-3 pb-1">
-                        <v-list-item-title class="mytitle">{{ card2.date | ChangeDate }}</v-list-item-title>
-                        <v-list-item-subtitle class="mysubtitle">
-                          매치 경기 시간: 
-                          {{ card2.fixed_time | ChangeTime }}시
-                        </v-list-item-subtitle>
-                        <p v-if="card2.result == 1" style="margin: 12px 0px">
-                          결과: 승리
-                        </p>
-                        <p v-else style="margin: 12px 0px">
-                          결과: 패배
-                        </p>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </v-img>
-                </v-card> -->
                     </v-slide-item>
                   </v-slide-group>
                 </v-expansion-panel-content>
@@ -239,11 +209,11 @@ export default {
         "#290702",
       ],
       matchSrc: [
+        require("@/assets/images/sports/futsal.jpg"),
+        require("@/assets/images/sports/basketball.jpg"),
+        require("@/assets/images/sports/pool.jpg"),
         require("@/assets/images/sports/tennis.jpg"),
-        require("@/assets/images/sports/tennis.jpg"),
-        require("@/assets/images/sports/tennis.jpg"),
-        require("@/assets/images/sports/tennis.jpg"),
-        require("@/assets/images/sports/tennis.jpg"),
+        require("@/assets/images/sports/bowling.jpg"),
       ],
 
       confirmedMatch: {
