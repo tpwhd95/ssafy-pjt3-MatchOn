@@ -10,49 +10,38 @@
         </div>
       </v-card-title>
 
-
       <v-container fluid>
-
         <v-row>
-          <v-col 
-          v-for="card1 in cards1" 
-          :key="card1.title" 
-          >
-            <v-card
-              :elevation="7"
-            >
-            <v-img
-              :src="card1.src"
-              height="150px"
-              @click="reportDetail(card1.sports_id)"
-            >
-            <div class="d-flex flex-no-wrap justify-space-between">
-              <div>
-                <v-card-title
-                  class="headline"
-                >{{ card1.title }}</v-card-title>
+          <v-col v-for="card1 in cards1" :key="card1.title">
+            <v-card :elevation="7">
+              <v-img
+                :src="card1.src"
+                height="150px"
+                @click="reportDetail(card1.sports_id)"
+              >
+                <div class="d-flex flex-no-wrap justify-space-between">
+                  <div>
+                    <v-card-title class="headline">{{
+                      card1.title
+                    }}</v-card-title>
 
-                <v-card-subtitle>
-
-                  {{ card1.total }}전 {{ card1.win }}승 {{ card1.lose }}패
-                </v-card-subtitle>
-          
-          
-                  <v-progress-circular
-                    :rotate="-90"
-                    :size="100"
-                    :width="15"
-                    :value="card1.rate"
-                    color="#0f4c81"
-                  >
-                    {{ card1.rate }}%
-                  </v-progress-circular>
-       
-
+                    <v-card-subtitle>
+                      {{ card1.total }}전 {{ card1.win }}승 {{ card1.lose }}패
+                    </v-card-subtitle>
+                  </div>
+                  <div>
+                    <v-progress-circular
+                      :rotate="-90"
+                      :size="100"
+                      :width="15"
+                      :value="card1.rate"
+                      color="#0f4c81"
+                    >
+                      {{ card1.rate }}%
+                    </v-progress-circular>
+                  </div>
                 </div>
-              </div>
-              
-            </v-img>
+              </v-img>
             </v-card>
           </v-col>
         </v-row>
@@ -163,7 +152,6 @@ export default {
 </script>
 
 <style>
-
 .match_title {
   font-size: 23px;
   padding-left: 19px;
@@ -180,9 +168,7 @@ export default {
   /* align-items: center; */
 }
 
-.card_design{
+.card_design {
   text-align: center;
 }
-
-
 </style>
