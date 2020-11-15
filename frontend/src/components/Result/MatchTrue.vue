@@ -13,7 +13,7 @@
         color="error"
         class="mt-10 mb-15"
         @click="$router.push('/schedule')"
-        >마이페이지로</v-btn
+        >내 일정으로</v-btn
       >
     </div>
   </div>

@@ -19,7 +19,7 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn @click="push1">push</v-btn>
+        <!-- <v-btn @click="push1">push</v-btn> -->
 
         <!-- 비로그인 디비전 -->
         <v-dialog v-if="!this.isLoggedIn" v-model="dialog" max-width="500">
@@ -70,6 +70,7 @@
         v-model="value"
         background-color="black"
         fixed="true"
+        v-if="this.isLoggedIn"
       >
         <v-btn value="home" to="/">
           <!-- <span style="color: white">집</span> -->
