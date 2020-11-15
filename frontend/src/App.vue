@@ -58,37 +58,7 @@
         </v-btn>
       </v-app-bar>
 
-      <v-navigation-drawer v-model="drawer" fixed left temporary dark>
-        <v-list nav dense>
-          <v-list-item-group v-model="group">
-            <v-list-item style="margin: 12px 3px">
-              <v-list-item-title @click="$router.push('/')">
-                <h1 class="display-1 font-weight-bold">
-                  Match On
-                </h1></v-list-item-title
-              >
-            </v-list-item>
-
-            <v-list-item v-if="this.isLoggedIn" style="margin: 6px 3px">
-              <v-list-item-title @click="$router.push('/profile')">
-                <span class="text-h6 font-weight-bold">
-                  마이페이지
-                </span></v-list-item-title
-              >
-            </v-list-item>
-
-            <v-list-item style="margin: 6px 3px">
-              <v-list-item-title @click="$router.push('/howtouse')">
-                <span class="text-h6 font-weight-bold">
-                  이용방법
-                </span></v-list-item-title
-              >
-            </v-list-item>
-          </v-list-item-group>
-        </v-list>
-      </v-navigation-drawer>
-
-      <v-main class="h-100 mb-7">
+      <v-main class="h-100" style="padding-bottom: 50px">
         <router-view
           @report-detail="getReportDetail"
           :report_detail_datas="report_detail_datas"
