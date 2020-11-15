@@ -1,5 +1,5 @@
 <template>
-  <div class="match" style="margin: 0 0 50px">
+  <div>
     <!-- 비로그인 디비전 -->
     <v-main v-if="!this.isLoggedIn" class="mx-auto" max-width="720">
       <v-container fluid>
@@ -9,95 +9,35 @@
       </v-container>
     </v-main>
 
-    <!-- 로그인 디비전 -->
-    <!-- 현재 매칭 정보 -->
-    <v-card
-      v-if="this.isLoggedIn && this.flag == false"
-      class="mx-auto"
-      max-width="720"
-    >
-      <v-container fluid>
-        <h2>{{ userProfile.username }}님의 경기 정보</h2>
-        <v-row>
-          <v-col v-for="card1 in cards1" :key="card1.title" :cols="card1.flex">
-            <v-card style="padding: 16px">
-              <h3>{{ card1.title }}</h3>
-              <v-row>
-                <v-col
-                  v-for="card2 in card1.cards2"
-                  :key="card2.sports"
-                  :cols="card2.flex"
-                >
-                  <v-card
-                    v-if="card1.title == '조율중인 경기'"
-                    style="padding: 8px"
-                    @click="getMatchRoom(card2.match_pk)"
-                  >
-                    <p style="margin: 12px 0px">종목: {{ card2.sports }}</p>
-                    <p style="margin: 12px 0px">날짜: {{ card2.date }}</p>
-                    <p style="margin: 12px 0px">
-                      시간: {{ card2.match_start | ChangeTime }}시 ~
-                      {{ card2.match_end | ChangeTime }}시
-                    </p>
-                  </v-card>
-
-                  <v-card
-                    v-if="card1.title == '대기중인 경기'"
-                    style="padding: 8px"
-                  >
-                    <p style="margin: 12px 0px">종목: {{ card2.sports }}</p>
-                    <p style="margin: 12px 0px">날짜: {{ card2.date }}</p>
-                    <p style="margin: 12px 0px">
-                      시간: {{ card2.fixed_time | ChangeTime }}시
-                    </p>
-                  </v-card>
-
-                  <v-card
-                    v-if="card1.title == '진행중인 경기'"
-                    style="padding: 8px"
-                    @click="
-                      getResultRoom(
-                        card2.match_pk,
-                        card2.sports,
-                        card2.date,
-                        card2.fixed_time
-                      )
-                    "
-                  >
-                    <p style="margin: 12px 0px">종목: {{ card2.sports }}</p>
-                    <p style="margin: 12px 0px">날짜: {{ card2.date }}</p>
-                    <p style="margin: 12px 0px">
-                      시간: {{ card2.fixed_time | ChangeTime }}시
-                    </p>
-                  </v-card>
-                </v-col>
-              </v-row>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-card>
-
     <!-- 매칭 신청 -->
-    <v-card v-if="this.isLoggedIn" class="mx-auto" max-width="720">
+    <v-card v-else class="mx-auto card_design" max-width="720">
+      <v-card-title class="match_title pb-0 mt-1">
+        <div>
+          <span class="ft-dh bold">매치 </span>
+          <span class="ft-dh span_title">종목을 </span>
+          <span class="ft-dh onred bold">온 </span>
+          <span class="ft-dh span_title">하세요!</span>
+        </div>
+      </v-card-title>
+
       <v-container fluid>
         <v-row>
           <v-col
             v-for="card in cards"
             :key="card.title"
-            :cols="card.flex"
             :sportsName="card.title"
+            class="pb-0"
           >
-            <v-card>
+            <v-card :elevation="5" class="card_design">
               <v-img
                 :src="card.src"
-                class="white--text align-end"
-                gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                height="200px"
+                class="white--text ft-dh"
+                gradient="to bottom, rgba(0,0,0,.05), rgba(0,0,0,.6)"
+                height="150px"
                 @click="matching(card.title, card.title2)"
                 style="cursor: pointer"
               >
-                <v-card-title v-text="card.title2"></v-card-title>
+                <span class="card_title">{{ card.title2 }}</span>
               </v-img>
             </v-card>
           </v-col>
@@ -154,33 +94,6 @@ export default {
       userProfile: sessionStorage.getItem("userProfile")
         ? JSON.parse(sessionStorage.getItem("userProfile"))
         : [],
-      cards1: [
-        // {
-        //   title: "매칭중인 경기",
-        //   flex: 12,
-        //   cards2: [],
-        // },
-        {
-          title: "조율중인 경기",
-          flex: 12,
-          cards2: [],
-        },
-        {
-          title: "대기중인 경기",
-          flex: 12,
-          cards2: [],
-        },
-        {
-          title: "진행중인 경기",
-          flex: 12,
-          cards2: [],
-        },
-        // {
-        //   title: "완료된 경기",
-        //   flex: 12,
-        //   cards2: [],
-        // },
-      ],
     };
   },
   methods: {
@@ -190,199 +103,40 @@ export default {
         query: { sports: sportsName, sportsKR: sportsNameKR },
       });
     },
-
-    getMatchInfo() {
-      console.log(this.token);
-      const self = this;
-      http
-        .get("/auth/match-info/", {
-          headers: {
-            Authorization: "JWT " + this.token,
-          },
-        })
-        .then(function (res) {
-          console.log(res);
-          for (let i of res.data.data) {
-            // if (i.status == 1) {
-            //   var temp_sports = "";
-            //   if (i.sports_name == "futsal") {
-            //     temp_sports = "풋살";
-            //   }
-            //   if (i.sports_name == "basket_ball") {
-            //     temp_sports = "농구";
-            //   }
-            //   if (i.sports_name == "pool") {
-            //     temp_sports = "당구";
-            //   }
-            //   if (i.sports_name == "tennis") {
-            //     temp_sports = "테니스";
-            //   }
-            //   if (i.sports_name == "bowling") {
-            //     temp_sports = "볼링";
-            //   }
-            //   self.cards1[0].cards2.push({
-            //     sports: temp_sports,
-            //     date: i.date,
-            //     flex: 12,
-            //     start_time: i.start_time,
-            //     end_time: i.end_time,
-            //   });
-            // }
-            if (i.status == 2) {
-              self.flag = false;
-              var temp_sports = "";
-              if (i.sports_name == "futsal") {
-                temp_sports = "풋살";
-              }
-              if (i.sports_name == "basket_ball") {
-                temp_sports = "농구";
-              }
-              if (i.sports_name == "pool") {
-                temp_sports = "당구";
-              }
-              if (i.sports_name == "tennis") {
-                temp_sports = "테니스";
-              }
-              if (i.sports_name == "bowling") {
-                temp_sports = "볼링";
-              }
-              self.cards1[0].cards2.push({
-                sports: temp_sports,
-                date: i.date,
-                flex: 12,
-                match_pk: i.matching_pk,
-                match_start: i.match_start,
-                match_end: i.match_end,
-              });
-            }
-            if (i.status == 3) {
-              self.flag = false;
-              var temp_sports = "";
-              if (i.sports_name == "futsal") {
-                temp_sports = "풋살";
-              }
-              if (i.sports_name == "basket_ball") {
-                temp_sports = "농구";
-              }
-              if (i.sports_name == "pool") {
-                temp_sports = "당구";
-              }
-              if (i.sports_name == "tennis") {
-                temp_sports = "테니스";
-              }
-              if (i.sports_name == "bowling") {
-                temp_sports = "볼링";
-              }
-              self.cards1[1].cards2.push({
-                sports: temp_sports,
-                date: i.date,
-                flex: 12,
-                fixed_time: i.fixed_time,
-              });
-            }
-            if (i.status == 4) {
-              self.flag = false;
-              var temp_sports = "";
-              if (i.sports_name == "futsal") {
-                temp_sports = "풋살";
-              }
-              if (i.sports_name == "basket_ball") {
-                temp_sports = "농구";
-              }
-              if (i.sports_name == "pool") {
-                temp_sports = "당구";
-              }
-              if (i.sports_name == "tennis") {
-                temp_sports = "테니스";
-              }
-              if (i.sports_name == "bowling") {
-                temp_sports = "볼링";
-              }
-              self.cards1[2].cards2.push({
-                sports: temp_sports,
-                date: i.date,
-                flex: 12,
-                fixed_time: i.fixed_time,
-                match_pk: i.matching_pk,
-              });
-            }
-            // if (i.status == 5) {
-            //   self.flag = false;
-            //   var temp_sports = "";
-            //   if (i.sports_name == "futsal") {
-            //     temp_sports = "풋살";
-            //   }
-            //   if (i.sports_name == "basket_ball") {
-            //     temp_sports = "농구";
-            //   }
-            //   if (i.sports_name == "pool") {
-            //     temp_sports = "당구";
-            //   }
-            //   if (i.sports_name == "tennis") {
-            //     temp_sports = "테니스";
-            //   }
-            //   if (i.sports_name == "bowling") {
-            //     temp_sports = "볼링";
-            //   }
-            //   self.cards1[3].cards2.push({
-            //     sports: temp_sports,
-            //     date: i.date,
-            //     flex: 12,
-            //     fixed_time: i.fixed_time,
-            //   });
-            // }
-          }
-        })
-        .catch(function (err) {
-          alert(err);
-        });
-    },
-    getMatchRoom(match_id) {
-      console.log(match_id);
-      console.log(this.token);
-      http
-        .post(
-          "/match/match-room/",
-          { match_pk: match_id },
-          {
-            headers: {
-              Authorization: "JWT " + this.token,
-            },
-          }
-        )
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      this.$router.push({
-        name: "MatchRoom",
-        query: { match_id: match_id },
-      });
-    },
-    getResultRoom(match_id, sports, date, time) {
-      console.log(match_id);
-      console.log(this.token);
-      this.$router.push({
-        name: "ResultRoom",
-        query: { match_id: match_id, sports: sports, date: date, time: time },
-      });
-    },
   },
   computed: {
     ...mapGetters(["isLoggedIn"]),
     ...mapState(["token"]),
   },
-  created() {
-    if (this.isLoggedIn) {
-      this.getMatchInfo();
-    }
-  },
-  filters: {
-    ChangeTime(value) {
-      return value.split(":")[0];
-    },
-  },
 };
 </script>
+
+<style scoped>
+.match_title {
+  font-size: 28px;
+  text-align: center;
+}
+
+.match_image {
+  height: 26vh;
+  width: 26vh;
+  border-radius: 10px;
+}
+
+.card_title {
+  font-size: 30px;
+  line-height: 23vh;
+  font-weight: 600;
+  opacity: 0.85;
+  /* align-items: center; */
+}
+
+.card_design {
+  text-align: center;
+}
+
+.span_title {
+  color: rgb(58, 58, 58);
+  opacity: 0.85;
+}
+</style>

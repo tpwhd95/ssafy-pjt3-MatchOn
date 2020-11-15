@@ -1,14 +1,20 @@
 <template>
-  <v-form v-model="valid" class="mb-12">
+  <v-form v-model="valid" class="mb-2">
     <v-container>
       <v-row>
-        <v-col cols="12" class="py-0">
-          <v-text-field
+        <v-col cols="12" class="py-0 pl-1">
+
+          <h2 class="page_title">
+            <span class="ft-dh bold"> {{ sportsNameKR }} </span>
+            <span class="ft-dh bold">매치</span>
+            <span class="ft-dh onred bold">온</span>
+          </h2>
+          <!-- <v-text-field
             v-model="sportsNameKR"
             label="매치 종목은"
             readonly
             color="rgb(189, 22, 44)"
-          ></v-text-field>
+          ></v-text-field> -->
         </v-col>
 
         <v-col cols="12" class="py-0">
@@ -40,14 +46,14 @@
           </v-menu>
         </v-col>
 
-        <v-col cols="12" class="py-0">
+        <v-col cols="12" class="py-0 mt-1">
           <div class="mb-0" style="font-size: 12px">
-            가능한 시간을 선택하세요.
+            매치 가능한 시간을 선택하세요.
           </div>
           <div>
             <p class="mb-0">
               <span class="bold">{{ (time[0] + 6) | ChangeTime }}시</span>부터
-              <span class="bold">{{ (time[1] + 6) | ChangeTime }}시</span>
+              <span class="bold">{{ (time[1] + 6) | ChangeTime }}시</span>사이
             </p>
           </div>
           <v-range-slider
@@ -71,6 +77,8 @@
             style="text-transform: none"
             color="rgb(189, 22, 44)"
             dark
+            class="py-2 mt-1"
+            width="200px"
             @click="submit(sportsNameKR, date1, time)"
           >
             한 판 붙자!
@@ -368,5 +376,15 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+
+.page_title {
+  padding-left: 6px;
+  padding-right: 10px;
+  padding-top: 8px;
+  padding-bottom: 6px;
+  /* margin-right: 2px; */
+  font-size: 30px;
+}
+
 </style>

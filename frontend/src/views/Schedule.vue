@@ -4,11 +4,11 @@
       <v-container fluid>
         <div>
           <v-sheet tile height="54" class="d-flex">
-            <h2 class="page_title">
+            <p class="page_title">
               <span class="ft-dh">{{ userProfile.username }}님의 </span>
               <span class="ft-dh bold">매치</span>
               <span class="ft-dh onred bold">온</span>
-            </h2>
+            </p>
             <v-btn
               icon
               class="ml-3 mr-1 my-2"
@@ -479,9 +479,9 @@ export default {
   padding-left: 6px;
   padding-right: 10px;
   padding-top: 8px;
-  padding-bottom: 6px;
+  margin-bottom: 0px;
   /* margin-right: 2px; */
-  font-size: 28px;
+  font-size: 23px;
 }
 
 .month_title {
