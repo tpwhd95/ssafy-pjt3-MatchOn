@@ -11,7 +11,7 @@
             src="@/assets/images/logos/logo.png"
             alt="match-on-logo"
             style="height: 100%"
-            class="ml-15"
+            class="ml-1"
           />
         </div>
 
@@ -47,12 +47,20 @@
 
         <!-- 로그인 디비전 -->
         <v-btn
-          v-if="this.isLoggedIn"
+          v-if="this.isLoggedIn && this.awesomeId == 'logoutbutton'"
           color="rgb(189, 22, 44)"
           dark
           @click="logout2"
+          :id="awesomeId"
         >
-          로그아웃
+          <span :id="awesomefont1">이</span>
+          <span :id="awesomefont2">걸 </span>
+          <span :id="awesomefont3">로</span>
+          <span :id="awesomefont4">그</span>
+          <span :id="awesomefont5">아</span>
+          <span :id="awesomefont6">웃</span>
+          <span :id="awesomefont7">해</span>
+          <span>?</span>
         </v-btn>
       </v-app-bar>
 
@@ -73,7 +81,7 @@
         class="d-flex justify-space-around align-center"
         v-if="this.isLoggedIn"
       >
-        <v-btn value="home" to="/">
+        <v-btn value="home" to="/" @click="awesomeFunc">
           <!-- <span style="color: white">집</span> -->
           <i class="fas fa-home fa-2x" style="color: white"></i>
         </v-btn>
@@ -128,6 +136,15 @@ export default {
       token2: "",
       report_detail_datas: [],
       sports_name: "",
+      awesomeVar: 0,
+      awesomeId: "",
+      awesomefont1: "",
+      awesomefont2: "",
+      awesomefont3: "",
+      awesomefont4: "",
+      awesomefont5: "",
+      awesomefont6: "",
+      awesomefont7: "",
     };
   },
   methods: {
@@ -263,6 +280,28 @@ export default {
           console.log(error);
         });
     },
+    awesomeFunc() {
+      this.awesomeVar += 1;
+      if (this.awesomeVar % 7 === 0) {
+        this.awesomeId = "logoutbutton";
+        this.awesomefont1 = "buttonFont1";
+        this.awesomefont2 = "buttonFont2";
+        this.awesomefont3 = "buttonFont3";
+        this.awesomefont4 = "buttonFont4";
+        this.awesomefont5 = "buttonFont5";
+        this.awesomefont6 = "buttonFont6";
+        this.awesomefont7 = "buttonFont7";
+      } else {
+        this.awesomeId = "";
+        this.awesomefont1 = "";
+        this.awesomefont2 = "";
+        this.awesomefont3 = "";
+        this.awesomefont4 = "";
+        this.awesomefont5 = "";
+        this.awesomefont6 = "";
+        this.awesomefont7 = "";
+      }
+    },
   },
   computed: {
     ...mapGetters(["isLoggedIn"]),
@@ -279,5 +318,45 @@ export default {
 <style scoped>
 .h-100 {
   height: 100%;
+}
+#logoutbutton {
+  background: linear-gradient(
+    45deg,
+    red,
+    orange,
+    yellow,
+    green,
+    blue,
+    navy,
+    purple
+  );
+}
+#buttonFont1 {
+  color: red;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+}
+#buttonFont2 {
+  color: orange;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+}
+#buttonFont3 {
+  color: yellow;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+}
+#buttonFont4 {
+  color: green;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+}
+#buttonFont5 {
+  color: blue;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+}
+#buttonFont6 {
+  color: navy;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+}
+#buttonFont7 {
+  color: purple;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 }
 </style>
