@@ -41,7 +41,15 @@
         </v-col>
 
         <v-col cols="12" class="py-0">
-          <div>가능한 시간을 선택하세요.</div>
+          <div class="mb-0" style="font-size: 12px">
+            가능한 시간을 선택하세요.
+          </div>
+          <div>
+            <p class="mb-0">
+              <span class="bold">{{ (time[0] + 6) | ChangeTime }}시</span>부터
+              <span class="bold">{{ (time[1] + 6) | ChangeTime }}시</span>
+            </p>
+          </div>
           <v-range-slider
             v-model="time"
             :tick-labels="ticksLabels"
@@ -50,10 +58,12 @@
             ticks="always"
             tick-size="3"
             color="rgb(189, 22, 44)"
-          ></v-range-slider>
+          >
+          </v-range-slider>
         </v-col>
-
-        <div class="mx-3">당신의 위치에 마커를 설정해주세요.</div>
+        <div class="mx-3 mb-1" style="font-size: 12px">
+          매치를 원하는 위치에 마커를 설정해주세요.
+        </div>
         <div id="map" style="margin: auto; width: 95%; height: 270px"></div>
 
         <v-col cols="12" class="d-flex justify-center">
@@ -92,23 +102,23 @@ export default {
       date1: "",
       time: [0, 1],
       ticksLabels: [
-        6,
-        7,
-        8,
-        9,
-        10,
-        11,
-        12,
-        13,
-        14,
-        15,
-        16,
-        17,
-        18,
-        19,
-        20,
-        21,
-        22,
+        "오전 6시",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "오후 10시",
       ],
       today: "",
       lat: "37.5663",
@@ -316,6 +326,20 @@ export default {
   mounted() {
     this.getToday();
     window.kakao && window.kakao.maps ? this.initMap() : this.addScript();
+  },
+  filters: {
+    ChangeTime(timeTime) {
+      if (timeTime < 12) {
+        var newTime = "오전 " + timeTime;
+        return newTime;
+      } else if (timeTime == 12) {
+        var newTime = "오후 " + timeTime;
+        return newTime;
+      } else if (timeTime > 12) {
+        var newTime = "오후 " + (timeTime - 12);
+        return newTime;
+      }
+    },
   },
 };
 </script>
