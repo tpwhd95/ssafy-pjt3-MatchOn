@@ -45,7 +45,7 @@
         </v-dialog>
 
         <!-- 로그인 디비전 -->
-        <v-btn
+        <!-- <v-btn
           v-if="this.isLoggedIn && this.awesomeId == 'logoutbutton'"
           color="rgb(189, 22, 44)"
           dark
@@ -60,8 +60,9 @@
           <span :id="awesomefont6">웃</span>
           <span :id="awesomefont7">해</span>
           <span>?</span>
+          <span>로그아웃</span>
         </v-btn>
-      </v-app-bar>
+      </v-app-bar> -->
 
       <v-main class="h-100" style="padding-bottom: 50px">
         <router-view
@@ -143,15 +144,15 @@ export default {
       token2: "",
       report_detail_datas: [],
       sports_name: "",
-      awesomeVar: 0,
-      awesomeId: "",
-      awesomefont1: "",
-      awesomefont2: "",
-      awesomefont3: "",
-      awesomefont4: "",
-      awesomefont5: "",
-      awesomefont6: "",
-      awesomefont7: "",
+      // awesomeVar: 0,
+      // awesomeId: "",
+      // awesomefont1: "",
+      // awesomefont2: "",
+      // awesomefont3: "",
+      // awesomefont4: "",
+      // awesomefont5: "",
+      // awesomefont6: "",
+      // awesomefont7: "",
     };
   },
   methods: {
@@ -287,28 +288,28 @@ export default {
           console.log(error);
         });
     },
-    awesomeFunc() {
-      this.awesomeVar += 1;
-      if (this.awesomeVar % 7 === 0) {
-        this.awesomeId = "logoutbutton";
-        this.awesomefont1 = "buttonFont1";
-        this.awesomefont2 = "buttonFont2";
-        this.awesomefont3 = "buttonFont3";
-        this.awesomefont4 = "buttonFont4";
-        this.awesomefont5 = "buttonFont5";
-        this.awesomefont6 = "buttonFont6";
-        this.awesomefont7 = "buttonFont7";
-      } else {
-        this.awesomeId = "";
-        this.awesomefont1 = "";
-        this.awesomefont2 = "";
-        this.awesomefont3 = "";
-        this.awesomefont4 = "";
-        this.awesomefont5 = "";
-        this.awesomefont6 = "";
-        this.awesomefont7 = "";
-      }
-    },
+    // awesomeFunc() {
+    //   this.awesomeVar += 1;
+    //   if (this.awesomeVar % 7 === 0) {
+    //     this.awesomeId = "logoutbutton";
+    //     this.awesomefont1 = "buttonFont1";
+    //     this.awesomefont2 = "buttonFont2";
+    //     this.awesomefont3 = "buttonFont3";
+    //     this.awesomefont4 = "buttonFont4";
+    //     this.awesomefont5 = "buttonFont5";
+    //     this.awesomefont6 = "buttonFont6";
+    //     this.awesomefont7 = "buttonFont7";
+    //   } else {
+    //     this.awesomeId = "";
+    //     this.awesomefont1 = "";
+    //     this.awesomefont2 = "";
+    //     this.awesomefont3 = "";
+    //     this.awesomefont4 = "";
+    //     this.awesomefont5 = "";
+    //     this.awesomefont6 = "";
+    //     this.awesomefont7 = "";
+    //   }
+    // },
   },
   computed: {
     ...mapGetters(["isLoggedIn"]),
