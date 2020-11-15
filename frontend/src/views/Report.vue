@@ -9,12 +9,27 @@
               style="padding: 16px"
               @click="reportDetail(card1.sports_id)"
             >
-              <h3>{{ card1.title }}</h3>
-              <p>{{ card1.total }}전</p>
-              <p>{{ card1.win }}승</p>
-              <p>{{ card1.lose }}패</p>
-              <p>승률: {{ card1.rate }}%</p>
-              <p>sports_id: {{ card1.sports_id }}</p>
+              <h2>{{ card1.title }}</h2>
+              <v-row>
+                <v-col class="d-flex align-center">
+                  <span style="margin-right: 5px">{{ card1.total }}전</span>
+                  <span style="margin-right: 5px">{{ card1.win }}승</span>
+                  <span style="margin-right: 5px">{{ card1.lose }}패</span>
+                  <!-- <span>승률: {{ card1.rate }}%</span> -->
+                  <!-- <p>sports_id: {{ card1.sports_id }}</p> -->
+                </v-col>
+                <v-col>
+                  <v-progress-circular
+                    :rotate="-90"
+                    :size="100"
+                    :width="15"
+                    :value="card1.rate"
+                    color="primary"
+                  >
+                    {{ card1.rate }}%
+                  </v-progress-circular>
+                </v-col>
+              </v-row>
             </v-card>
           </v-col>
         </v-row>
