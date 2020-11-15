@@ -88,7 +88,7 @@
       </p>
 
       <v-row v-if="userProfile.id == room_master" class="mx-1">
-        <v-col cols="12" class="py-0">
+        <v-col cols="11" class="py-0">
           <p style="font-size: 12px">매치 시간을 지정해주세요.</p>
           <v-slider
             v-model="ex3.val"

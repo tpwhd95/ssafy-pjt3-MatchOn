@@ -1,12 +1,25 @@
 <template>
   <v-card class="mx-auto" max-width="720">
-    <h1>경기결과 입력</h1>
-    <p>경기 번호: {{ match_id }}</p>
-    <p>종목: {{ sports }}</p>
-    <p>날짜: {{ date }}</p>
-    <p>시간: {{ time | ChangeTime }}시</p>
-    <v-btn @click="inputResult(true)">승리</v-btn>
-    <v-btn @click="inputResult(false)">패배</v-btn>
+    <h1 class="ft-dh text-center">
+      <span class="ft-dh">경기결과</span><span class="ft-dh onred">입력</span>
+    </h1>
+    <div class="mx-2 mt-15 mb-16">
+      <strong>{{ date | changeDate }} </strong>
+      <span
+        ><strong>{{ time | ChangeTime }}시</strong>에 플레이한
+      </span>
+      <p>
+        <strong>{{ sports }}</strong> 경기 결과를 입력해주세요.
+      </p>
+    </div>
+    <br />
+    <br />
+    <br />
+    <br />
+    <div class="d-flex justify-space-around mt-16">
+      <v-btn color="blue accent-4" dark @click="inputResult(true)">승리</v-btn>
+      <v-btn color="red accent-4" dark @click="inputResult(false)">패배</v-btn>
+    </div>
 
     <v-snackbar v-model="alert_collide">
       이미 결과를 입력하셨습니다. 상대방이 결과를 입력할 때까지 기다려주세요.
@@ -103,6 +116,13 @@ export default {
   filters: {
     ChangeTime(value) {
       return value.split(":")[0];
+    },
+    changeDate(value) {
+      const year = value.split("-")[0];
+      const month = value.split("-")[1];
+      const date = value.split("-")[2];
+      const answer = year + "년 " + month + "월 " + date + "일";
+      return answer;
     },
   },
   beforeMount() {
