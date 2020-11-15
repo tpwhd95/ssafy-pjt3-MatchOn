@@ -1,9 +1,9 @@
 <template>
   <v-app>
     <!-- 내브바 -->
-    <v-app-bar app color="black darken-3" dark>
+    <v-app-bar app class="align-center" color="black darken-3" dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <div class="text-center">
+      <div style="height: 40px">
         <!-- <h1 @click="$router.push('/')" class="ft-dh" style="cursor: pointer">
           매치<span class="ft-dh onred">온</span>
         </h1> -->
@@ -11,8 +11,8 @@
           @click="$router.push('/')"
           src="@/assets/images/logos/logo.png"
           alt="match-on-logo"
-          style="width: 35%"
-          class="mt-2"
+          style="height: 100%"
+          class="ml-auto"
         />
       </div>
 
@@ -43,7 +43,12 @@
       </v-dialog>
 
       <!-- 로그인 디비전 -->
-      <v-btn v-if="this.isLoggedIn" color="teal" dark @click="logout2">
+      <v-btn
+        v-if="this.isLoggedIn"
+        color="rgb(189, 22, 44)"
+        dark
+        @click="logout2"
+      >
         로그아웃
       </v-btn>
     </v-app-bar>
@@ -84,27 +89,33 @@
     </v-main>
 
     <!-- 바텀 내비게이터 -->
-    <v-bottom-navigation v-model="value" background-color="black">
-      <v-btn value="home">
+    <v-bottom-navigation v-model="value" background-color="black" fixed="true">
+      <v-btn value="home" to="/">
         <span style="color: white">집</span>
         <i class="fas fa-home fa-2x" style="color: white"></i>
       </v-btn>
 
-      <v-btn value="match">
+      <v-btn value="match" to="/match">
         <span style="color: white">매치</span>
         <i class="fas fa-flag-checkered fa-2x" style="color: white"></i>
       </v-btn>
 
-      <v-btn value="calendar">
+      <v-btn value="schedule" to="/schedule">
         <span style="color: white">일정</span>
         <i class="fa fa-calendar-check fa-2x" style="color: white"></i>
       </v-btn>
 
-      <v-btn value="report">
+      <v-btn value="report" to="/report">
         <span style="color: white">전적</span>
         <i class="far fa-clipboard fa-2x" style="color: white"></i>
       </v-btn>
     </v-bottom-navigation>
+
+    <!-- <v-card style="max-width: 720px">
+      <v-btn @click="push1">push</v-btn>
+      <p>{{ token2 }}</p>
+      <p>ver 11.13.1</p>
+    </v-card> -->
   </v-app>
 </template>
 

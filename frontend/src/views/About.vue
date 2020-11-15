@@ -1,12 +1,13 @@
 <template>
-  <v-form v-model="valid">
+  <v-form v-model="valid" class="mb-12">
     <v-container>
       <v-row>
         <v-col cols="12" class="py-0">
           <v-text-field
             v-model="sportsNameKR"
-            label="종목"
+            label="매치 종목은"
             readonly
+            color="rgb(189, 22, 44)"
           ></v-text-field>
         </v-col>
 
@@ -22,16 +23,19 @@
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
                 v-model="date1"
-                label="날짜"
+                label="매치를 원하는 날짜를 선택하세요"
                 readonly
                 v-bind="attrs"
                 v-on="on"
+                color="rgb(189, 22, 44)"
               ></v-text-field>
             </template>
             <v-date-picker
+              color="rgba(189, 22, 44)"
               v-model="date1"
               @input="menu1 = false"
               :min="today"
+              locale="kr"
             ></v-date-picker>
           </v-menu>
         </v-col>
@@ -45,6 +49,7 @@
             step="1"
             ticks="always"
             tick-size="3"
+            color="rgb(189, 22, 44)"
           ></v-range-slider>
         </v-col>
 
@@ -54,7 +59,7 @@
         <v-col cols="12" class="d-flex justify-center">
           <v-btn
             style="text-transform: none"
-            color="primary"
+            color="rgb(189, 22, 44)"
             dark
             @click="submit(sportsNameKR, date1, time)"
           >
@@ -70,6 +75,8 @@
 </template>
 
 <script>
+import MapPin from "@/assets/images/mics/map-pin.png";
+
 import http from "@/util/http-common";
 import { mapState } from "vuex";
 import axios from "axios";
@@ -158,9 +165,15 @@ export default {
       // 지도에 마커와 인포윈도우를 표시하는 함수입니다
       function displayMarker(locPosition) {
         // 마커를 생성합니다
+
+        var imageSrc = MapPin,
+          imageSize = new kakao.maps.Size(30, 45);
+        var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+
         var marker = new kakao.maps.Marker({
           map: map,
           position: locPosition,
+          image: markerImage,
         });
 
         // 지도 중심좌표를 접속위치로 변경합니다
