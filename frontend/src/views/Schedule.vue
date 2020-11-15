@@ -1,14 +1,14 @@
 <template>
-  <div class="mb-14">
+  <div class="mb-25">
     <v-card class="mx-auto" max-width="720">
       <v-container fluid>
         <div>
           <v-sheet tile height="54" class="d-flex">
-            <p class="page_title">
-              <span class="ft-dh">{{ userProfile.username }}님의 </span>
+            <div class="page_title">
+              <span class="ft-dh bold">{{ userProfile.username }}님의 </span>
               <span class="ft-dh bold">매치</span>
               <span class="ft-dh onred bold">온</span>
-            </p>
+            </div>
             <v-btn
               icon
               class="ml-3 mr-1 my-2"
@@ -57,14 +57,22 @@
             <v-slide-item v-for="card2 in confirmedMatch.cards2" :key="card2">
               <div class="mr-2 ml-1 mb-3">
                 <v-card>
-                  <v-img class="white--text card_image" :src="card2.matchSrc">
-                    <v-card-title class="ft-dh">{{
+                  <v-img class="card_image" :src="card2.matchSrc">
+
+                    <v-list-item>
+                      <v-list-item-content class="pt-3 pb-4">
+                        <v-list-item-title class="mytitle">{{ card2.sports }}</v-list-item-title>
+                        <v-list-item-subtitle class="mysubtitle">{{ card2.gu }}</v-list-item-subtitle>
+                        <!-- <v-list-item-content class="mysubtitle2">{{ card2.fixed_time | ChangeTime }}시 -->
+                          <!-- 매치</v-list-item-content> -->
+                      </v-list-item-content>
+                    </v-list-item>
+
+                    <v-card-subtitle class="ft-dh mx-0 my-0 pb-0">{{
                       card2.date | ChangeDate
-                    }}</v-card-title>
-                    <v-card-subtitle class="ft-dh">{{
-                      card2.gu
                     }}</v-card-subtitle>
-                    <v-card-subtitle class="ft-dh"
+                    
+                    <v-card-subtitle class="ft-dh mx-0 my-0 py-0"
                       >{{ card2.fixed_time | ChangeTime }}시
                       매치</v-card-subtitle
                     >
@@ -173,6 +181,34 @@
                           </v-list-item>
                         </v-img>
                       </v-card>
+
+                      <v-card
+                    v-else-if="card2.status == 5"
+                    class="ml-1 mr-1"
+                >
+                  <v-img
+                    class="white--text semi_card_image"
+                    :src="card2.matchSrc"     
+                  >
+                    <v-card-title>{{ card2.sports }}</v-card-title>
+                    <v-card-subtitle >{{ card2.gu }}</v-card-subtitle>
+                    <v-list-item>
+                      <v-list-item-content class="pt-0 my-0 pb-1">
+                        <v-list-item-title class="mytitle">{{ card2.date | ChangeDate }}</v-list-item-title>
+                        <v-list-item-subtitle class="mysubtitle">
+                          매치 경기 시간: 
+                          {{ card2.fixed_time | ChangeTime }}시
+                        </v-list-item-subtitle>
+                        <p v-if="card2.result == 1" style="margin: 12px 0px">
+                          결과: 승리
+                        </p>
+                        <p v-else style="margin: 12px 0px">
+                          결과: 패배
+                        </p>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-img>
+                </v-card>
                     </v-slide-item>
                   </v-slide-group>
                 </v-expansion-panel-content>
@@ -209,11 +245,11 @@ export default {
         "#290702",
       ],
       matchSrc: [
-        require("@/assets/images/sports/futsal.jpg"),
-        require("@/assets/images/sports/basketball.jpg"),
-        require("@/assets/images/sports/pool.jpg"),
-        require("@/assets/images/sports/tennis.jpg"),
-        require("@/assets/images/sports/bowling.jpg"),
+        require("@/assets/images/sports/futsal.png"),
+        require("@/assets/images/sports/basketball.png"),
+        require("@/assets/images/sports/tennis.png"),
+        require("@/assets/images/sports/pool.png"),
+        require("@/assets/images/sports/bowling.png"),
       ],
 
       confirmedMatch: {
@@ -245,11 +281,11 @@ export default {
           flex: 12,
           cards2: [],
         },
-        // {
-        //   title: "완료된 경기",
-        //   flex: 12,
-        //   cards2: [],
-        // },
+        {
+          title: "완료된 경기",
+          flex: 12,
+          cards2: [],
+        },
       ],
       room_master: null,
     };
@@ -367,15 +403,15 @@ export default {
                 matchSrc: match_src,
               });
             } else {
-              // self.cards1[3].cards2.push({
-              //   sports: temp_sports,
-              //   date: i.date,
-              //   fixed_time: i.fixed_time,
-              //   result: i.result,
-              //   gu: temp_gu[0] + ' ' + temp_gu[1],
-              //   status: i.status,
-              //   matchSrc: match_src
-              // });
+              self.cards1[3].cards2.push({
+                sports: temp_sports,
+                date: i.date,
+                fixed_time: i.fixed_time,
+                result: i.result,
+                gu: temp_gu[0] + ' ' + temp_gu[1],
+                status: i.status,
+                matchSrc: match_src
+              });
             }
           }
 
@@ -463,9 +499,10 @@ export default {
 
 .mytitle {
   font-size: 17px;
-  color: #ffffff;
+  color: #000000;
   /* font-weight: bold; */
   line-height: 17px;
+  margin-top: 20px;
 }
 
 .mysubtitle {

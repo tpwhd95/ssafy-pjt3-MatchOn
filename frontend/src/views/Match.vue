@@ -31,13 +31,13 @@
             <v-card :elevation="5" class="card_design">
               <v-img
                 :src="card.src"
-                class="white--text ft-dh"
+                class="white--text"
                 gradient="to bottom, rgba(0,0,0,.05), rgba(0,0,0,.6)"
                 height="150px"
                 @click="matching(card.title, card.title2)"
                 style="cursor: pointer"
               >
-                <span class="card_title">{{ card.title2 }}</span>
+              <span class="card_title ft-dh">{{ card.title2 }}</span>
               </v-img>
             </v-card>
           </v-col>
@@ -124,16 +124,17 @@ export default {
 }
 
 .card_title {
-  font-size: 30px;
+  font-size: 35px;
   line-height: 23vh;
-  font-weight: 600;
-  opacity: 0.85;
+  font-weight: 400;
+  opacity: 0.8;
+  color: #ffffff;
   /* align-items: center; */
 }
 
-.card_design {
+/* .card_design {
   text-align: center;
-}
+} */
 
 .span_title {
   color: rgb(58, 58, 58);
