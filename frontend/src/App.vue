@@ -2,7 +2,7 @@
   <v-app>
     <!-- 내브바 -->
     <v-app-bar app class="align-center" color="black darken-3" dark>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <!-- <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon> -->
       <div style="height: 40px">
         <!-- <h1 @click="$router.push('/')" class="ft-dh" style="cursor: pointer">
           매치<span class="ft-dh onred">온</span>
@@ -94,22 +94,22 @@
     <!-- 바텀 내비게이터 -->
     <v-bottom-navigation v-model="value" background-color="black" fixed="true">
       <v-btn value="home" to="/">
-        <span style="color: white">집</span>
+        <!-- <span style="color: white">집</span> -->
         <i class="fas fa-home fa-2x" style="color: white"></i>
       </v-btn>
 
       <v-btn value="match" to="/match">
-        <span style="color: white">매치</span>
+        <!-- <span style="color: white">매치</span> -->
         <i class="fas fa-flag-checkered fa-2x" style="color: white"></i>
       </v-btn>
 
       <v-btn value="schedule" to="/schedule">
-        <span style="color: white">일정</span>
+        <!-- <span style="color: white">일정</span> -->
         <i class="fa fa-calendar-check fa-2x" style="color: white"></i>
       </v-btn>
 
       <v-btn value="report" to="/report">
-        <span style="color: white">전적</span>
+        <!-- <span style="color: white">전적</span> -->
         <i class="far fa-clipboard fa-2x" style="color: white"></i>
       </v-btn>
     </v-bottom-navigation>
