@@ -35,7 +35,7 @@
 
     <v-row>
       <v-col cols="12" class="d-flex justify-center mt-7">
-        <v-btn color="primary" @click="main"> 메인으로 돌아가기 </v-btn>
+        <v-btn color="error" @click="main"> 메인으로 돌아가기 </v-btn>
       </v-col>
     </v-row>
   </v-container>
