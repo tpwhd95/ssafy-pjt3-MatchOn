@@ -258,8 +258,8 @@ export default {
       matchSrc: [
         require("@/assets/images/sports/futsal.png"),
         require("@/assets/images/sports/basketball.png"),
-        require("@/assets/images/sports/tennis.png"),
         require("@/assets/images/sports/pool.png"),
+        require("@/assets/images/sports/tennis.png"),
         require("@/assets/images/sports/bowling.png"),
       ],
 
