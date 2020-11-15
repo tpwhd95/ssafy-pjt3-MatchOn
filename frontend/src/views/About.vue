@@ -141,6 +141,8 @@ export default {
           self.lng = lon1;
           self.lat = lat1;
 
+          console.log("지오로케이션으로 받아온 현재 위치", self.lng, self.lat);
+
           var locPosition = new kakao.maps.LatLng(lat1, lon1); // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
 
           // 마커와 인포윈도우를 표시합니다
@@ -149,8 +151,8 @@ export default {
       } else {
         // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
 
-        var locPosition = new kakao.maps.LatLng(33.450701, 126.570667),
-          message = "geolocation을 사용할수 없어요..";
+        var locPosition = new kakao.maps.LatLng(33.450701, 126.570667);
+        alert("현재 위치를 받아올 수 없어요");
 
         displayMarker(locPosition);
       }
@@ -183,8 +185,6 @@ export default {
 
           var position = map.getCenter();
           marker.setPosition(position);
-          self.lng = position.getLng();
-          self.lat = position.getLat();
         });
 
         // kakao.maps.event.addListener(map, "click", function (mouseEvent) {
