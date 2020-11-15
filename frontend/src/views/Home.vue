@@ -48,8 +48,10 @@
             )
           "
         >
-          <v-img class="white--text semi_card_image" :src="card2.matchSrc">
-            <v-card-title>{{ card2.sports }}</v-card-title>
+          <v-img class="semi_card_image" :src="card2.matchSrc">
+            <v-card-title class="font-weight-black">{{
+              card2.sports
+            }}</v-card-title>
             <v-card-subtitle>{{ card2.gu }}</v-card-subtitle>
             <v-list-item>
               <v-list-item-content class="pt-3 pb-1">
@@ -86,11 +88,11 @@ export default {
         },
       ],
       matchSrc: [
-        require("@/assets/images/sports/futsal.jpg"),
-        require("@/assets/images/sports/basketball.jpg"),
-        require("@/assets/images/sports/pool.jpg"),
-        require("@/assets/images/sports/tennis.jpg"),
-        require("@/assets/images/sports/bowling.jpg"),
+        require("@/assets/images/sports/futsal.png"),
+        require("@/assets/images/sports/basketball.png"),
+        require("@/assets/images/sports/pool.png"),
+        require("@/assets/images/sports/tennis.png"),
+        require("@/assets/images/sports/bowling.png"),
       ],
     };
   },
@@ -236,7 +238,7 @@ export default {
 
 .mytitle {
   font-size: 17px;
-  color: #ffffff;
+  color: #000000;
   /* font-weight: bold; */
   line-height: 17px;
 }
