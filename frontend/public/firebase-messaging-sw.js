@@ -51,6 +51,8 @@ self.addEventListener('notificationClick', function(event) {
         clients.openWindow('https://matchon-1521d.web.app/')
     );
 });
+
+
 // window.addEventListener('beforeinstallprompt', function (event) {
 //     event.preventDefault();
 //     //@ts-ignore
