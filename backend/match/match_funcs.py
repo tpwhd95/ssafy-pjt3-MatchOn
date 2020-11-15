@@ -14,6 +14,20 @@ def re_geocode(lat, lng):
     full_gu = si_name + '_' + gu_name
     return full_gu
 
+def re_dongcode(lat, lng):
+    import requests, json
+
+    KEY = '0df3f7aca34fb1536a4fb5964fac74d2'
+    
+    URL = f'https://dapi.kakao.com/v2/local/geo/coord2regioncode.json?x={lng}&y={lat}'
+    headers = {"Authorization": 'KakaoAK' + ' ' + KEY}
+    result = json.loads(str(requests.get(URL, headers=headers).text))
+    dong_name = result['documents'][0]['address_name']
+    return dong_name
+
+
+
+
 def test_func():
     import time
     print ("10초만 잘래요")

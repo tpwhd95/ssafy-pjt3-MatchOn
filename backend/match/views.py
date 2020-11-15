@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
 # 외부함수
-from .match_funcs import re_geocode
+from .match_funcs import re_geocode, re_dongcode
 
 # 모델
 from users.models import User, BeforeMatch, AfterMatch
@@ -331,8 +331,6 @@ def result(request):
 @api_view(['GET'])
 def report(request):
     user = get_object_or_404(User, username=request.user)
-    
-    
     context = {}
     sports = ['pae_ssaum', 'futsal', 'basket_ball', 'bowling', 'tennis', 'pool']
     for i in range(1, 6):
@@ -351,5 +349,24 @@ def report(request):
         temp['sports_name'] = sports[i]
         context[sports[i]] = temp
     return Response(context, status=status.HTTP_200_OK)
-    
 
+
+@api_view(['GET'])
+def report_detail(request, sports_pk):
+    user = get_object_or_404(User, username=request.user)
+    print(user)
+    sports = ['pae_ssaum', 'futsal', 'basket_ball', 'bowling', 'tennis', 'pool']
+    sports_kr = ['pae_ssaum', '풋살', '농구', '볼링', '테니스', '당구']
+    result_kr = ['패배', '승리']
+    matches = AfterMatch.objects.filter(before_match__user=user, before_match__sports_name=sports[int(sports_pk)], before_match__status='5')
+    context = []
+    for match in matches:
+        temp = {}
+        temp['id'] = match.id
+        temp['date'] = match.before_match.date
+        temp['sports_name'] = sports_kr[int(sports_pk)]
+        temp['fixed_time'] = match.fixed_time
+        temp['gu'] = re_dongcode(match.fixed_lat, match.fixed_lng)
+        temp['result'] = result_kr[int(match.result)]
+        context.append(temp)
+    return Response(context, status=status.HTTP_200_OK)
