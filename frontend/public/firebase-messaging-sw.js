@@ -30,12 +30,13 @@ messaging.setBackgroundMessageHandler(function (payload) {
 
 
 self.addEventListener('push', function (event) {
-    console.log('[Service Worker] Push Received.');
-    console.log(`[Service Worker] Push had this data: "${event.data.text()}"`);
     console.log(event.data.json());
     const title = '매치온!';
     const options = {
         body: `${event.data.json().data.message}`,
+        icon: 'img/icons/matchon-80x80.png',
+        badge: 'img/icons/matchon-80x80.png',
+        type: 'message'
     };
     event.waitUntil(self.registration.showNotification(title, options));
 });
@@ -47,9 +48,11 @@ self.addEventListener('notificationClick', function(event) {
     event.showNotification.close();
 
     event.waitUntil(
-        clients.openWindow('http://localhost:8080/')
+        clients.openWindow('https://matchon-1521d.web.app/')
     );
 });
+
+
 // window.addEventListener('beforeinstallprompt', function (event) {
 //     event.preventDefault();
 //     //@ts-ignore

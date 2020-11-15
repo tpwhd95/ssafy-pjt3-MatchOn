@@ -39,3 +39,9 @@ self.addEventListener("fetch", (event) => {
         )
     );
 });
+
+self.addEventListener ( 'push' , function ( event ) {
+    event.waitUntil (self.registration.showNotification ( 'ServiceWorker Cookbook' , {
+       body : '푸시 알림 구독 관리'
+    }));
+  });

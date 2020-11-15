@@ -9,11 +9,21 @@
             :key="card1.date"
             cols="12"
           >
-            <v-card style="padding: 16px">
-              <p>날짜: {{ card1.date }}</p>
-              <p>장소: {{ card1.gu }}</p>
-              <p>시작시간: {{ card1.fixed_time | ChangeTime }}시</p>
-              <p>결과: {{ card1.result }}</p>
+            <v-card
+              style="padding: 16px"
+              v-if="card1.result == '승리'"
+              color="blue lighten-3"
+            >
+              <p>{{ card1.date }}</p>
+              <p>{{ card1.gu }}</p>
+              <p>{{ card1.fixed_time | ChangeTime }}시</p>
+              <p>{{ card1.result }}</p>
+            </v-card>
+            <v-card style="padding: 16px" v-else color="red accent-2">
+              <p>{{ card1.date }}</p>
+              <p>{{ card1.gu }}</p>
+              <p>{{ card1.fixed_time | ChangeTime }}시</p>
+              <p>{{ card1.result }}</p>
             </v-card>
           </v-col>
         </v-row>
