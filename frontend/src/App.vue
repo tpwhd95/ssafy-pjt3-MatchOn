@@ -16,7 +16,11 @@
         />
       </div>
 
+      <p>ver 11.15.9</p>
+
       <v-spacer></v-spacer>
+
+      <v-btn @click="push1">push</v-btn>
 
       <!-- 비로그인 디비전 -->
       <v-dialog v-if="!this.isLoggedIn" v-model="dialog" max-width="500">
@@ -113,12 +117,6 @@
         <i class="far fa-clipboard fa-2x" style="color: white"></i>
       </v-btn>
     </v-bottom-navigation>
-
-    <!-- <v-card style="max-width: 720px">
-      <v-btn @click="push1">push</v-btn>
-      <p>{{ token2 }}</p>
-      <p>ver 11.15.6</p>
-    </v-card> -->
   </v-app>
 </template>
 
