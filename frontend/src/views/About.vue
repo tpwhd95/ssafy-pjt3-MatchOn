@@ -246,6 +246,8 @@ export default {
           Authorization: "JWT " + this.token,
         },
       };
+      const temp_time0 = this.time[0];
+      const temp_time1 = this.time[1];
       this.time[0] += 6;
       this.time[1] += 6;
       if (this.time[0] < 10) {
@@ -273,6 +275,8 @@ export default {
         .then((res) => {
           if (res.data.status_code == 403) {
             this.alert_collide = true;
+            this.time[0] = temp_time0;
+            this.time[1] = temp_time1;
           } else {
             console.log(res);
             console.log(res.data.result);
