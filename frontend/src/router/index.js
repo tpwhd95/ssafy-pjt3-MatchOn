@@ -13,8 +13,11 @@ import ResultReady from '../components/Result/ResultReady.vue'
 import ResultError from '../components/Result/ResultError.vue'
 import ResultFalse from '../components/Result/ResultFalse.vue'
 import ResultTrue from '../components/Result/ResultTrue.vue'
+import MatchTrue from '../components/Result/MatchTrue.vue'
 import Login from "../views/Login.vue";
 import Chat from "../views/Chat.vue";
+import Report from "../views/Report.vue";
+import ReportDetail from "../views/ReportDetail.vue";
 
 Vue.use(VueRouter)
 
@@ -80,6 +83,11 @@ const routes = [
     component: ResultTrue
   },
   {
+    path: '/matchtrue',
+    name: 'MatchTrue',
+    component: MatchTrue
+  },
+  {
     path: "/login",
     name: "Login",
     component: Login
@@ -96,7 +104,17 @@ const routes = [
         next({ name: 'Login' })
       }
     }
-  }
+  },
+  {
+    path: "/report",
+    name: "Report",
+    component: Report
+  },
+  {
+    path: "/reportdetail",
+    name: "ReportDetail",
+    component: ReportDetail
+  },
 ]
 
 const router = new VueRouter({
