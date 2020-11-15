@@ -3,8 +3,8 @@ import VueRouter from 'vue-router'
 
 import Home from '../views/Home.vue'
 import About from '../views/About.vue'
-import Profile from '../views/Profile.vue'
-import Map from '../views/Map.vue'
+import Schedule from '../views/Schedule.vue'
+import Match from '../views/Match.vue'
 import Matching from '../views/Matching.vue'
 import HowToUse from '../views/HowToUse.vue'
 import MatchRoom from '../views/MatchRoom.vue'
@@ -33,14 +33,14 @@ const routes = [
     component: About
   },
   {
-    path: '/profile',
-    name: 'Profile',
-    component: Profile
+    path: '/schedule',
+    name: 'Schedule',
+    component: Schedule
   },
   {
-    path: '/map',
-    name: 'Map',
-    component: Map
+    path: '/match',
+    name: 'Match',
+    component: Match
   },
   {
     path: '/matching',
