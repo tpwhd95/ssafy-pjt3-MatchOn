@@ -1,25 +1,37 @@
 <template>
-  <v-card class="mx-auto" max-width="720">
-    <h1>조율하는 방</h1>
-    <p>{{ match_id }}번 경기</p>
-
+  <v-card class="mx-auto mb-15" max-width="720">
+    <h1 class="ft-dh text-center">
+      <span class="ft-dh onred">매치</span><span class="ft-dh">룸</span>
+    </h1>
+    <p class="ml-2 mb-0" style="font-size: 14px">매치 위치를 선택해주세요.</p>
     <div id="map" style="margin: auto; width: 95%; height: 270px"></div>
-
     <div class="card">
       <div class="card-body">
         <p class="text-secondary nomessages" v-if="messages.length == 0">
           [팀원들과 자유롭게 대화하고 방장님은 장소와 시간을 정해주세요!]
         </p>
-        <div class="messages" v-chat-scroll="{ always: false, smooth: true }">
+
+        <!-- 채팅방 -->
+        <v-card
+          outlined
+          class="messages mx-2 mt-2"
+          v-chat-scroll="{ always: false, smooth: true }"
+          style="background-color: rgba(0, 0, 0, 0.2)"
+        >
           <div v-for="message in messages" :key="message.id">
             <div v-if="message.name == userProfile.username">
               <div class="d-flex justify-end">
-                <span>{{ message.message }}</span>
+                <span class="mx-3" style="color: rgba(0, 0, 0, 0.8)">{{
+                  message.message
+                }}</span>
                 <!-- <span class="text-info">:[나] </span> -->
               </div>
-              <div class="d-flex justify-end text-secondary time">
+              <p
+                class="d-flex justify-end text-secondary time mx-3 mb-1 0.5rem"
+                style="color: rgba(0, 0, 0, 0.5)"
+              >
                 {{ message.timestamp }}
-              </div>
+              </p>
             </div>
             <div v-else>
               <span class="text-info">[{{ message.name }}]: </span>
@@ -28,7 +40,7 @@
               <span class="text-secondary time">{{ message.timestamp }}</span>
             </div>
           </div>
-        </div>
+        </v-card>
       </div>
       <div class="card-action">
         <CreateMessage :name="userProfile.username" :match_id="match_id" />
@@ -51,19 +63,27 @@
         <v-col cols="12" class="py-0">
           <v-slider
             v-model="ex3.val"
+            :default="stime"
             :label="ex3.label"
             :thumb-color="ex3.color"
-            :min="6"
-            :max="22"
+            :min="stime"
+            :max="etime"
             step="1"
             thumb-label="always"
           ></v-slider>
         </v-col>
       </v-row>
-
-      <v-btn v-if="userProfile.id == room_master" @click="inputAfterMatch">
-        확정
-      </v-btn>
+      <div class="text-center">
+        <v-btn
+          style="font-color: rgb(0, 0, 0)"
+          class="mb-2"
+          color="rgb(189, 22, 44)"
+          v-if="userProfile.id == room_master"
+          @click="inputAfterMatch"
+        >
+          확정
+        </v-btn>
+      </div>
     </div>
   </v-card>
 </template>
@@ -74,6 +94,7 @@ import { mapState } from "vuex";
 import CreateMessage from "@/components/CreateMessage";
 import fb from "@/firebase/init";
 import moment from "moment";
+import MapPin from "@/assets/images/mics/map-pin.png";
 
 export default {
   name: "MatchRoom",
@@ -85,6 +106,10 @@ export default {
       match_id: this.$route.query.match_id,
       room_master: null,
       sport: "",
+      start_time: "",
+      end_time: "",
+      stime: "",
+      etime: "",
       center_lat: "37.477107637586194",
       center_lng: "126.96346058714246",
       messages: [],
@@ -153,6 +178,15 @@ export default {
           this.center_lat = res.data.data[0].match_lat;
           this.center_lng = res.data.data[0].match_lng;
           this.users = res.data.data[0].users;
+          this.start_time = res.data.data[0].start_time;
+          this.end_time = res.data.data[0].end_time;
+
+          var stime = this.start_time.split(":")[0];
+          var etime = this.end_time.split(":")[0];
+
+          this.stime = stime;
+          this.etime = etime;
+
           let users = JSON.parse(JSON.stringify(res.data.data[0].users));
           let user_keys = Object.keys(users);
           const room_users_ref = fb.collection(
@@ -365,9 +399,14 @@ export default {
       // 지도에 마커를 표시하는 함수입니다
       function displayMarker(place) {
         // 마커를 생성하고 지도에 표시합니다
+        var imageSrc = MapPin,
+          imageSize = new kakao.maps.Size(20, 30);
+        var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+
         var marker = new kakao.maps.Marker({
           map: map,
           position: new kakao.maps.LatLng(place.y, place.x),
+          image: markerImage,
         });
 
         // 마커에 클릭이벤트를 등록합니다

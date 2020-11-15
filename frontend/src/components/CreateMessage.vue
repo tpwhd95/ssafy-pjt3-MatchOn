@@ -11,9 +11,9 @@
         />
         <p class="text-danger" v-if="errorText">{{ errorText }}</p>
       </div>
-      <button class="btn btn-primary" type="submit" name="action">
-        Submit
-      </button>
+      <v-btn class="btn btn-primary" type="submit" name="action"
+        >메시지 전송</v-btn
+      >
     </form>
   </div>
 </template>
