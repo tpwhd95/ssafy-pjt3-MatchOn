@@ -12,10 +12,21 @@
         </p>
         <div class="messages" v-chat-scroll="{ always: false, smooth: true }">
           <div v-for="message in messages" :key="message.id">
-            <span class="text-info">[{{ message.name }}]: </span>
-            <span>{{ message.message }}</span>
-            <br />
-            <span class="text-secondary time">{{ message.timestamp }}</span>
+            <div v-if="message.name == userProfile.username">
+              <div class="d-flex justify-end">
+                <span>{{ message.message }}</span>
+                <!-- <span class="text-info">:[나] </span> -->
+              </div>
+              <div class="d-flex justify-end text-secondary time">
+                {{ message.timestamp }}
+              </div>
+            </div>
+            <div v-else>
+              <span class="text-info">[{{ message.name }}]: </span>
+              <span>{{ message.message }}</span>
+              <br />
+              <span class="text-secondary time">{{ message.timestamp }}</span>
+            </div>
           </div>
         </div>
       </div>

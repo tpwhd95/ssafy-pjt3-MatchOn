@@ -78,14 +78,18 @@ export default {
               });
               console.log("충돌 남");
 
-              this.$router.push("/resultfalse");
-              this.room_results_ref.get().then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
-                  doc.ref.set({
-                    match_result: 0,
+              this.room_results_ref
+                .get()
+                .then((querySnapshot) => {
+                  querySnapshot.forEach((doc) => {
+                    doc.ref.set({
+                      match_result: 0,
+                    });
                   });
+                })
+                .then(() => {
+                  this.$router.push("/resultfalse");
                 });
-              });
               return;
             }
           }
@@ -124,9 +128,11 @@ export default {
             });
 
             // 내 상태가 0
-            if (my_status == 0) {
+            if (my_status == 0 && opposit_status == 0) {
               // 모달 클로즈
-              console.log("다시 입력하세요");
+              this.$router.push("/resultfalse");
+            } else if (my_status == 0) {
+              console.log("나 상태 0");
             }
             // 내 상태가 0이 아닌데 상대가 0이면
             else if (my_status != 0 && opposit_status == 0) {
@@ -153,25 +159,51 @@ export default {
               // 경기 종료 로직
               console.log("경기 종료");
               this.$router.push("/resulttrue");
-              http
-                .post(
-                  "/match/result/",
-                  {
-                    match_pk: this.match_id,
-                    result: my_status,
-                  },
-                  {
-                    headers: {
-                      Authorization: "JWT " + this.token,
+              if (my_status == 1) {
+                my_status = "false";
+                console.log("나는 졌다", this.match_id, my_status);
+                http
+                  .post(
+                    "/match/result/",
+                    {
+                      match_pk: this.match_id,
+                      result: my_status,
                     },
-                  }
-                )
-                .then((res) => {
-                  console.log("경기 결과 입력 완료");
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
+                    {
+                      headers: {
+                        Authorization: "JWT " + this.token,
+                      },
+                    }
+                  )
+                  .then((res) => {
+                    console.log("경기 결과 입력 완료");
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
+              } else if (my_status == 2) {
+                my_status = "true";
+                console.log("나는 이겼다", this.match_id, my_status);
+                http
+                  .post(
+                    "/match/result/",
+                    {
+                      match_pk: this.match_id,
+                      result: my_status,
+                    },
+                    {
+                      headers: {
+                        Authorization: "JWT " + this.token,
+                      },
+                    }
+                  )
+                  .then((res) => {
+                    console.log("경기 결과 입력 완료");
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
+              }
             }
           });
         }

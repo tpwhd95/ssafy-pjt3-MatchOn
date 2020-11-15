@@ -1,39 +1,27 @@
 <template>
   <v-app>
-    <!-- 내브바 -->
-    <v-app-bar app class="align-center" color="black darken-3" dark>
+    <v-app-bar app color="grey darken-3" dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <div style="height: 40px">
-        <!-- <h1 @click="$router.push('/')" class="ft-dh" style="cursor: pointer">
-          매치<span class="ft-dh onred">온</span>
-        </h1> -->
-        <img
-          @click="$router.push('/')"
-          src="@/assets/images/logos/logo.png"
-          alt="match-on-logo"
-          style="height: 100%"
-          class="ml-auto"
-        />
+      <div>
+        <h1 @click="$router.push('/')" style="cursor: pointer">Match On</h1>
       </div>
 
       <v-spacer></v-spacer>
 
-      <!-- 비로그인 디비전 -->
       <v-dialog v-if="!this.isLoggedIn" v-model="dialog" max-width="500">
         <template v-slot:activator="{ on, attrs }">
-          <!-- <v-btn color="teal" dark v-bind="attrs" v-on="on"> 로그인 </v-btn> -->
-          <i v-bind="attrs" v-on="on" class="fas fa-power-off fa-lg"></i>
+          <v-btn color="teal" dark v-bind="attrs" v-on="on"> Login </v-btn>
         </template>
         <v-card style="padding: 20px">
           <v-card-title
-            class="headline d-flex justify-center ft-dh"
+            class="headline d-flex justify-center"
             style="padding: 0px 0px 20px 0px"
           >
-            로그인
+            Login
           </v-card-title>
           <v-card-actions>
             <v-img
-              src="@/assets/images/kakao/kakao_login_large_wide.png"
+              src="@/assets/kakao_login_large_wide.png"
               @click="kakaologin"
               style="cursor: pointer"
             >
@@ -42,18 +30,12 @@
         </v-card>
       </v-dialog>
 
-      <!-- 로그인 디비전 -->
-      <v-btn
-        v-if="this.isLoggedIn"
-        color="rgb(189, 22, 44)"
-        dark
-        @click="logout2"
-      >
-        로그아웃
+      <v-btn v-if="this.isLoggedIn" color="teal" dark @click="logout2">
+        Logout
       </v-btn>
     </v-app-bar>
 
-    <v-navigation-drawer v-model="drawer" fixed left temporary dark>
+    <v-navigation-drawer v-model="drawer" absolute left temporary dark>
       <v-list nav dense>
         <v-list-item-group v-model="group">
           <v-list-item style="margin: 12px 3px">
@@ -84,40 +66,12 @@
     </v-navigation-drawer>
 
     <v-main>
-      <router-view
-        @report-detail="getReportDetail"
-        :report_detail_datas="report_detail_datas"
-        :sports_name="sports_name"
-      ></router-view>
+      <router-view></router-view>
     </v-main>
-
-    <!-- 바텀 내비게이터 -->
-    <v-bottom-navigation v-model="value" background-color="black" fixed="true">
-      <v-btn value="home" to="/">
-        <span style="color: white">집</span>
-        <i class="fas fa-home fa-2x" style="color: white"></i>
-      </v-btn>
-
-      <v-btn value="match" to="/match">
-        <span style="color: white">매치</span>
-        <i class="fas fa-flag-checkered fa-2x" style="color: white"></i>
-      </v-btn>
-
-      <v-btn value="schedule" to="/schedule">
-        <span style="color: white">일정</span>
-        <i class="fa fa-calendar-check fa-2x" style="color: white"></i>
-      </v-btn>
-
-      <v-btn value="report" to="/report">
-        <span style="color: white">전적</span>
-        <i class="far fa-clipboard fa-2x" style="color: white"></i>
-      </v-btn>
-    </v-bottom-navigation>
-
-    <!-- <v-card style="max-width: 720px">
+    <v-card style="max-width: 720px">
       <v-btn @click="push1">push</v-btn>
       <p>{{ token2 }}</p>
-      <p>ver 11.15.6</p>
+      <p>ver 11.13.1</p>
     </v-card>
   </v-app>
 </template>
@@ -144,8 +98,6 @@ export default {
       drawer: false,
       group: null,
       token2: "",
-      report_detail_datas: [],
-      sports_name: "",
     };
   },
   methods: {
@@ -263,28 +215,9 @@ export default {
           console.log(err);
         });
     },
-    getReportDetail(sports_pk) {
-      http
-        .get(`/match/report/${sports_pk}`, {
-          headers: {
-            Authorization: "JWT " + this.token,
-          },
-        })
-        .then((res) => {
-          this.report_detail_datas = res.data;
-          this.sports_name = res.data[0].sports_name;
-          console.log(this.report_detail_datas);
-          console.log(this.sports_name);
-          this.$router.push(`report/${sports_pk}`);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
   },
   computed: {
     ...mapGetters(["isLoggedIn"]),
-    ...mapState(["token"]),
   },
   watch: {
     group() {
@@ -293,6 +226,3 @@ export default {
   },
 };
 </script>
-
-<style>
-</style>

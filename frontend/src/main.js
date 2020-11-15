@@ -7,14 +7,15 @@ import store from './store'
 import vuetify from './plugins/vuetify';
 import VueChatScroll from 'vue-chat-scroll';
 import Directives from './plugins/directives';
-
-import 'bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
+// Global Font Css
+import "@/assets/font/font.css";
 
 Vue.config.productionTip = false
 Vue.use(Vuex)
 Vue.use(Directives);
 Vue.use(VueChatScroll);
+
+
 
 new Vue({
   created() {
