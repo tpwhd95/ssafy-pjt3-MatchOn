@@ -54,3 +54,11 @@
 .theme-color {
   color: rgb(189, 22, 44)
 }
+
+.brown {
+  color: rgb(117, 81, 57)
+}
+
+.bg-brown {
+  background-color: rgb(117, 81, 57);
+}

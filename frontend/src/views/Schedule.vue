@@ -145,7 +145,6 @@
                                 {{ card2.match_start | ChangeTime }}시 ~
                                 {{ card2.match_end | ChangeTime }}시
                               </v-list-item-subtitle>
-                              버튼!!
                             </v-list-item-content>
                           </v-list-item>
                         </v-img>
@@ -178,7 +177,6 @@
                                 매치 경기 시간:
                                 {{ card2.fixed_time | ChangeTime }}시
                               </v-list-item-subtitle>
-                              버튼!!
                             </v-list-item-content>
                           </v-list-item>
                         </v-img>

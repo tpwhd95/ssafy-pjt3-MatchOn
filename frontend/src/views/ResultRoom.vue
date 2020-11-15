@@ -1,9 +1,9 @@
 <template>
-  <v-card class="mx-auto" max-width="720">
+  <v-card class="mx-auto text-center" max-width="720">
     <h1 class="ft-dh text-center">
       <span class="ft-dh">경기결과</span><span class="ft-dh onred">입력</span>
     </h1>
-    <div class="mx-2 mt-15 mb-16">
+    <div class="mx-2 mt-10 mb-10">
       <strong>{{ date | changeDate }} </strong>
       <span
         ><strong>{{ time | ChangeTime }}시</strong>에 플레이한
@@ -12,14 +12,27 @@
         <strong>{{ sports }}</strong> 경기 결과를 입력해주세요.
       </p>
     </div>
+
+    <!-- <div class="d-flex justify-space-around mt-16"> -->
+
+    <v-btn
+      style="width: 80%; height: 30%; font-size: 3rem"
+      color="blue accent-4"
+      dark
+      @click="inputResult(true)"
+      >승리</v-btn
+    >
     <br />
     <br />
-    <br />
-    <br />
-    <div class="d-flex justify-space-around mt-16">
-      <v-btn color="blue accent-4" dark @click="inputResult(true)">승리</v-btn>
-      <v-btn color="red accent-4" dark @click="inputResult(false)">패배</v-btn>
-    </div>
+    <v-btn
+      style="width: 80%; height: 30%; font-size: 3rem"
+      color="red accent-4"
+      dark
+      @click="inputResult(false)"
+      >패배</v-btn
+    >
+
+    <!-- </div> -->
 
     <v-snackbar v-model="alert_collide">
       이미 결과를 입력하셨습니다. 상대방이 결과를 입력할 때까지 기다려주세요.
