@@ -80,6 +80,19 @@
       <!-- <p>{{ sportsName }}</p>
       <p>{{ date1 }}</p>
       <p>{{ time }}</p> -->
+      <v-snackbar v-model="alert_collide">
+        그 시간대에 다른 경기가 있어 매칭등록이 안됩니다.
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            color="pink"
+            text
+            v-bind="attrs"
+            @click="alert_collide = false"
+          >
+            닫기
+          </v-btn>
+        </template>
+      </v-snackbar>
     </v-container>
   </v-form>
 </template>
@@ -96,6 +109,7 @@ export default {
   components: {},
   data() {
     return {
+      alert_collide: false,
       sportsName: this.$route.query.sports,
       sportsNameKR: this.$route.query.sportsKR,
       menu1: false,
@@ -256,53 +270,58 @@ export default {
           requestHeaders
         )
         .then((res) => {
-          console.log(res);
-          console.log(res.data.result);
-          console.log(typeof res.data.result);
-          console.log(Object.keys(res.data).length);
-          if (res.data.result === "true") {
-            console.log("이프 됨");
-            console.log(res.data.device_tokens);
-            for (const i in res.data.device_tokens) {
-              console.log("for 됨");
-              console.log(res.data.device_tokens[i]);
-              axios
-                .post(
-                  "https://fcm.googleapis.com/fcm/send",
-                  {
-                    to: res.data.device_tokens[i],
-                    data: {
-                      message:
-                        "매칭이 완료되었습니다! 채팅방에서 경기 시간 및 장소를 조율해주세요.",
+          if (res.data.status_code == 403) {
+            this.alert_collide = true;
+          } else {
+            console.log(res);
+            console.log(res.data.result);
+            console.log(typeof res.data.result);
+            console.log(Object.keys(res.data).length);
+            if (res.data.result === "true") {
+              console.log("이프 됨");
+              console.log(res.data.device_tokens);
+              for (const i in res.data.device_tokens) {
+                console.log("for 됨");
+                console.log(res.data.device_tokens[i]);
+                axios
+                  .post(
+                    "https://fcm.googleapis.com/fcm/send",
+                    {
+                      to: res.data.device_tokens[i],
+                      data: {
+                        message:
+                          "매칭이 완료되었습니다! 채팅방에서 경기 시간 및 장소를 조율해주세요.",
+                      },
                     },
-                  },
-                  {
-                    headers: {
-                      "Content-Type": "application/json",
-                      Authorization:
-                        "key=AAAA5zwJHyg:APA91bGz18YD6un-vpBJDryN8g3PLx7NEbH7ChmnxU4l0TOOx1HKSpNZ7v3td8Fqb67tOHqmXvjnBRCpg_cUYzbGTQs0DZmophlF-gi4hCXMsUBkwQ1LYkE8aPB_eR-R2kQBjZvLmdKU",
-                      Accept: "application/json",
-                    },
-                  }
-                )
-                .then((data) => {
-                  console.log("push notification success");
-                  console.log(data);
-                })
-                .catch((err) => {
-                  console.log("push notification fail");
-                  console.log(err);
-                });
+                    {
+                      headers: {
+                        "Content-Type": "application/json",
+                        Authorization:
+                          "key=AAAA5zwJHyg:APA91bGz18YD6un-vpBJDryN8g3PLx7NEbH7ChmnxU4l0TOOx1HKSpNZ7v3td8Fqb67tOHqmXvjnBRCpg_cUYzbGTQs0DZmophlF-gi4hCXMsUBkwQ1LYkE8aPB_eR-R2kQBjZvLmdKU",
+                        Accept: "application/json",
+                      },
+                    }
+                  )
+                  .then((data) => {
+                    console.log("push notification success");
+                    console.log(data);
+                  })
+                  .catch((err) => {
+                    console.log("push notification fail");
+                    console.log(err);
+                  });
+              }
             }
+            this.$router.push({
+              name: "Matching",
+              query: { sportsNameKR: sportsNameKR, date1: date1, time: time },
+            });
           }
         })
         .catch((err) => {
           console.log(err);
+          this.alert_collide = true;
         });
-      this.$router.push({
-        name: "Matching",
-        query: { sportsNameKR: sportsNameKR, date1: date1, time: time },
-      });
     },
     getToday() {
       var today = new Date();

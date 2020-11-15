@@ -1,8 +1,21 @@
 <template>
   <v-card class="mx-auto" max-width="720">
-    <h1>매치 장소와 시간이 확정되었습니다!</h1>
-    <h2>대기중인 매치에서 정보를 확인하고 재밌게 스포츠를 즐기세요!</h2>
-    <v-btn @click="$router.push('/profile')">마이페이지로</v-btn>
+    <v-img height="250" src="@/assets/images/results/slamdunk.png"></v-img>
+
+    <v-card-title>매치 장소와 시간이 확정되었습니다!</v-card-title>
+
+    <v-card-text class="mb-5"
+      >대기중인 경기에서 정보를 확인하고 <br />재밌게 스포츠를
+      즐기세요!</v-card-text
+    >
+    <div class="d-flex justify-center">
+      <v-btn
+        color="error"
+        class="mt-10 mb-15"
+        @click="$router.push('/schedule')"
+        >마이페이지로</v-btn
+      >
+    </div>
   </v-card>
 </template>
 
