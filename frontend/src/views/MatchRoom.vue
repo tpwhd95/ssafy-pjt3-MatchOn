@@ -1,34 +1,52 @@
 <template>
-  <v-card class="mx-auto" max-width="720">
-    <h1>조율하는 방</h1>
-    <p>{{ match_id }}번 경기</p>
-    <p>방장: {{ room_master }}</p>
-    <p>중앙위치: {{ center_lat }}, {{ center_lng }}</p>
-    <p>내 번호: {{ userProfile.id }}</p>
-    <p>{{ users }}</p>
-    <p>유저들: {{ users_pk }}</p>
-
+  <v-card class="mx-auto mb-15" max-width="720">
+    <h1 class="ft-dh text-center">
+      <span class="ft-dh onred">매치</span><span class="ft-dh">룸</span>
+    </h1>
+    <p class="ml-2 mb-0" style="font-size: 14px">매치 위치를 선택해주세요.</p>
     <div id="map" style="margin: auto; width: 95%; height: 270px"></div>
-
     <div class="card">
       <div class="card-body">
         <p class="text-secondary nomessages" v-if="messages.length == 0">
-          [No messages yet!]
+          [팀원들과 자유롭게 대화하고 방장님은 장소와 시간을 정해주세요!]
         </p>
-        <div class="messages" v-chat-scroll="{ always: false, smooth: true }">
+
+        <!-- 채팅방 -->
+        <v-card
+          outlined
+          class="messages mx-2 mt-2"
+          v-chat-scroll="{ always: false, smooth: true }"
+          style="background-color: rgba(0, 0, 0, 0.2)"
+        >
           <div v-for="message in messages" :key="message.id">
-            <span class="text-info">[{{ message.name }}]: </span>
-            <span>{{ message.message }}</span>
-            <br />
-            <span class="text-secondary time">{{ message.timestamp }}</span>
+            <div v-if="message.name == userProfile.username">
+              <div class="d-flex justify-end">
+                <span class="mx-3" style="color: rgba(0, 0, 0, 0.8)">{{
+                  message.message
+                }}</span>
+                <!-- <span class="text-info">:[나] </span> -->
+              </div>
+              <p
+                class="d-flex justify-end text-secondary time mx-3 mb-1 0.5rem"
+                style="color: rgba(0, 0, 0, 0.5)"
+              >
+                {{ message.timestamp }}
+              </p>
+            </div>
+            <div v-else>
+              <span class="text-info">[{{ message.name }}]: </span>
+              <span>{{ message.message }}</span>
+              <br />
+              <span class="text-secondary time">{{ message.timestamp }}</span>
+            </div>
           </div>
-        </div>
+        </v-card>
       </div>
       <div class="card-action">
         <CreateMessage :name="userProfile.username" :match_id="match_id" />
       </div>
 
-      <v-row style="margin: 10px">
+      <!-- <v-row style="margin: 10px">
         <v-checkbox
           v-for="(user, key) in users"
           :key="user.username"
@@ -39,26 +57,33 @@
       </v-row>
       <p>{{ teamA }}</p>
       <p>{{ teamB }}</p>
-      <p>{{ fixed_users }}</p>
+      <p>{{ fixed_users }}</p> -->
 
-      <v-row class="mx-1">
+      <v-row v-if="userProfile.id == room_master" class="mx-1">
         <v-col cols="12" class="py-0">
           <v-slider
             v-model="ex3.val"
+            :default="stime"
             :label="ex3.label"
             :thumb-color="ex3.color"
-            :min="6"
-            :max="22"
+            :min="stime"
+            :max="etime"
             step="1"
             thumb-label="always"
           ></v-slider>
         </v-col>
       </v-row>
-      <p>{{ this.ex3.val }}</p>
-
-      <v-btn v-if="userProfile.id == room_master" @click="inputAfterMatch">
-        확정
-      </v-btn>
+      <div class="text-center">
+        <v-btn
+          style="font-color: rgb(0, 0, 0)"
+          class="mb-2"
+          color="rgb(189, 22, 44)"
+          v-if="userProfile.id == room_master"
+          @click="inputAfterMatch"
+        >
+          확정
+        </v-btn>
+      </div>
     </div>
   </v-card>
 </template>
@@ -69,6 +94,7 @@ import { mapState } from "vuex";
 import CreateMessage from "@/components/CreateMessage";
 import fb from "@/firebase/init";
 import moment from "moment";
+import MapPin from "@/assets/images/mics/map-pin.png";
 
 export default {
   name: "MatchRoom",
@@ -80,30 +106,30 @@ export default {
       match_id: this.$route.query.match_id,
       room_master: null,
       sport: "",
+      start_time: "",
+      end_time: "",
+      stime: "",
+      etime: "",
       center_lat: "37.477107637586194",
       center_lng: "126.96346058714246",
       messages: [],
       userProfile: sessionStorage.getItem("userProfile")
         ? JSON.parse(sessionStorage.getItem("userProfile"))
         : [],
-
+      users_pk: [],
       selected: "",
-
       fixed_lat: "37.477107637586194",
       fixed_lng: "126.96346058714246",
       ex3: { label: "확정시간", val: 50, color: "red" },
-
-      users_pk: [],
-      users: {},
-      teamA: [],
-      teamB: [],
+      match_results_ref: null,
+      match_users_ref: null,
       fixed_users: {},
     };
   },
   computed: {
     ...mapState(["token"]),
   },
-  created() {
+  mounted() {
     this.getRoomData(this.match_id);
 
     let ref = fb
@@ -123,6 +149,14 @@ export default {
         }
       });
     });
+
+    this.room_results_ref.onSnapshot((snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        if (change.type === "added") {
+          console.log("확정!!!!!!!");
+        }
+      });
+    });
   },
   methods: {
     getRoomData(match_id) {
@@ -139,56 +173,142 @@ export default {
           }
         )
         .then((res) => {
-          console.log(res);
+          console.log(res.data);
           this.room_master = Object.keys(res.data.data[0].users)[0];
           this.center_lat = res.data.data[0].match_lat;
           this.center_lng = res.data.data[0].match_lng;
           this.users = res.data.data[0].users;
-          this.users_pk = Object.keys(res.data.data[0].users);
-          if (res.data.data[0].sports === "tennis") {
-            this.sport = "테니스장";
-          } else if (res.data.data[0].sports === "bowling") {
-            this.sport = "볼링장";
-          } else if (res.data.data[0].sports === "pool") {
-            this.sport = "당구장";
-          } else if (res.data.data[0].sports === "futsal") {
-            this.sport = "풋살장";
-          } else if (res.data.data[0].sports === "basket_ball") {
-            this.sport = "농구장";
-          }
+          this.start_time = res.data.data[0].start_time;
+          this.end_time = res.data.data[0].end_time;
+
+          var stime = this.start_time.split(":")[0];
+          var etime = this.end_time.split(":")[0];
+
+          this.stime = stime;
+          this.etime = etime;
+
+          let users = JSON.parse(JSON.stringify(res.data.data[0].users));
+          let user_keys = Object.keys(users);
+          const room_users_ref = fb.collection(
+            "room_users" + String(this.match_id)
+          );
+          const room_results_ref = fb.collection(
+            "room_results" + String(this.match_id)
+          );
+          room_users_ref
+            .doc(user_keys[0])
+            .get()
+            .then((doc) => {
+              if (this.userProfile.id == user_keys[0] && !doc.exists) {
+                console.log("ddd");
+                // 파이어베이스에 roomid로 룸을 생성하고 하위에 users를 입력
+                for (let i = 0; i < user_keys.length; i += 1) {
+                  console.log("for");
+                  room_users_ref
+                    .doc(user_keys[i])
+                    .set({
+                      user: users[user_keys[i]],
+                      user_id: user_keys[i],
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                    });
+                }
+              }
+            });
+          room_results_ref
+            .doc(users[this.userProfile.id].team ? "1" : "0")
+            .set({
+              match_result: -1,
+            })
+            .then(() => {
+              room_results_ref.onSnapshot((snapshot) => {
+                snapshot.docChanges().forEach((change) => {
+                  if (change.type === "modified") {
+                    console.log("변경 발생");
+                    this.$router.push("/matchtrue");
+                  }
+                });
+              });
+              console.log(res.data.data[0].users);
+              const users_pk = Object.keys(res.data.data[0].users);
+              console.log(users_pk);
+              for (const user_pk of users_pk) {
+                if (this.users[user_pk].team == true) {
+                  this.fixed_users[user_pk] = { team: 1 };
+                } else {
+                  this.fixed_users[user_pk] = { team: 0 };
+                }
+              }
+              console.log(this.fixed_users);
+              if (res.data.data[0].sports === "tennis") {
+                this.sport = "테니스장";
+              } else if (res.data.data[0].sports === "bowling") {
+                this.sport = "볼링장";
+              } else if (res.data.data[0].sports === "pool") {
+                this.sport = "당구장";
+              } else if (res.data.data[0].sports === "futsal") {
+                this.sport = "풋살장";
+              } else if (res.data.data[0].sports === "basket_ball") {
+                this.sport = "농구장";
+              }
+            })
+            .then(() => {
+              window.kakao && window.kakao.maps
+                ? this.initMap()
+                : this.addScript();
+            });
         })
         .catch((err) => {
           console.log(err);
         });
     },
     inputAfterMatch() {
-      if (this.teamA.length == this.users_pk.length / 2) {
-        http
-          .post(
-            "/match/am/",
-            {
-              match_pk: this.match_id,
-              // fixed_time: this.ex3.val,
-              fixed_time: "09:00:00",
-              users: this.fixed_users,
-              fixed_lat: this.fixed_lat,
-              fixed_lng: this.fixed_lng,
-            },
-            {
-              headers: {
-                Authorization: "JWT " + this.token,
-              },
-            }
-          )
-          .then((res) => {
-            console.log(res);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+      // if (this.teamA.length == this.users_pk.length / 2) {
+      console.log("입력 실행!");
+      if (this.ex3.val < 10) {
+        this.ex3.val = "0" + String(this.ex3.val) + ":00:00";
       } else {
-        alert("각 팀의 인원 수가 같아야 합니다.");
+        this.ex3.val = String(this.ex3.val) + ":00:00";
       }
+      console.log(this.fixed_users);
+      http
+        .post(
+          "/match/am/",
+          {
+            match_pk: this.match_id,
+            fixed_time: this.ex3.val,
+            // fixed_time: "09:00:00",
+            users: this.fixed_users,
+            fixed_lat: this.fixed_lat,
+            fixed_lng: this.fixed_lng,
+          },
+          {
+            headers: {
+              Authorization: "JWT " + this.token,
+            },
+          }
+        )
+        .then((res) => {
+          console.log("전송 완료!");
+
+          const room_results_ref = fb.collection(
+            "room_results" + String(this.match_id)
+          );
+          room_results_ref.get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              doc.ref.set({
+                match_result: 0,
+              });
+            });
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      // } else {
+      //   alert("각 팀의 인원 수가 같아야 합니다.");
+      // }
     },
     addScript() {
       const script = document.createElement("script");
@@ -243,6 +363,8 @@ export default {
       var center_loc = "12";
       var callback = (result, status) => {
         if (status === kakao.maps.services.Status.OK) {
+          console.log("콜백함수!!!!!!");
+          console.log(self.center_lng, self.center_lat);
           console.log("지역 명칭 : " + result[0].address_name);
           center_loc = result[0].address_name.split(" ")[2];
           console.log(center_loc + " " + self.sport);
@@ -253,7 +375,7 @@ export default {
         // 키워드로 장소를 검색합니다
         ps.keywordSearch(center_loc + " " + self.sport, placesSearchCB);
       };
-
+      console.log(self.center_lng, self.center_lat);
       geocoder.coord2RegionCode(self.center_lng, self.center_lat, callback);
 
       var infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
@@ -277,9 +399,14 @@ export default {
       // 지도에 마커를 표시하는 함수입니다
       function displayMarker(place) {
         // 마커를 생성하고 지도에 표시합니다
+        var imageSrc = MapPin,
+          imageSize = new kakao.maps.Size(20, 30);
+        var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+
         var marker = new kakao.maps.Marker({
           map: map,
           position: new kakao.maps.LatLng(place.y, place.x),
+          image: markerImage,
         });
 
         // 마커에 클릭이벤트를 등록합니다
@@ -317,6 +444,7 @@ export default {
           self.selected = place.place_name;
           self.fixed_lng = place.x;
           self.fixed_lat = place.y;
+          console.log(self.fixed_lng, self.fixed_lat);
         });
       }
 
@@ -331,28 +459,25 @@ export default {
       }
     },
   },
-  mounted() {
-    window.kakao && window.kakao.maps ? this.initMap() : this.addScript();
-  },
-  watch: {
-    teamA(values) {
-      if (values.length == this.users_pk.length / 2) {
-        this.teamB = this.users_pk.filter((item) => !values.includes(item));
-      } else {
-        this.teamB = [];
-      }
-      console.log(this.users_pk);
-      for (const user_pk of this.users_pk) {
-        console.log(user_pk);
-        console.log(values);
-        if (values.includes(user_pk)) {
-          this.fixed_users[user_pk] = { team: 0 };
-        } else {
-          this.fixed_users[user_pk] = { team: 1 };
-        }
-      }
-    },
-  },
+  // watch: {
+  //   teamA(values) {
+  //     if (values.length == this.users_pk.length / 2) {
+  //       this.teamB = this.users_pk.filter((item) => !values.includes(item));
+  //     } else {
+  //       this.teamB = [];
+  //     }
+  //     console.log(this.users_pk);
+  //     for (const user_pk of this.users_pk) {
+  //       console.log(user_pk);
+  //       console.log(values);
+  //       if (values.includes(user_pk)) {
+  //         this.fixed_users[user_pk] = { team: 0 };
+  //       } else {
+  //         this.fixed_users[user_pk] = { team: 1 };
+  //       }
+  //     }
+  //   },
+  // },
 };
 </script>
 

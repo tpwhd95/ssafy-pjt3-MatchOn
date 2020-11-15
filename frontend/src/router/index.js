@@ -3,8 +3,8 @@ import VueRouter from 'vue-router'
 
 import Home from '../views/Home.vue'
 import About from '../views/About.vue'
-import Profile from '../views/Profile.vue'
-import Map from '../views/Map.vue'
+import Schedule from '../views/Schedule.vue'
+import Match from '../views/Match.vue'
 import Matching from '../views/Matching.vue'
 import HowToUse from '../views/HowToUse.vue'
 import MatchRoom from '../views/MatchRoom.vue'
@@ -13,8 +13,11 @@ import ResultReady from '../components/Result/ResultReady.vue'
 import ResultError from '../components/Result/ResultError.vue'
 import ResultFalse from '../components/Result/ResultFalse.vue'
 import ResultTrue from '../components/Result/ResultTrue.vue'
+import MatchTrue from '../components/Result/MatchTrue.vue'
 import Login from "../views/Login.vue";
 import Chat from "../views/Chat.vue";
+import Report from "../views/Report.vue";
+import ReportDetail from "../views/ReportDetail.vue";
 
 Vue.use(VueRouter)
 
@@ -30,14 +33,14 @@ const routes = [
     component: About
   },
   {
-    path: '/profile',
-    name: 'Profile',
-    component: Profile
+    path: '/schedule',
+    name: 'Schedule',
+    component: Schedule
   },
   {
-    path: '/map',
-    name: 'Map',
-    component: Map
+    path: '/match',
+    name: 'Match',
+    component: Match
   },
   {
     path: '/matching',
@@ -80,6 +83,11 @@ const routes = [
     component: ResultTrue
   },
   {
+    path: '/matchtrue',
+    name: 'MatchTrue',
+    component: MatchTrue
+  },
+  {
     path: "/login",
     name: "Login",
     component: Login
@@ -96,7 +104,17 @@ const routes = [
         next({ name: 'Login' })
       }
     }
-  }
+  },
+  {
+    path: "/report",
+    name: "Report",
+    component: Report
+  },
+  {
+    path: "/report/:sports_pk",
+    name: "ReportDetail",
+    component: ReportDetail
+  },
 ]
 
 const router = new VueRouter({

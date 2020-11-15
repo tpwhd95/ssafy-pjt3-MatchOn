@@ -1,12 +1,13 @@
 <template>
-  <v-form v-model="valid">
+  <v-form v-model="valid" class="mb-12">
     <v-container>
       <v-row>
         <v-col cols="12" class="py-0">
           <v-text-field
             v-model="sportsNameKR"
-            label="종목"
+            label="매치 종목은"
             readonly
+            color="rgb(189, 22, 44)"
           ></v-text-field>
         </v-col>
 
@@ -22,22 +23,33 @@
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
                 v-model="date1"
-                label="날짜"
+                label="매치를 원하는 날짜를 선택하세요"
                 readonly
                 v-bind="attrs"
                 v-on="on"
+                color="rgb(189, 22, 44)"
               ></v-text-field>
             </template>
             <v-date-picker
+              color="rgba(189, 22, 44)"
               v-model="date1"
               @input="menu1 = false"
               :min="today"
+              locale="kr"
             ></v-date-picker>
           </v-menu>
         </v-col>
 
         <v-col cols="12" class="py-0">
-          <div>가능한 시간을 선택하세요.</div>
+          <div class="mb-0" style="font-size: 12px">
+            가능한 시간을 선택하세요.
+          </div>
+          <div>
+            <p class="mb-0">
+              <span class="bold">{{ (time[0] + 6) | ChangeTime }}시</span>부터
+              <span class="bold">{{ (time[1] + 6) | ChangeTime }}시</span>
+            </p>
+          </div>
           <v-range-slider
             v-model="time"
             :tick-labels="ticksLabels"
@@ -45,20 +57,23 @@
             step="1"
             ticks="always"
             tick-size="3"
-          ></v-range-slider>
+            color="rgb(189, 22, 44)"
+          >
+          </v-range-slider>
         </v-col>
-
-        <div class="mx-3">당신의 위치에 마커를 설정해주세요.</div>
+        <div class="mx-3 mb-1" style="font-size: 12px">
+          매치를 원하는 위치에 마커를 설정해주세요.
+        </div>
         <div id="map" style="margin: auto; width: 95%; height: 270px"></div>
 
-        <v-col cols="12" class="d-flex justify-center">
+        <v-col cols="12" class="text-center">
           <v-btn
             style="text-transform: none"
-            color="primary"
+            color="rgb(189, 22, 44)"
             dark
             @click="submit(sportsNameKR, date1, time)"
           >
-            MatchOn!
+            한 판 붙자!
           </v-btn>
         </v-col>
       </v-row>
@@ -70,6 +85,8 @@
 </template>
 
 <script>
+import MapPin from "@/assets/images/mics/map-pin.png";
+
 import http from "@/util/http-common";
 import { mapState } from "vuex";
 import axios from "axios";
@@ -85,23 +102,23 @@ export default {
       date1: "",
       time: [0, 1],
       ticksLabels: [
-        6,
-        7,
-        8,
-        9,
-        10,
-        11,
-        12,
-        13,
-        14,
-        15,
-        16,
-        17,
-        18,
-        19,
-        20,
-        21,
-        22,
+        "오전 6시",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "오후 10시",
       ],
       today: "",
       lat: "37.5663",
@@ -141,6 +158,8 @@ export default {
           self.lng = lon1;
           self.lat = lat1;
 
+          console.log("지오로케이션으로 받아온 현재 위치", self.lng, self.lat);
+
           var locPosition = new kakao.maps.LatLng(lat1, lon1); // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
 
           // 마커와 인포윈도우를 표시합니다
@@ -149,8 +168,8 @@ export default {
       } else {
         // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
 
-        var locPosition = new kakao.maps.LatLng(33.450701, 126.570667),
-          message = "geolocation을 사용할수 없어요..";
+        var locPosition = new kakao.maps.LatLng(33.450701, 126.570667);
+        alert("현재 위치를 받아올 수 없어요");
 
         displayMarker(locPosition);
       }
@@ -158,9 +177,15 @@ export default {
       // 지도에 마커와 인포윈도우를 표시하는 함수입니다
       function displayMarker(locPosition) {
         // 마커를 생성합니다
+
+        var imageSrc = MapPin,
+          imageSize = new kakao.maps.Size(30, 45);
+        var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+
         var marker = new kakao.maps.Marker({
           map: map,
           position: locPosition,
+          image: markerImage,
         });
 
         // 지도 중심좌표를 접속위치로 변경합니다
@@ -169,19 +194,35 @@ export default {
         // 마커가 드래그 가능하도록 설정합니다
         marker.setDraggable(false);
 
-        kakao.maps.event.addListener(map, "click", function (mouseEvent) {
-          // 클릭한 위도, 경도 정보를 가져옵니다
-          var latlng = mouseEvent.latLng;
+        kakao.maps.event.addListener(map, "dragend", function () {
+          // 지도 중심좌표를 얻어옵니다
 
-          // 마커 위치를 클릭한 위치로 옮깁니다
-          marker.setPosition(latlng);
-
-          console.log(latlng.getLat(), latlng.getLng());
-          self.lng = latlng.getLng();
-          self.lat = latlng.getLat();
-
-          var resultDiv = document.getElementById("clickLatlng");
+          var position = map.getCenter();
+          marker.setPosition(position);
+          self.lng = position.getLng();
+          self.lat = position.getLat();
         });
+
+        kakao.maps.event.addListener(map, "zoom_changed", function () {
+          // 지도 중심좌표를 얻어옵니다
+
+          var position = map.getCenter();
+          marker.setPosition(position);
+        });
+
+        // kakao.maps.event.addListener(map, "click", function (mouseEvent) {
+        //   // 클릭한 위도, 경도 정보를 가져옵니다
+        //   var latlng = mouseEvent.latLng;
+
+        //   // 마커 위치를 클릭한 위치로 옮깁니다
+        //   marker.setPosition(latlng);
+
+        //   console.log(latlng.getLat(), latlng.getLng());
+        //   self.lng = latlng.getLng();
+        //   self.lat = latlng.getLat();
+
+        //   var resultDiv = document.getElementById("clickLatlng");
+        // });
       }
     },
     submit(sportsNameKR, date1, time) {
@@ -285,6 +326,20 @@ export default {
   mounted() {
     this.getToday();
     window.kakao && window.kakao.maps ? this.initMap() : this.addScript();
+  },
+  filters: {
+    ChangeTime(timeTime) {
+      if (timeTime < 12) {
+        var newTime = "오전 " + timeTime;
+        return newTime;
+      } else if (timeTime == 12) {
+        var newTime = "오후 " + timeTime;
+        return newTime;
+      } else if (timeTime > 12) {
+        var newTime = "오후 " + (timeTime - 12);
+        return newTime;
+      }
+    },
   },
 };
 </script>

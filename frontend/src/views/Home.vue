@@ -1,9 +1,33 @@
 <template>
-  <div class="home">
-    <v-card v-if="!this.isLoggedIn" class="mx-auto" max-width="720">
-      <v-container fluid> 로그인 하세요. </v-container>
-    </v-card>
+  <div class="h-100">
+    <!-- 비로그인 디비전 -->
+    <!-- <v-main v-if="!this.isLoggedIn" class="mx-auto" max-width="720">
+      <v-container fluid>
+        <div class="text-center d-flex align-center">
+          <img src="@/assets/images/logos/logo.png" style="width: 100%" />
+        </div>
+      </v-container>
+    </v-main> -->
 
+    <v-container
+      v-if="!this.isLoggedIn"
+      class="h-100 mx-auto d-flex justify-center align-center pb-15 bg-black"
+      max-width="720"
+    >
+      <div>
+        <!-- <h2>테스트</h2> -->
+        <img
+          src="@/assets/images/logos/logo_black.png"
+          alt="match-on-logo"
+          style="height: 50px"
+        />
+      </div>
+    </v-container>
+
+    <!-- 비 로그인 디비전 끝! -->
+
+    <!-- 로그인 디비전 -->
+    <!-- 현재 매칭 정보 -->
     <v-card
       v-if="this.isLoggedIn && this.flag == false"
       class="mx-auto"
@@ -71,6 +95,7 @@
       </v-container>
     </v-card>
 
+    <!-- 매칭 신청 -->
     <v-card v-if="this.isLoggedIn" class="mx-auto" max-width="720">
       <v-container fluid>
         <v-row>
@@ -114,31 +139,31 @@ export default {
         {
           title: "futsal",
           title2: "풋살",
-          src: require("@/assets/futsal.jpg"),
+          src: require("@/assets/images/sports/futsal.jpg"),
           flex: 12,
         },
         {
           title: "basket_ball",
           title2: "농구",
-          src: require("@/assets/basketball.jpg"),
+          src: require("@/assets/images/sports/basketball.jpg"),
           flex: 12,
         },
         {
           title: "tennis",
           title2: "테니스",
-          src: require("@/assets/tennis.jpg"),
+          src: require("@/assets/images/sports/tennis.jpg"),
           flex: 12,
         },
         {
           title: "pool",
           title2: "당구",
-          src: require("@/assets/pool.jpg"),
+          src: require("@/assets/images/sports/pool.jpg"),
           flex: 12,
         },
         {
           title: "bowling",
           title2: "볼링",
-          src: require("@/assets/bowling.jpg"),
+          src: require("@/assets/images/sports/bowling.jpg"),
           flex: 12,
         },
       ],
@@ -378,3 +403,13 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.h-100 {
+  height: 100%;
+}
+
+/* .bg-black {
+  background-color: black;
+} */
+</style>
