@@ -106,10 +106,7 @@
                   <v-slide-group active-class="success">
                     <v-slide-item v-for="card2 in card1.cards2" :key="card2">
                       <v-card v-if="card2.status == 1" class="ml-1 mr-1">
-                        <v-img
-                          class="black--text semi_card_image"
-                          :src="card2.matchSrc"
-                        >
+                        <v-img class="semi_card_image" :src="card2.matchSrc">
                           <v-card-title>{{ card2.sports }}</v-card-title>
                           <v-card-subtitle>{{ card2.gu }}</v-card-subtitle>
                           <v-list-item>
@@ -132,12 +129,18 @@
                         class="ml-1 mr-1"
                         @click="getMatchRoom(card2.match_pk)"
                       >
-                        <v-img
-                          class="black--text semi_card_image"
-                          :src="card2.matchSrc"
-                        >
-                          <v-card-title>{{ card2.sports }}</v-card-title>
-                          <v-card-subtitle>{{ card2.gu }}</v-card-subtitle>
+                        <v-img class="semi_card_image" :src="card2.matchSrc">
+                          <v-row>
+                            <v-col cols="9">
+                              <v-card-title>{{ card2.sports }}</v-card-title>
+                            </v-col>
+                            <v-col cols="3" class="pt-7">
+                              <v-chip color="black" dark>click</v-chip>
+                            </v-col>
+                          </v-row>
+                          <v-card-subtitle class="py-0">{{
+                            card2.gu
+                          }}</v-card-subtitle>
                           <v-list-item>
                             <v-list-item-content class="pt-3 pb-1">
                               <v-list-item-title class="mytitle">{{
@@ -165,12 +168,18 @@
                           )
                         "
                       >
-                        <v-img
-                          class="black--text semi_card_image"
-                          :src="card2.matchSrc"
-                        >
-                          <v-card-title>{{ card2.sports }}</v-card-title>
-                          <v-card-subtitle>{{ card2.gu }}</v-card-subtitle>
+                        <v-img class="semi_card_image" :src="card2.matchSrc">
+                          <v-row>
+                            <v-col cols="9">
+                              <v-card-title>{{ card2.sports }}</v-card-title>
+                            </v-col>
+                            <v-col cols="3" class="pt-7">
+                              <v-chip color="black" dark>click</v-chip>
+                            </v-col>
+                          </v-row>
+                          <v-card-subtitle class="py-0">{{
+                            card2.gu
+                          }}</v-card-subtitle>
                           <v-list-item>
                             <v-list-item-content class="pt-3 pb-1">
                               <v-list-item-title class="mytitle">{{
@@ -186,10 +195,7 @@
                       </v-card>
 
                       <v-card v-else-if="card2.status == 5" class="ml-1 mr-1">
-                        <v-img
-                          class="black--text semi_card_image"
-                          :src="card2.matchSrc"
-                        >
+                        <v-img class="semi_card_image" :src="card2.matchSrc">
                           <v-card-title>{{ card2.sports }}</v-card-title>
                           <v-card-subtitle class="py-0">{{
                             card2.gu
