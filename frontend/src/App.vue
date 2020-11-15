@@ -7,6 +7,7 @@
           <!-- 내브바 로고 -->
 
           <img
+            v-if="this.isLoggedIn"
             @click="$router.push('/')"
             src="@/assets/images/logos/logo.png"
             alt="match-on-logo"
@@ -14,17 +15,16 @@
             class="ml-15"
           />
         </div>
-
-        <p>ver 11.16.2</p>
-
         <v-spacer></v-spacer>
 
-        <v-btn @click="push1">push</v-btn>
+        <!-- <p>ver 11.16.2</p>
+
+
+        <v-btn @click="push1">push</v-btn> -->
 
         <!-- 비로그인 디비전 -->
         <v-dialog v-if="!this.isLoggedIn" v-model="dialog" max-width="500">
           <template v-slot:activator="{ on, attrs }">
-            <!-- <v-btn color="teal" dark v-bind="attrs" v-on="on"> 로그인 </v-btn> -->
             <i v-bind="attrs" v-on="on" class="fas fa-power-off fa-lg"></i>
           </template>
           <v-card style="padding: 20px">
@@ -92,7 +92,7 @@
         </v-btn>
       </v-bottom-navigation>
     </div>
-    <MainSignoutPC class="d-none d-md-block mt-15" />
+    <MainSignoutPC class="d-none d-md-block" />
   </v-app>
 </template>
 

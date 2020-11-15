@@ -1,26 +1,21 @@
 <template>
   <div class="h-100">
-    <!-- 비로그인 디비전 -->
-    <!-- <v-main v-if="!this.isLoggedIn" class="mx-auto" max-width="720">
-      <v-container fluid>
-        <div class="text-center d-flex align-center">
-          <img src="@/assets/images/logos/logo.png" style="width: 100%" />
-        </div>
-      </v-container>
-    </v-main> -->
-
     <v-container
       v-if="!this.isLoggedIn"
-      class="h-100 mx-auto d-flex justify-center align-center pb-15 bg-black"
+      class="h-100 mx-auto d-flex justify-center align-center pb-15 bg-brown"
       max-width="720"
     >
-      <div>
-        <!-- <h2>테스트</h2> -->
+      <div class="text-center">
+        <h2 class="main-text ft-dh mb-7">
+          온라인 스포츠 <span class="ft-dh onred bold"> 매칭 </span>서비스
+        </h2>
         <img
-          src="@/assets/images/logos/logo_black.png"
+          src="@/assets/images/logos/full_logo_black.png"
           alt="match-on-logo"
-          style="height: 50px"
+          style="height: 150px"
+          class="mb-7"
         />
+        <h3 class="main-text">서비스 사용을 위해 로그인해주세요</h3>
       </div>
     </v-container>
 
@@ -409,7 +404,35 @@ export default {
   height: 100%;
 }
 
-/* .bg-black {
-  background-color: black;
+.bg-brown {
+  background-color: rgba(32, 32, 32, 0.925);
+}
+
+.main-text {
+  color: rgba(255, 255, 255, 0.863);
+}
+
+/* #content {
+  position: relative;
+  background-color: rgba(0, 1, 41, 0.774);
+  width: 100vw;
+  height: 100vh;
+}
+
+#content:after {
+  background-image: url("~@/assets/images/mics/mobile-bg.jpg");
+
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
 } */
 </style>
