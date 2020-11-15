@@ -16,17 +16,7 @@ const config = {
 firebase.initializeApp(config);
 
 // 백그라운드 상태에서 받은 알림 처리
-const messaging = firebase.messaging();
-messaging.setBackgroundMessageHandler(function (payload) {
-    console.log(payload)
-    const title = "매치온!";
-    const options = {
-        // body: payload.data.message
-        body: "qwer"
-    };
 
-    return self.registration.showNotification(title, options);
-});
 
 
 self.addEventListener('push', function (event) {
@@ -42,7 +32,7 @@ self.addEventListener('push', function (event) {
 });
 
 
-self.addEventListener('notificationClick', function(event) {
+self.addEventListener('notificationClick', function (event) {
     console.log('푸쉬 알림 클릭')
 
     event.showNotification.close();
