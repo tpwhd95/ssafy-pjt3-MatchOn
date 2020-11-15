@@ -66,14 +66,14 @@
         </div>
         <div id="map" style="margin: auto; width: 95%; height: 270px"></div>
 
-        <v-col cols="12" class="d-flex justify-center">
+        <v-col cols="12" class="text-center">
           <v-btn
             style="text-transform: none"
             color="rgb(189, 22, 44)"
             dark
             @click="submit(sportsNameKR, date1, time)"
           >
-            MatchOn!
+            한 판 붙자!
           </v-btn>
         </v-col>
       </v-row>
