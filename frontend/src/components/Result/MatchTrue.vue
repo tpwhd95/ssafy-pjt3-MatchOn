@@ -1,7 +1,6 @@
 <template>
   <div class="mx-auto" max-width="720">
-    <v-img height="250" src="@/assets/images/results/slamdunk.png"></v-img>
-
+    <v-img height="200" src="@/assets/images/logos/logo.png"></v-img>
     <v-card-title>매치 장소와 시간이 확정되었습니다!</v-card-title>
 
     <v-card-text class="mb-5"
