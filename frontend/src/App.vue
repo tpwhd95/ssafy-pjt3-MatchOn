@@ -15,7 +15,7 @@
           />
         </div>
 
-        <p>ver 11.16.2</p>
+        <p>ver 11.16.6</p>
 
         <v-spacer></v-spacer>
 
@@ -70,6 +70,7 @@
         v-model="value"
         background-color="black"
         fixed="true"
+        class="d-flex justify-space-around align-center"
         v-if="this.isLoggedIn"
       >
         <v-btn value="home" to="/">
