@@ -3,17 +3,15 @@
     <div class="d-md-none h-100">
       <!-- 내브바 -->
       <v-app-bar app class="align-center" color="black darken-3" dark>
-        <!-- <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon> -->
         <div style="height: 40px">
-          <!-- <h1 @click="$router.push('/')" class="ft-dh" style="cursor: pointer">
-          매치<span class="ft-dh onred">온</span>
-        </h1> -->
+          <!-- 내브바 로고 -->
+
           <img
             @click="$router.push('/')"
             src="@/assets/images/logos/logo.png"
             alt="match-on-logo"
             style="height: 100%"
-            class="ml-auto"
+            class="ml-15"
           />
         </div>
 
