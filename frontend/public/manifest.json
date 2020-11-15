@@ -2,6 +2,7 @@
     "name": "MatchOn",
     "short_name": "MatchOn",
     "theme_color": "#000000",
+    "description": "이진석 화이팅",
     "icons": [
         {
             "src": "./img/icons/matchon-16x16.png",
