@@ -3,17 +3,15 @@
     <div class="d-md-none h-100">
       <!-- 내브바 -->
       <v-app-bar app class="align-center" color="black darken-3" dark>
-        <!-- <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon> -->
         <div style="height: 40px">
-          <!-- <h1 @click="$router.push('/')" class="ft-dh" style="cursor: pointer">
-          매치<span class="ft-dh onred">온</span>
-        </h1> -->
+          <!-- 내브바 로고 -->
+
           <img
             @click="$router.push('/')"
             src="@/assets/images/logos/logo.png"
             alt="match-on-logo"
             style="height: 100%"
-            class="ml-auto"
+            class="ml-15"
           />
         </div>
 
@@ -21,7 +19,7 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn @click="push1">push</v-btn>
+        <!-- <v-btn @click="push1">push</v-btn> -->
 
         <!-- 비로그인 디비전 -->
         <v-dialog v-if="!this.isLoggedIn" v-model="dialog" max-width="500">
@@ -73,6 +71,7 @@
         background-color="black"
         fixed="true"
         class="d-flex justify-space-around align-center"
+        v-if="this.isLoggedIn"
       >
         <v-btn value="home" to="/">
           <!-- <span style="color: white">집</span> -->
