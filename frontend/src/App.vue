@@ -61,8 +61,8 @@
           <span :id="awesomefont7">해</span>
           <span>?</span>
           <span>로그아웃</span>
-        </v-btn>
-      </v-app-bar> -->
+        </v-btn> -->
+      </v-app-bar>
 
       <v-main class="h-100" style="padding-bottom: 50px">
         <router-view
