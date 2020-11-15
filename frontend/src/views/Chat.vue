@@ -58,7 +58,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .chat h2 {
   font-size: 2.6em;
   margin-bottom: 0px;
