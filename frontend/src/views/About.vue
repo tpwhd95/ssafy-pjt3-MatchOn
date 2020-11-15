@@ -81,7 +81,8 @@
       <p>{{ date1 }}</p>
       <p>{{ time }}</p> -->
       <v-snackbar v-model="alert_collide">
-        그 시간대에 다른 경기가 있어 매칭등록이 안됩니다.
+        이미 같은 시간에 등록된 다른 경기가 있습니다. <br />
+        다른 시간을 선택해주세요.
         <template v-slot:action="{ attrs }">
           <v-btn
             color="pink"
