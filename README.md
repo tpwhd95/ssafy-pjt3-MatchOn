@@ -150,24 +150,32 @@
 $ python -m venv venv
 # 가상환경은 git 레퍼지토리에 기록되지 않으므로 각자 설정해주어야 합니다.
 ```
+
 ##### 가상환경 켜기
+
 ```bash
 # ven가 위치하는 폴더에서
 $ source venv/Scripts/activate
 ```
+
 ##### 가상환경 끄기
+
 ```bash
 $ deactivate
 ```
 
 ##### pip 리스트 갱신
+
 ```bash
 $ pip freeze > requirements.txt
 ```
+
 ##### pip 설치
+
 ```bash
 $ pip install -r requirements.txt
 ```
+
 ##### `./backend`에서 실행
 
 ```bash
@@ -200,12 +208,14 @@ $ npm run serve
 #### Commit 그라운드 룰
 
 #### 커밋 메시지
+
 ```bash
 $ git commit -m "S03P31A306-29 | Backend Devtools Setup Done"
 # 지라 이슈번호 | 커밋메시지로 적습니다.
 ```
 
 #### feature 관리
+
 ```bash
 $ git branch(혹은 checkout) feature/user-accounts-setup
 # feature/기능이름으로 적습니다.
