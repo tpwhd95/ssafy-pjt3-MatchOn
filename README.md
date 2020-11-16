@@ -1,6 +1,6 @@
 # 유한회사 맡촌
 
-![full_logo](C:\Users\multicampus\Desktop\s03p31a306\README.assets\full_logo.png)
+![full_logo](README.assets/full_logo-1605487065583.png)
 
 ## 서비스 소개
 
