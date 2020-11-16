@@ -20,7 +20,6 @@ firebase.initializeApp(config);
 
 
 self.addEventListener('push', function (event) {
-    console.log(event.data.json());
     const title = '매치온!';
     const options = {
         body: `${event.data.json().data.message}`,
@@ -33,7 +32,6 @@ self.addEventListener('push', function (event) {
 
 
 self.addEventListener('notificationClick', function (event) {
-    console.log('푸쉬 알림 클릭')
 
     event.showNotification.close();
 
@@ -42,27 +40,3 @@ self.addEventListener('notificationClick', function (event) {
     );
 });
 
-
-// window.addEventListener('beforeinstallprompt', function (event) {
-//     event.preventDefault();
-//     //@ts-ignore
-//     window.promptEvent = event;
-//     if (window.matchMedia('(display-mode: standalone)').matches) {
-//         console.log('display-mode is standalone');
-//     } else {
-//         setVisible(true)
-//     }
-// });
-
-// function addToHomeScreen() {
-//     //@ts-ignore
-//     window.promptEvent.prompt();
-//     //@ts-ignore
-//     window.promptEvent.userChoice.then((choiceResult: any) => {
-//         if (choiceResult.outcome === 'accepted') {
-//             console.log('User accepted the A2HS prompt')
-//         } else {
-//             console.log('User dismissed the A2HS prompt')
-//         }
-//     })
-// }

@@ -21,7 +21,6 @@ messaging.usePublicVapidKey('BFkC_RJgJiV2-FZ5I2sdG5ifkhETUKFhl-QDgJPB5dttB39gSTh
 // 알림 수신을 위한 사용자 권한 요청
 Notification.requestPermission()
     .then((permission) => {
-        console.log('permission ', permission)
         if (permission !== 'granted') {
             alert('알림을 허용해주세요')
         }

@@ -180,15 +180,13 @@ export default {
     this.room_results_ref.onSnapshot((snapshot) => {
       snapshot.docChanges().forEach((change) => {
         if (change.type === "added") {
-          console.log("확정!!!!!!!");
+          console.log("confirmed");
         }
       });
     });
   },
   methods: {
     getRoomData(match_id) {
-      console.log(match_id);
-      console.log(this.token);
       http
         .post(
           "/match/match-room/",
@@ -200,7 +198,6 @@ export default {
           }
         )
         .then((res) => {
-          console.log(res.data);
           this.room_master = Object.keys(res.data.data[0].users)[0];
           this.center_lat = res.data.data[0].match_lat;
           this.center_lng = res.data.data[0].match_lng;
@@ -227,10 +224,8 @@ export default {
             .get()
             .then((doc) => {
               if (this.userProfile.id == user_keys[0] && !doc.exists) {
-                console.log("ddd");
                 // 파이어베이스에 roomid로 룸을 생성하고 하위에 users를 입력
                 for (let i = 0; i < user_keys.length; i += 1) {
-                  console.log("for");
                   room_users_ref
                     .doc(user_keys[i])
                     .set({
@@ -252,14 +247,11 @@ export default {
               room_results_ref.onSnapshot((snapshot) => {
                 snapshot.docChanges().forEach((change) => {
                   if (change.type === "modified") {
-                    console.log("변경 발생");
                     this.$router.push("/matchtrue");
                   }
                 });
               });
-              console.log(res.data.data[0].users);
               const users_pk = Object.keys(res.data.data[0].users);
-              console.log(users_pk);
               for (const user_pk of users_pk) {
                 if (this.users[user_pk].team == true) {
                   this.fixed_users[user_pk] = { team: 1 };
@@ -267,7 +259,6 @@ export default {
                   this.fixed_users[user_pk] = { team: 0 };
                 }
               }
-              console.log(this.fixed_users);
               if (res.data.data[0].sports === "tennis") {
                 this.sport = "테니스장";
               } else if (res.data.data[0].sports === "bowling") {
@@ -291,14 +282,11 @@ export default {
         });
     },
     inputAfterMatch() {
-      // if (this.teamA.length == this.users_pk.length / 2) {
-      console.log("입력 실행!");
       if (this.ex3.val < 10) {
         this.ex3.val = "0" + String(this.ex3.val) + ":00:00";
       } else {
         this.ex3.val = String(this.ex3.val) + ":00:00";
       }
-      console.log(this.fixed_users);
       http
         .post(
           "/match/am/",
@@ -317,8 +305,6 @@ export default {
           }
         )
         .then((res) => {
-          console.log("전송 완료!");
-
           const room_results_ref = fb.collection(
             "room_results" + String(this.match_id)
           );
@@ -389,12 +375,8 @@ export default {
       var geocoder = new kakao.maps.services.Geocoder();
       var center_loc = "12";
       var callback = (result, status) => {
-        if (status === kakao.maps.services.Status.OK) {
-          console.log("콜백함수!!!!!!");
-          console.log(self.center_lng, self.center_lat);
-          console.log("지역 명칭 : " + result[0].address_name);
+        if (status === kakao.maps.services.Status.OK) {;
           center_loc = result[0].address_name.split(" ")[2];
-          console.log(center_loc + " " + self.sport);
         }
         // 장소 검색 객체를 생성합니다
         var ps = new kakao.maps.services.Places();
@@ -402,7 +384,6 @@ export default {
         // 키워드로 장소를 검색합니다
         ps.keywordSearch(center_loc + " " + self.sport, placesSearchCB);
       };
-      console.log(self.center_lng, self.center_lat);
       geocoder.coord2RegionCode(self.center_lng, self.center_lat, callback);
 
       var infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
@@ -471,7 +452,6 @@ export default {
           self.selected = place.place_name;
           self.fixed_lng = place.x;
           self.fixed_lat = place.y;
-          console.log(self.fixed_lng, self.fixed_lat);
         });
       }
 
@@ -507,10 +487,7 @@ export default {
   //     } else {
   //       this.teamB = [];
   //     }
-  //     console.log(this.users_pk);
   //     for (const user_pk of this.users_pk) {
-  //       console.log(user_pk);
-  //       console.log(values);
   //       if (values.includes(user_pk)) {
   //         this.fixed_users[user_pk] = { team: 0 };
   //       } else {

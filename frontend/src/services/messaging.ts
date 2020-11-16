@@ -11,7 +11,6 @@ messaging.usePublicVapidKey('BFkC_RJgJiV2-FZ5I2sdG5ifkhETUKFhl-QDgJPB5dttB39gSTh
 
 messaging.getToken().then((currentToken) => {
     if (currentToken) {
-        console.log(currentToken);
         token.value = currentToken;
     } else {
         // Show permission request.
