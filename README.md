@@ -1,12 +1,6 @@
-# 有限會社 맡촌
+# 유한회사 맡촌
 
-> 三星電子 株式會社
-
-> サムスン電子 株式会社 
-
-> Match ON
-
-## Contents
+![full_logo](C:\Users\multicampus\Desktop\s03p31a306\README.assets\full_logo.png)
 
 ## 서비스 소개
 
@@ -97,11 +91,39 @@
 
 
 
+## 기술 스택
+
+#### backend
+
+- django
+- python thread
+
+#### frontend
+
+- vue.js, vuex, vuetify
+- node.js
+
+#### DB
+
+- mysql
+
+- Google Firebase
+- firebase realtime database
+
+#### deploy tools
+
+- Jenkins
+- AWS
+- nginx
+- firebase
+
+#### pwa
 
 
-## 설치 및 실행
 
-### 패키지 설치
+## 프로젝트 소개
+
+### 설치 및 실행
 
 #### backend
 
