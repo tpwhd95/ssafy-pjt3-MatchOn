@@ -17,10 +17,6 @@
         </div>
         <v-spacer></v-spacer>
 
-        <p>ver 11.16.7</p>
-
-        <!-- <v-btn @click="push1">push</v-btn> -->
-
         <!-- 비로그인 디비전 -->
         <v-dialog v-if="!this.isLoggedIn" v-model="dialog" max-width="500">
           <template v-slot:activator="{ on, attrs }">
@@ -166,11 +162,9 @@ export default {
               access_token: token,
             })
             .then((res) => {
-              console.log("Login Success");
               Kakao.API.request({
                 url: "/v2/user/me",
                 success: function (res) {
-                  console.log(res);
                   var username = res.properties.nickname;
                   username = username.replace(/(\s*)/g, "");
                   var password = res.id;
@@ -180,7 +174,6 @@ export default {
                       password: password,
                     })
                     .then((json) => {
-                      console.log(json);
                       const data = json.data;
                       self.setToken(data.token);
                       self.setUserProfile(data.user);
@@ -208,7 +201,6 @@ export default {
       this.dialog = false;
       const token2 = sessionStorage.getItem("token2");
       this.token2 = token2;
-      console.log(token2);
       axios
         .post(
           "https://fcm.googleapis.com/fcm/send",
@@ -227,11 +219,9 @@ export default {
         )
         .then((data) => {
           console.log("push notification success");
-          console.log(data);
         })
         .catch((err) => {
           console.log("push notification fail");
-          console.log(err);
         });
       this.$router.go();
     },
@@ -245,7 +235,6 @@ export default {
     push1() {
       const token2 = sessionStorage.getItem("token2");
       this.token2 = token2;
-      console.log(token2);
       axios
         .post(
           "https://fcm.googleapis.com/fcm/send",
@@ -263,8 +252,7 @@ export default {
           }
         )
         .then((data) => {
-          console.log("asdf");
-          console.log(data);
+          console.log("data success");
         })
         .catch((err) => {
           console.log(err);
@@ -280,8 +268,6 @@ export default {
         .then((res) => {
           this.report_detail_datas = res.data;
           this.sports_name = res.data[0].sports_name;
-          console.log(this.report_detail_datas);
-          console.log(this.sports_name);
           this.$router.push(`report/${sports_pk}`);
         })
         .catch((error) => {

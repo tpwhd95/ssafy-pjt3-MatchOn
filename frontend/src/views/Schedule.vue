@@ -309,8 +309,6 @@ export default {
   },
   methods: {
     getMatchRoom(match_id) {
-      console.log(match_id);
-      console.log(this.token);
       http
         .post(
           "/match/match-room/",
@@ -322,7 +320,7 @@ export default {
           }
         )
         .then((res) => {
-          console.log(res);
+          console.log("success");
         })
         .catch((err) => {
           console.log(err);
@@ -333,8 +331,6 @@ export default {
       });
     },
     getResultRoom(match_id, sports, date, time) {
-      console.log(match_id);
-      console.log(this.token);
       this.$router.push({
         name: "ResultRoom",
         query: { match_id: match_id, sports: sports, date: date, time: time },
@@ -350,7 +346,6 @@ export default {
           },
         })
         .then(function (res) {
-          console.log(res);
           for (let i of res.data.data) {
             const temp_sports = "";
             const match_src = "";

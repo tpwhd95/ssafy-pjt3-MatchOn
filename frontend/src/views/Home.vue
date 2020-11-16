@@ -112,7 +112,6 @@ export default {
           },
         })
         .then(function (res) {
-          console.log(res);
           for (let i of res.data.data) {
             const temp_sports = "";
             const match_src = "";
@@ -153,8 +152,6 @@ export default {
         });
     },
     getResultRoom(match_id, sports, date, time) {
-      console.log(match_id);
-      console.log(this.token);
       this.$router.push({
         name: "ResultRoom",
         query: { match_id: match_id, sports: sports, date: date, time: time },

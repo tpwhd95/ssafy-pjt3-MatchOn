@@ -181,8 +181,6 @@ export default {
           self.lng = lon1;
           self.lat = lat1;
 
-          console.log("지오로케이션으로 받아온 현재 위치", self.lng, self.lat);
-
           var locPosition = new kakao.maps.LatLng(lat1, lon1); // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
 
           // 마커와 인포윈도우를 표시합니다
@@ -264,8 +262,6 @@ export default {
       if (this.time[1] < 10) {
         this.time[1] = "0" + this.time[1];
       }
-      console.log(this.time);
-      console.log(sessionStorage.getItem("token2"));
       http
         .post(
           "/match/bm/",
@@ -286,16 +282,8 @@ export default {
             this.time[0] = temp_time0;
             this.time[1] = temp_time1;
           } else {
-            console.log(res);
-            console.log(res.data.result);
-            console.log(typeof res.data.result);
-            console.log(Object.keys(res.data).length);
             if (res.data.result === "true") {
-              console.log("이프 됨");
-              console.log(res.data.device_tokens);
               for (const i in res.data.device_tokens) {
-                console.log("for 됨");
-                console.log(res.data.device_tokens[i]);
                 axios
                   .post(
                     "https://fcm.googleapis.com/fcm/send",
@@ -317,11 +305,9 @@ export default {
                   )
                   .then((data) => {
                     console.log("push notification success");
-                    console.log(data);
                   })
                   .catch((err) => {
                     console.log("push notification fail");
-                    console.log(err);
                   });
               }
             }

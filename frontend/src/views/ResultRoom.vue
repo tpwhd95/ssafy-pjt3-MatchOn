@@ -72,7 +72,6 @@ export default {
   methods: {
     inputResult(result) {
       // 경기 결과 데이터 입력
-      console.log(" 경기 결과 데이터 입력 시작");
 
       const my_status = result ? 2 : 1;
       // 상대편 상태를 가져옴
@@ -85,7 +84,6 @@ export default {
             if (doc.id != this.my_team)
               opposit_status = doc.data().match_result;
             else if (doc.data().match_result != 0) {
-              console.log("이미 입력 마침");
               this.alert_collide = true;
               isAlready = true;
             }
@@ -96,13 +94,11 @@ export default {
 
           // 상대편이 0이 아닐 경우
           if (opposit_status != 0) {
-            console.log(" 상대편이 입력을 마친 상태");
             // 내 값과 상대방의 값이 같으면 충돌
             if (my_status == opposit_status) {
               this.room_results_ref.doc(this.my_team).set({
                 match_result: my_status,
               });
-              console.log("충돌 남");
 
               this.room_results_ref
                 .get()
@@ -119,7 +115,6 @@ export default {
               return;
             }
           }
-          console.log("경기 결과  입력");
           this.room_results_ref.doc(this.my_team).set({
             match_result: my_status,
           });
@@ -148,7 +143,6 @@ export default {
     this.room_results_ref.onSnapshot((snapshot) => {
       snapshot.docChanges().forEach((change) => {
         if (change.type === "modified") {
-          console.log("변경 발생");
           this.room_results_ref.get().then((querySnapshot) => {
             let my_status = 0;
             let opposit_status = 0;
@@ -165,12 +159,10 @@ export default {
               // 모달 클로즈
               this.$router.push("/resultfalse");
             } else if (my_status == 0) {
-              console.log("나 상태 0");
             }
             // 내 상태가 0이 아닌데 상대가 0이면
             else if (my_status != 0 && opposit_status == 0) {
               // 대기 중 모달 출력
-              console.log("대기 중");
               this.$router.push("/resultready");
             }
             // 내 상태가 0이 아니고 상대도 0이 아니고 결과값이 같으면
@@ -180,7 +172,6 @@ export default {
               my_status == opposit_status
             ) {
               // 충돌 로직
-              console.log("충돌");
               this.$router.push("/resultfalse");
             }
             // 내 상태가 0이 아니고 상대도 0이 아니고 결과값이 다르면
@@ -190,11 +181,9 @@ export default {
               my_status != opposit_status
             ) {
               // 경기 종료 로직
-              console.log("경기 종료");
               this.$router.push("/resulttrue");
               if (my_status == 1) {
                 my_status = "false";
-                console.log("나는 졌다", this.match_id, my_status);
                 http
                   .post(
                     "/match/result/",
@@ -209,14 +198,13 @@ export default {
                     }
                   )
                   .then((res) => {
-                    console.log("경기 결과 입력 완료");
+                    console.log("success");
                   })
                   .catch((err) => {
                     console.log(err);
                   });
               } else if (my_status == 2) {
                 my_status = "true";
-                console.log("나는 이겼다", this.match_id, my_status);
                 http
                   .post(
                     "/match/result/",
@@ -231,7 +219,7 @@ export default {
                     }
                   )
                   .then((res) => {
-                    console.log("경기 결과 입력 완료");
+                    console.log("success");
                   })
                   .catch((err) => {
                     console.log(err);
@@ -247,7 +235,6 @@ export default {
       querySnapshot.forEach((doc) => {
         if (doc.data().user_id == this.user_profile.id) {
           this.my_team = doc.data().user.team ? "1" : "0";
-          console.log(this.my_team);
         }
       });
     });

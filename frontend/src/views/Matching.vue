@@ -55,9 +55,6 @@ export default {
     main() {
       this.$router.push("/");
     },
-    test() {
-      console.log("Hey Listen!");
-    },
   },
   mounted() {
     setTimeout(this.main, 5000);
