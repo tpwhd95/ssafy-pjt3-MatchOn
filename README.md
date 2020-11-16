@@ -113,6 +113,7 @@
 
 - vue.js, vuex, vuetify
 - node.js
+- Google Firebase
 
 #### SCM ( Software Configuration Management)
 
