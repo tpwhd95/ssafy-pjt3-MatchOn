@@ -65,11 +65,9 @@
     //token값 알아내기
     messaging.requestPermission()
       .then(function () {
-        console.log("Have permission");
         return messaging.getToken();
       })
       .then(function (token) {
-        console.log(token);
         sessionStorage.setItem("token2", token)
       })
       .catch(function (arr) {

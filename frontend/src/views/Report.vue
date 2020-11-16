@@ -127,7 +127,6 @@ export default {
   },
   watch: {
     reportlist(value) {
-      console.log(value);
       const dict = {
         futsal: 0,
         basket_ball: 1,
