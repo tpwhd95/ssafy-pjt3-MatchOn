@@ -11,9 +11,19 @@ class Sports(models.Model):
 
 class Match(models.Model):
     sports = models.ForeignKey(Sports, on_delete=models.CASCADE)
-    # 유저 각자들의 위치를 모아줄 위치정보(위도, 경도) 정보는 안 넣어줘도 되는걸까?
-
-
+    # 장소
+    lat = models.FloatField(null=True)
+    lng = models.FloatField(null=True)
+    # 시간
+    date = models.DateField()
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+    fixed_time = models.TimeField(null=True, blank=True)
+    won_team = models.BooleanField(null=True, blank=True)
+    zero_resulted = models.BooleanField(default=False)
+    one_resulted = models.BooleanField(default=False)
+    
+    
 class MatchUser(models.Model):
     match = models.ForeignKey(Match, on_delete=models.CASCADE)
     user_pk = models.IntegerField()

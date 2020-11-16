@@ -3,6 +3,7 @@ const CACHE_NAME = "cache-v1";
 
 // 캐싱할 파일
 const FILES_TO_CACHE = [
+    "/",
     "/offline.html",
     "/favicon.ico"
 ];
@@ -39,3 +40,9 @@ self.addEventListener("fetch", (event) => {
         )
     );
 });
+
+// self.addEventListener('push', function (event) {
+//     event.waitUntil(self.registration.showNotification('ServiceWorker Cookbook', {
+//         body: '푸시 알림 구독 관리'
+//     }));
+// });

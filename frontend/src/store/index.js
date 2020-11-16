@@ -1,7 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import http from "@/util/http-common";
-import socket from './modules/socket';
 
 Vue.use(Vuex);
 
@@ -11,6 +10,8 @@ export default new Vuex.Store({
   state: {
     token: sessionStorage.getItem('token'),
     userProfile: sessionStorage.getItem("userProfile") ? JSON.parse(sessionStorage.getItem("userProfile")) : [],
+    reportlist: [],
+    reportdetaillist: [],
   },
   getters: {
     isLoggedIn(state) {
@@ -34,6 +35,12 @@ export default new Vuex.Store({
       state.userProfile = payload
       sessionStorage.setItem("userProfile", JSON.stringify(payload))
     },
+    setReport(state, payload) {
+      state.reportlist = payload
+    },
+    setReportDetail(state, payload) {
+      state.reportdetaillist = payload
+    },
   },
   actions: {
     setToken(context, payload) {
@@ -45,9 +52,34 @@ export default new Vuex.Store({
     setUserProfile(context, payload) {
       context.commit("setUserProfile", payload)
     },
-  },
-  modules: {
-    // socket,
+    getReport(context) {
+      http
+        .get("/match/report/", {
+          headers: {
+            Authorization: "JWT " + context.state.token
+          },
+        })
+        .then((res) => {
+          context.commit("setReport", res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    getReportDetail(context) {
+      http
+        .get(`/match/report/${sports_pk}`, {
+          headers: {
+            Authorization: "JWT " + context.state.token
+          },
+        })
+        .then((res) => {
+          context.commit("setReportDetail", res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
   strict: debug,
 });

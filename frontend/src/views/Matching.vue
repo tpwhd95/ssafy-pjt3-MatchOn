@@ -1,55 +1,81 @@
 <template>
-  <v-container>
-    <v-row justify="space-around">
-      <v-card width="400">
-        <!-- <v-img height="100%" src="@/assets/son.jpg"> -->
-        <v-card-title class="black--text mt-8">
-          <p class="ml-3">
-            Wonbin님 팀원들을 찾고있습니다. <br /><br />매칭이 완료되면
-            <br />푸시알림이 발송됩니다.
-          </p>
-        </v-card-title>
-        <!-- </v-img> -->
+  <v-container class="h-100 mt-15">
+    <div class="text-center">
+      <img
+        src="@/assets/images/logos/logo.png"
+        alt="awesome-logo-image"
+        style="height: 150px"
+      />
+    </div>
+    <div class="text-center">
+      <h2 class="bold">매칭이 성공적으로 등록되었습니다!</h2>
+    </div>
+    <div class="my-3">
+      <p class="font-weight-bold text-center mb-0">
+        {{ date1 | ChangeDate }} {{ time[0] | ChangeTime }}시부터
+        {{ time[1] | ChangeTime }}시까지
+      </p>
+      <p class="font-weight-bold text-center mb-0">
+        {{ sportsNameKR }} 매치가 가능한 상대들을 찾습니다.
+      </p>
+    </div>
 
-        <v-card-text>
-          <div class="font-weight-bold ml-8 mb-2">종목: 풋살</div>
-          <div class="font-weight-bold ml-8 mb-2">날짜: 2020년 11월 5일</div>
-          <div class="font-weight-bold ml-8 mb-2">
-            시간: 오전 6시 ~ 오후 10시
-          </div>
-        </v-card-text>
-      </v-card>
-    </v-row>
+    <div class="text-center">
+      <h3 class="bold">매칭이 완료되면 푸쉬알림으로 알려드립니다.</h3>
+    </div>
 
-    <v-row justify="space-around">
-      <v-col cols="8" class="mt-5">
-        <v-progress-linear
-          color="deep-purple accent-4"
-          indeterminate
-          rounded
-          height="6"
-        ></v-progress-linear>
-      </v-col>
-    </v-row>
-
-    <v-row>
-      <v-col cols="12" class="d-flex justify-center mt-7">
-        <v-btn color="primary" @click="main()"> 메인으로 돌아가기 </v-btn>
-      </v-col>
-    </v-row>
+    <div class="my-5">
+      <v-progress-linear
+        color="red accent-4"
+        indeterminate
+        rounded
+        height="6"
+      ></v-progress-linear>
+      <p class="text-center" style="font-size: 12px">
+        잠시후 메인페이지로 이동합니다.
+      </p>
+    </div>
+    <div class="text-center">
+      <v-btn color="error" @click="main"> 메인으로 돌아가기 </v-btn>
+    </div>
   </v-container>
 </template>
 
 <script>
 export default {
-  name: "matching",
+  name: "Matching",
   data() {
-    return {};
+    return {
+      sportsNameKR: this.$route.query.sportsNameKR,
+      date1: this.$route.query.date1,
+      time: this.$route.query.time,
+    };
   },
   methods: {
     main() {
-      // this.$router.push("/");
-      this.$router.push("/map");
+      this.$router.push("/");
+    },
+    test() {
+      console.log("Hey Listen!");
+    },
+  },
+  mounted() {
+    setTimeout(this.main, 5000);
+  },
+  filters: {
+    ChangeDate(value) {
+      var svalue = value.split("-");
+      var newDate = svalue[0] + "년 " + svalue[1] + "월 " + svalue[2] + "일";
+      return newDate;
+    },
+    ChangeTime(value) {
+      if (value < 12) {
+        return "오전" + value;
+      } else if (value == 12) {
+        return "오후 12";
+      } else {
+        return "오후" + (value - 12);
+      }
     },
   },
 };

@@ -5,12 +5,17 @@ import './registerServiceWorker'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify';
-// import socket from './plugins/socketPlugin';
+import VueChatScroll from 'vue-chat-scroll';
 import Directives from './plugins/directives';
+// Global Font Css
+import "@/assets/font/font.css";
 
 Vue.config.productionTip = false
 Vue.use(Vuex)
 Vue.use(Directives);
+Vue.use(VueChatScroll);
+
+
 
 new Vue({
   created() {

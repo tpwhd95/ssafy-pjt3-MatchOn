@@ -1,0 +1,64 @@
+/* Google Font Import */
+@import url("https://fonts.googleapis.com/css2?family=Do+Hyeon&Nanum+Gothic:wght@700;800&Noto+Sans+KR:wght@300&Black+Han+Sans&display=swap");
+
+/* Naver Nanum Square */
+@import url("https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css");
+
+.ft-bhs {
+  font-family: "Black Han Sans";
+}
+
+.ft-nns {
+  font-family: "NanumSquare";
+}
+
+.ft-nss {
+  font-family: "Noto Sans KR";
+}
+
+.ft-dh {
+  font-family: "Do Hyeon";
+}
+
+.normal {
+  font-weight: 400;
+}
+.bold {
+  font-weight: 700;
+}
+.bolder {
+  font-weight: 800;
+}
+.light {
+  font-weight: 300;
+}
+
+* {
+  font-family: "Nanum Gothic", "NanumSquare", "Do Hyeon", "Noto Sans KR",
+    sans-serif;
+  font-weight: 400;
+}
+
+.bg-cblue {
+  background-color: #0f4c81;
+}
+
+.cblue {
+  color: #0f4c81;
+}
+
+.onred {
+  color: #c00d00;
+}
+
+.theme-color {
+  color: rgb(189, 22, 44)
+}
+
+.brown {
+  color: rgb(117, 81, 57)
+}
+
+.bg-brown {
+  background-color: rgb(117, 81, 57);
+}

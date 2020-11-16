@@ -4,11 +4,15 @@ from .models import Sports, Match, MatchUser, Locations
 class MatchAdmin(admin.ModelAdmin):
     list_display = ['sports', 'pk']
 
+
+class MatchUserAdmin(admin.ModelAdmin):
+    list_display = ['pk', 'match', 'user_pk', 'team']
+    list_filter = ['match']
+
+
 # class UserAdmin(admin.ModelAdmin):
 #     list_display = ['nickname']
-# class BeforeMatchAdmin(admin.ModelAdmin):
-#     search_fields = ['title']
-#     list_display = '__all__'
+
 
 # class WeatherLikeAdmin(admin.ModelAdmin):
 #     list_display = ['movie', 'weather', 'user', ]
@@ -19,5 +23,5 @@ class MatchAdmin(admin.ModelAdmin):
 # admin.site.register(Genre, GenreAdmin)
 admin.site.register(Sports)
 admin.site.register(Match, MatchAdmin)
-admin.site.register(MatchUser)
+admin.site.register(MatchUser, MatchUserAdmin)
 admin.site.register(Locations)

@@ -50,10 +50,11 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-
+    
     'users',
     'match',
     'api',
+    
 ]
 
 MIDDLEWARE = [
@@ -91,6 +92,8 @@ CORS_ALLOW_HEADERS = (
 )
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:8080',
+    'http://localhost:8081',
+    # 'https://matchon-1521d.web.app/',
     # 'http://k3a306.p.ssafy.io/'
 ]
 
@@ -210,5 +213,6 @@ ACCOUNT_LOGOUT_ON_GET = True
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'users.serializers.UserSerializer',
 }
+
 
 # FORCE_SCRIPT_NAME = '/api'

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="kr">
 
 <head>
   <meta charset="utf-8">
@@ -16,11 +16,21 @@
 
   <!-- <script src="/socket.io/socket.io.js"></script> -->
   <link rel="manifest" href="/manifest.json">
-  <link rel="apple-touch-icon" href="/img/icons/icon-152x152.png" />
+  <link rel="apple-touch-icon" sizes="192x192" href="./img/icons/matchon-192x192.png" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   <meta name="apple-mobile-web-app-title" content="맡촌" />
-  
+
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#000000">
+
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+
+  <link rel="apple-touch-startup-image" sizes="180x180" href="/img/icons/matchon-180x180.png">
+
+  <link rel="shortcut icon" type="image/x-icon" href="./img/icons/favicon.ico" />
+  <link rel="icon" href="./img/icons/favicon.ico" type="image/x-icon" />
+
 </head>
 
 <body>
@@ -31,11 +41,41 @@
   <div id="app"></div>
   <!-- built files will be auto injected -->
   <script>
-  if ("serviceWorker" in navigator) {
+    if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
-          navigator.serviceWorker.register("sw.js");
+        navigator.serviceWorker.register("sw.js");
       });
-  }
+    }
+  </script>
+  <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyDGdHvQgttXEKYkihDzYhpsKc6CPavUlD4",
+      authDomain: "matchon-1521d.firebaseapp.com",
+      databaseURL: "https://matchon-1521d.firebaseio.com",
+      projectId: "matchon-1521d",
+      storageBucket: "matchon-1521d.appspot.com",
+      messagingSenderId: "993144676136",
+    };
+    firebase.initializeApp(config);
+
+    const messaging = firebase.messaging();
+
+    //token값 알아내기
+    messaging.requestPermission()
+      .then(function () {
+        console.log("Have permission");
+        return messaging.getToken();
+      })
+      .then(function (token) {
+        console.log(token);
+        sessionStorage.setItem("token2", token)
+      })
+      .catch(function (arr) {
+        console.log("Error Occured");
+      });
+
 
   </script>
 </body>
