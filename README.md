@@ -15,7 +15,7 @@
 
 ## :cow: :dog: 서비스 소개
 
-### :artificial_satellite: 기획의도
+### :mortar_board: 기획의도
 
 > 어느순간 당신은 스포츠 경기를 하고 싶을 때가 있습니다. 스포츠 경기를 하기 위해 많은 난관이 있습니다. 보통 `인원모집 -> 시간선정 -> 장소선정 -> 장소예약`의 방식으로 번거롭게 해야 스포츠 경기를 즐길 수 있습니다. 또한, 인원모집을 함에 있어서 개인들의 실력을 알 수 없기에 시작부터 번거롭습니다. 복잡한 준비과정이 귀찮아서 운동하는 것을 망설이게 되기도 합니다. 이러한 문제를 한 번에 해결할 수 있는 서비스는 없을까? 란 질문에서부터 MATCHON 서비스를 기획하게 되었습니다.
 
@@ -50,7 +50,7 @@
 
 
 
-###  :soccer::basketball::tennis::8ball::bowling: MATCHON 
+###  :soccer: :basketball: :tennis: :8ball: :bowling: MATCHON 
 
 >  스포츠 팀매칭 시스템 ( 풋살, 농구, 테니스, 당구, 볼링)
 
@@ -140,9 +140,9 @@
 
 
 
-## 설치 및 실행
+## :seedling: 설치 및 실행
 
-#### backend
+#### :raised_back_of_hand: backend
 
 ##### 가상환경 설정
 
@@ -186,7 +186,7 @@ $ python manage.py runserver
 
 
 
-#### frontend
+#### :raised_hand: frontend
 
 ##### `./frontend` 에서 설치
 
@@ -205,7 +205,7 @@ $ npm run serve
 
 
 
-#### Commit 그라운드 룰
+#### :vertical_traffic_light: Commit 그라운드 룰
 
 #### 커밋 메시지
 
