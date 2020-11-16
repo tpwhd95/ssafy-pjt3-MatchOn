@@ -2,7 +2,7 @@
 
 ![full_logo](README.assets/full_logo-1605487065583.png)
 
-## :corn::tent::circus_tent: Contents
+## :corn: :tent: :circus_tent:  Contents
 
 - [서비스 소개](##서비스-소개)
   - [기획의도](###기획의도)
