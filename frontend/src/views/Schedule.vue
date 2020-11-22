@@ -278,7 +278,7 @@ export default {
           cards2: [],
         },
         {
-          title: "조율중인 경기",
+          title: "조율 중인 매치",
           flex: 12,
           cards2: [],
         },
@@ -288,7 +288,7 @@ export default {
         //   cards2: [],
         // },
         {
-          title: "진행중인 경기",
+          title: "지금, 매치온!",
           flex: 12,
           cards2: [],
         },
